@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+    margin: 0;
+    background: #05140c;
+    overflow: hidden;
+  }
+
+  body {
+    font-family: 'IBM Plex Sans Thai', 'Noto Sans Thai', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    color: #101c16;
+    /* ตู้จอสัมผัส: ปิดการเลือกข้อความ / เมนูค้าง / ไฮไลต์เวลาแตะ */
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  button {
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@layer components {
+  /* ปุ่มทุกชนิดยุบลงทันทีเมื่อกด = feedback ภายใน 1 เฟรม */
+  .press {
+    transition: transform 90ms ease-out, background-color 140ms ease-out,
+      border-color 140ms ease-out, box-shadow 140ms ease-out;
+  }
+  .press:active:not(:disabled) {
+    transform: scale(0.965);
+  }
+
+  .card {
+    @apply rounded-[28px] border-2 border-brand-100 bg-white;
+  }
+
+  /* เป้าแตะขั้นต่ำ 72x72px ตามข้อกำหนด */
+  .tap {
+    min-width: 72px;
+    min-height: 72px;
+  }
+}
+
+/* แถบคลื่นเสียงขณะกำลังฟัง - ใช้ transform อย่างเดียว เบาสำหรับ Raspberry Pi */
+@keyframes wave-bar {
+  0%,
+  100% {
+    transform: scaleY(0.2);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+.wave-bar {
+  animation: wave-bar 780ms ease-in-out infinite;
+  transform-origin: center;
+}
