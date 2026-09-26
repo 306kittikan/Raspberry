@@ -14,7 +14,8 @@ import {
 
 /** หน้าจัดการข้อมูลใบหน้า: ดู → ยืนยันก่อนลบ → ยืนยันหลังลบเสร็จ */
 export default function FaceDataScreen() {
-  const { faceEnrolled, faceEnrolledAtLabel, deleteFaceData, goto, endSession } = useKiosk()
+  const { faceEnrolled, faceEnrolledAtLabel, canDeleteFace, startEnrollFlow, deleteFaceData, goto, endSession } =
+    useKiosk()
   const [step, setStep] = useState('view') // view | confirm | deleted
 
   const doDelete = () => {
@@ -75,7 +76,7 @@ export default function FaceDataScreen() {
                 size="xl"
                 variant="outlineDanger"
                 icon={IconTrash}
-                disabled={!faceEnrolled}
+                disabled={!faceEnrolled || !canDeleteFace}
                 onClick={() => setStep('confirm')}
               >
                 ลบข้อมูลใบหน้าของฉัน

@@ -1,5 +1,7 @@
 import React from 'react'
 import { useKiosk } from '../state/KioskProvider'
+import CameraView from './CameraView'
+import { useLayout } from './Stage'
 import { IconMic } from './Icons'
 
 const BARS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
@@ -13,8 +15,14 @@ const BARS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
  * ปุ่มจะเป็นสีเทาเฉพาะตอนที่ระบบถอดเสียงยังไม่พร้อมเท่านั้น
  */
 export default function MicPanel() {
-  const { micState, transcript, sttReady, voiceSupported, startListening } = useKiosk()
+  const { micState, transcript, sttReady, voiceSupported, cameraOk, startListening } = useKiosk()
+  const { mode } = useLayout()
   const disabled = !sttReady || !voiceSupported
+
+  // บนจอคอมพิวเตอร์มีแผงด้านข้างแสดงภาพผู้ใช้อยู่แล้ว จึงไม่ต้องซ้ำอีกที่นี่
+  // บนตู้จริง (จอแนวตั้ง) ไม่มีพื้นที่ด้านข้าง จึงแสดงภาพย่อระหว่างพูดแทน
+  // เพื่อให้รู้สึกเหมือนกำลังคุยกับใครสักคน ไม่ใช่พูดใส่ปุ่มเปล่า ๆ
+  const showFace = mode === 'kiosk' && cameraOk && micState !== 'idle'
 
   const label = !voiceSupported
     ? 'เบราว์เซอร์นี้ใช้ไมโครโฟนไม่ได้'
@@ -37,6 +45,13 @@ export default function MicPanel() {
   return (
     <div className={`rounded-[32px] border-2 p-10 ${ring}`}>
       <div className="flex items-center gap-10">
+        {showFace ? (
+          <CameraView
+            className="h-[184px] w-[184px] shrink-0"
+            rounded="rounded-full border-4 border-brand-600"
+          />
+        ) : null}
+
         <div className="relative flex h-[184px] w-[184px] shrink-0 items-center justify-center">
           {micState === 'listening' && !disabled ? (
             <span className="absolute inset-0 rounded-full border-4 border-brand-400 animate-pulse-ring" />

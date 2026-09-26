@@ -84,6 +84,8 @@ export function KioskProvider({ children }) {
   const [cameraReady, setCameraReady] = useState(false)
   const [sttReady, setSttReady] = useState(false)
   const [consentId, setConsentId] = useState(null)
+  // true = ผู้ใช้กำลังจะลงทะเบียนใบหน้า ต้องระบุตัวตนด้วยรหัสนักศึกษาก่อน
+  const [enrollIntent, setEnrollIntent] = useState(false)
   const [enrollError, setEnrollError] = useState(null)
   const [voiceUnclear, setVoiceUnclear] = useState(false)
   const [forceNoSchedule, setForceNoSchedule] = useState(false)
@@ -94,6 +96,8 @@ export function KioskProvider({ children }) {
   const [candidate, setCandidate] = useState(null) // ผู้ที่ระบบคิดว่าใช่ (ยังไม่ยืนยัน)
   const [faceEnrolled, setFaceEnrolled] = useState(false)
   const [faceEnrolledAtLabel, setFaceEnrolledAtLabel] = useState(null)
+  // ลบข้อมูลใบหน้าได้เฉพาะผู้ที่ยืนยันตัวตนด้วยใบหน้าแล้ว เซิร์ฟเวอร์เป็นผู้ตัดสิน
+  const [canDeleteFace, setCanDeleteFace] = useState(false)
   const [micState, setMicState] = useState('idle') // idle | listening | processing
   const [transcript, setTranscript] = useState('')
   const [answer, setAnswer] = useState(null)
@@ -223,6 +227,7 @@ export function KioskProvider({ children }) {
       setAnonymous(false)
       setFaceEnrolled(false)
       setFaceEnrolledAtLabel(null)
+      setEnrollIntent(false)
       setMicState('idle')
       setTranscript('')
       setAnswer(null)
@@ -280,9 +285,11 @@ export function KioskProvider({ children }) {
         const face = await api.getFaceStatus()
         setFaceEnrolled(face.enrolled)
         setFaceEnrolledAtLabel(face.enrolledAtLabel)
+        setCanDeleteFace(Boolean(face.canDelete))
       } catch {
         setFaceEnrolled(false)
         setFaceEnrolledAtLabel(null)
+        setCanDeleteFace(false)
       }
     }
   }, [])
@@ -429,16 +436,33 @@ export function KioskProvider({ children }) {
         const sess = await api.loginWithStudentId(id)
         setStudent(sess.student)
         setAnonymous(false)
-        await loadPersonalData({ withFace: false })
-        setScreen('home')
-        track('เข้าสู่ระบบด้วยรหัสนักศึกษา', CHANNEL.TOUCH, SOURCE.DB)
+        await loadPersonalData({ withFace: true })
+
+        // ถ้าเข้ามาเพื่อลงทะเบียนใบหน้า ให้ไปขอความยินยอมต่อ
+        // ต้องรู้ก่อนว่าเป็นใครจึงจะผูกเวกเตอร์ใบหน้ากับรหัสนักศึกษาได้
+        if (enrollIntent) {
+          setScreen('consent')
+          track('เริ่มลงทะเบียนใบหน้า', CHANNEL.TOUCH, SOURCE.DB)
+        } else {
+          setScreen('home')
+          track('เข้าสู่ระบบด้วยรหัสนักศึกษา', CHANNEL.TOUCH, SOURCE.DB)
+        }
         return true
       } catch {
         return false
       }
     },
-    [loadPersonalData, markActivity, track]
+    [enrollIntent, loadPersonalData, markActivity, track]
   )
+
+  /** เริ่มขั้นตอนลงทะเบียนใบหน้า — ต้องระบุตัวตนด้วยรหัสนักศึกษาก่อนเสมอ */
+  const startEnrollFlow = useCallback(() => {
+    markActivity()
+    setEnrollIntent(true)
+    setEnrollError(null)
+    // ถ้ายืนยันตัวตนแล้ว (เช่น กดจากหน้าหลัก) ข้ามไปขอความยินยอมได้เลย
+    setScreen(student ? 'consent' : 'keypad')
+  }, [markActivity, student])
 
   const startAnonymous = useCallback(async () => {
     markActivity()
@@ -494,9 +518,11 @@ export function KioskProvider({ children }) {
       const face = await api.getFaceStatus()
       setFaceEnrolled(face.enrolled)
       setFaceEnrolledAtLabel(face.enrolledAtLabel)
+      setCanDeleteFace(Boolean(face.canDelete))
     } catch {
       setFaceEnrolled(true)
     }
+    setEnrollIntent(false)
     await loadPersonalData({ withFace: false })
     setScreen('home')
     track('ลงทะเบียนใบหน้าสำเร็จ', CHANNEL.TOUCH, SOURCE.DB)
@@ -752,6 +778,8 @@ export function KioskProvider({ children }) {
       voiceUnclear,
       consentId,
       enrollError,
+      enrollIntent,
+      canDeleteFace,
       simStudents,
       activeStudent,
       activeStudentIdx,
@@ -782,6 +810,7 @@ export function KioskProvider({ children }) {
       loginWithStudentId,
       startAnonymous,
       giveConsent,
+      startEnrollFlow,
       startEnrollCapture,
       finishEnroll,
       cancelEnroll,
@@ -796,11 +825,11 @@ export function KioskProvider({ children }) {
       now, screen, boot, bootError, student, isAuthenticated, anonymous,
       effectiveSchedule, effectiveExams, hasSchedule, faceEnrolled, faceEnrolledAtLabel,
       online, cameraOk, cameraReady, sttReady, faceSim, voiceUnclear,
-      consentId, enrollError, simStudents, activeStudent,
+      consentId, enrollError, enrollIntent, canDeleteFace, simStudents, activeStudent,
       activeStudentIdx, unknownReason, candidate, micState, transcript,
       answer, answerPending, enrollProgress, devOpen, events, logoutCountdown,
       markActivity, detectPresence, goto, startScan, confirmCandidate,
-      loginWithStudentId, startAnonymous, giveConsent, startEnrollCapture,
+      loginWithStudentId, startAnonymous, giveConsent, startEnrollFlow, startEnrollCapture,
       finishEnroll, cancelEnroll, deleteFaceData, askQuestion, startListening,
       endSession, track, sim,
     ]

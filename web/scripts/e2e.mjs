@@ -50,6 +50,12 @@ if (!browser) {
 
 const page = await browser.newPage({ viewport: VIEWPORT })
 const errors = []
+const faceCalls = []
+page.on('response', (r) => {
+  if (r.url().includes('/api/face/') || r.url().includes('/api/me/face')) {
+    faceCalls.push({ status: r.status(), path: r.url().split('/api')[1].split('?')[0] })
+  }
+})
 page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`))
 page.on('console', (m) => {
   if (m.type() === 'error') errors.push(`console: ${m.text()}`)
@@ -147,13 +153,69 @@ try {
   check(text.includes('cs@mju.ac.th'), 'เสนอช่องทางติดต่อสาขาแทน')
   await shot('9-notfound')
 
-  console.log('\n6. ออกจากระบบแล้วข้อมูลต้องหายจากจอ')
+  console.log('\n5ก. ลงทะเบียนใบหน้า')
+  // เส้นทางนี้เคยพังด้วย 401 เพราะระบบยังไม่รู้ว่ากำลังลงทะเบียนให้ใคร
+  // ตอนนี้ต้องผ่านการกรอกรหัสนักศึกษาก่อนเสมอ
   await page.getByRole('button', { name: /ออกจากระบบ/ }).click()
-  await page.waitForTimeout(1500)
+  await page.waitForTimeout(1200)
+  await page.evaluate(() => fetch('/api/sim/face/unknown', { method: 'POST' }))
+  await page.waitForTimeout(1300)
+
+  await page.getByText('ลงทะเบียนใบหน้า').first().click()
+  await page.waitForTimeout(800)
+  check((await body()).includes('ยืนยันตัวตนก่อนลงทะเบียนใบหน้า'),
+        'ลงทะเบียนต้องระบุตัวตนด้วยรหัสนักศึกษาก่อน')
+
+  for (const digit of '6604101388') {
+    await page.getByRole('button', { name: digit, exact: true }).first().click()
+  }
+  await page.getByRole('button', { name: 'ตกลง', exact: true }).click()
+  await page.waitForTimeout(2200)
+  check((await body()).includes('ให้ความยินยอมในการเก็บข้อมูล'),
+        'ระบุตัวตนแล้วเข้าสู่หน้าขอความยินยอม')
+
+  await page.getByText('ข้าพเจ้า', { exact: false }).first().click()
+  await page.waitForTimeout(500)
+  await page.getByRole('button', { name: /เริ่มถ่ายใบหน้า/ }).click()
+  await page.waitForTimeout(3000)
+  text = await body()
+  check(text.includes('กำลังถ่ายใบหน้า'), 'เริ่มเก็บตัวอย่างใบหน้าได้')
+  check((await page.locator('img[src*="/api/face/stream"]').count()) > 0,
+        'หน้าถ่ายใบหน้าแสดงภาพจากกล้อง')
+
+  const denied = faceCalls.filter((c) => c.status === 401 || c.status === 403)
+  check(denied.length === 0, 'ไม่มีคำขอใดถูกปฏิเสธสิทธิ์ระหว่างลงทะเบียน',
+        denied.map((c) => `${c.status} ${c.path}`).join(', '))
+  check(faceCalls.some((c) => c.path === '/face/consent' && c.status === 200),
+        'บันทึกความยินยอมลงฐานข้อมูลสำเร็จ')
+  check(faceCalls.some((c) => c.path === '/face/enroll/start' && c.status === 200),
+        'เซิร์ฟเวอร์เริ่มเก็บเวกเตอร์ใบหน้าแล้ว')
+  await shot('11-enroll')
+
+  await page.getByRole('button', { name: 'ยกเลิก' }).click()
+  await page.waitForTimeout(1300)
+
+  console.log('\n6. ออกจากระบบแล้วข้อมูลต้องหายจากจอ')
+  // ออกจากระบบไปแล้วตอนเริ่มหมวด 5ก และกดยกเลิกจากหน้าถ่ายใบหน้าแล้ว
+  // จึงควรอยู่ที่หน้าจอพักโดยไม่มีข้อมูลผู้ใช้ค้างอยู่
   text = await body()
   check(text.includes('ยืนหน้าตู้เพื่อดูตารางเรียนของคุณ'), 'กลับสู่หน้าจอพัก')
   check(!text.includes('••••'), 'ไม่มีข้อมูลผู้ใช้ค้างบนหน้าจอ')
   await shot('10-logged-out')
+
+  console.log('\n7. โหมดจอคอมพิวเตอร์แนวนอน (Windows)')
+  await page.setViewportSize({ width: 1600, height: 900 })
+  await page.goto(BASE, { waitUntil: 'networkidle' })
+  await page.waitForTimeout(1800)
+  const desktop = await page.evaluate(() => ({
+    noHScroll: document.body.scrollWidth <= window.innerWidth,
+    hasAside: Boolean(document.querySelector('img[src*="/api/face/stream"]')),
+    stageFound: Boolean(document.querySelector('[style*="1080px"]')),
+  }))
+  check(desktop.stageFound, 'เวทีขนาดตู้ยังคงขนาด 1080 บนจอแนวนอน')
+  check(desktop.hasAside, 'แผงด้านข้างแสดงภาพผู้ใช้จากกล้อง')
+  check(desktop.noHScroll, 'ไม่มีแถบเลื่อนแนวนอน')
+  await shot('12-desktop')
 
   check(errors.length === 0, 'ไม่มีข้อผิดพลาดใน console',
         errors.length ? [...new Set(errors)].slice(0, 3).join(' / ') : '')

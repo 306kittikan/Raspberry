@@ -63,7 +63,8 @@ function OptionCard({ icon: Icon, title, detail, onClick, primary }) {
 
 /** หน้าจำไม่ได้ — ยังไม่ยืนยันตัวตน จึงไม่แสดงข้อมูลส่วนบุคคลใด ๆ */
 export default function NotRecognizedScreen() {
-  const { unknownReason, goto, startAnonymous, startScan, endSession } = useKiosk()
+  const { unknownReason, goto, startEnrollFlow, startAnonymous, startScan, endSession } =
+    useKiosk()
   const head = HEADINGS[unknownReason] || HEADINGS.unrecognized
   const Icon = head.icon
   const canEnroll = unknownReason !== 'timeout' && unknownReason !== 'camera'
@@ -88,8 +89,8 @@ export default function NotRecognizedScreen() {
               primary
               icon={IconFace}
               title="ลงทะเบียนใบหน้า"
-              detail="ใช้เวลาไม่ถึงหนึ่งนาที ครั้งต่อไปเข้าใช้งานได้ทันที"
-              onClick={() => goto('consent')}
+              detail="กรอกรหัสนักศึกษาหนึ่งครั้ง แล้วครั้งต่อไปยืนหน้าตู้ได้เลย"
+              onClick={startEnrollFlow}
             />
           ) : null}
 

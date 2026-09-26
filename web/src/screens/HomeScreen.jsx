@@ -52,7 +52,10 @@ function ClassRow({ item, muted }) {
 }
 
 export default function HomeScreen() {
-  const { now, hasSchedule, schedule, exams, department, goto, endSession, track } = useKiosk()
+  const {
+    now, hasSchedule, schedule, exams, department,
+    faceEnrolled, startEnrollFlow, goto, endSession, track,
+  } = useKiosk()
   const [tab, setTab] = useState('today')
 
   // ตารางเรียน คาบถัดไป และการนับถอยหลังทั้งหมดคำนวณที่เซิร์ฟเวอร์
@@ -74,6 +77,25 @@ export default function HomeScreen() {
       <OfflineBanner />
 
       <div className="min-h-0 flex-1 overflow-y-auto px-12 pb-6 pt-8">
+        {/* ---- ชวนลงทะเบียนใบหน้า เฉพาะคนที่ยังไม่เคยลงทะเบียน ---- */}
+        {!faceEnrolled ? (
+          <button
+            type="button"
+            onClick={startEnrollFlow}
+            className="press tap mb-7 flex w-full items-center gap-5 rounded-[24px] border-2 border-brand-300 bg-white px-8 py-6 text-left active:bg-brand-50"
+          >
+            <IconFace className="h-14 w-14 shrink-0 text-brand-700" />
+            <span className="min-w-0 flex-1">
+              <span className="block text-[26px] font-bold leading-tight text-brand-900">
+                ลงทะเบียนใบหน้าไว้ไหม
+              </span>
+              <span className="mt-1 block text-body leading-snug text-ink-soft">
+                ครั้งต่อไปยืนหน้าตู้แล้วเห็นตารางเรียนได้เลย ไม่ต้องกรอกรหัส
+              </span>
+            </span>
+          </button>
+        ) : null}
+
         {/* ---- วิชาถัดไป: เด่นที่สุดบนหน้าจอ ---- */}
         {!hasSchedule ? (
           <>
@@ -253,8 +275,13 @@ export default function HomeScreen() {
           <Button size="lg" icon={IconSparkle} onClick={() => goto('assistant')}>
             ถามผู้ช่วย
           </Button>
-          <Button size="lg" variant="secondary" icon={IconFace} onClick={() => goto('facedata')}>
-            จัดการข้อมูลใบหน้า
+          <Button
+            size="lg"
+            variant="secondary"
+            icon={IconFace}
+            onClick={faceEnrolled ? () => goto('facedata') : startEnrollFlow}
+          >
+            {faceEnrolled ? 'จัดการข้อมูลใบหน้า' : 'ลงทะเบียนใบหน้า'}
           </Button>
         </div>
       </div>

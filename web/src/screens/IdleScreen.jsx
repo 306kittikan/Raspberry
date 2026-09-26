@@ -29,7 +29,7 @@ export default function IdleScreen() {
       <OfflineBanner />
 
       {/* ---- ส่วนหัว: เวลา วันที่ ชื่อสาขา ---- */}
-      <div className="bg-brand-800 px-12 pb-12 pt-14 text-white">
+      <div className="bg-brand-800 px-12 pb-10 pt-12 text-white">
         <div className="flex items-center gap-5">
           <IconLogo className="h-[76px] w-[76px] text-brand-200" />
           <div>
@@ -44,16 +44,16 @@ export default function IdleScreen() {
       </div>
 
       {/* ---- คำเชิญชวนหลัก ---- */}
-      <div className="flex flex-1 flex-col justify-between px-12 py-12">
-        <div className="card flex flex-col items-center px-10 py-14 text-center">
-          <span className="relative flex h-[200px] w-[200px] items-center justify-center">
+      <div className="flex min-h-0 flex-1 flex-col justify-between px-12 py-9">
+        <div className="card flex flex-col items-center px-10 py-11 text-center">
+          <span className="relative flex h-[184px] w-[184px] items-center justify-center">
             <span className="absolute inset-0 rounded-full border-4 border-brand-300 animate-pulse-ring" />
-            <span className="flex h-[200px] w-[200px] items-center justify-center rounded-full border-4 border-brand-600 bg-brand-50">
-              <IconFace className="h-[110px] w-[110px] text-brand-700" />
+            <span className="flex h-[184px] w-[184px] items-center justify-center rounded-full border-4 border-brand-600 bg-brand-50">
+              <IconFace className="h-[100px] w-[100px] text-brand-700" />
             </span>
           </span>
 
-          <h1 className="mt-10 text-h1 font-bold leading-tight text-brand-900">
+          <h1 className="mt-8 text-h1 font-bold leading-tight text-brand-900">
             ยืนหน้าตู้เพื่อดูตารางเรียนของคุณ
           </h1>
           <p className="mt-5 max-w-[800px] text-body-lg text-ink-soft">

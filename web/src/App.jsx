@@ -1,5 +1,6 @@
 import React from 'react'
 import Stage from './components/Stage'
+import PresencePanel from './components/PresencePanel'
 import DevPanel from './components/DevPanel'
 import InactivityOverlay from './components/InactivityOverlay'
 import { KioskProvider, useKiosk } from './state/KioskProvider'
@@ -46,7 +47,8 @@ function Router() {
   }
 
   return (
-    <Stage>
+    // แผงด้านข้างแสดงเฉพาะบนจอคอมพิวเตอร์แนวนอน บนตู้จริง Stage จะไม่เรนเดอร์มัน
+    <Stage aside={<PresencePanel />}>
       <div className="h-full w-full" onPointerDown={handlePointerDown}>
         <Screen key={safeScreen} />
       </div>

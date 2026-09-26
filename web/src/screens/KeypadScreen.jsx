@@ -8,13 +8,26 @@ import { IconCameraOff, IconIncognito } from '../components/Icons'
 
 /** หน้ากรอกรหัสนักศึกษาด้วยแป้นตัวเลขบนจอ */
 export default function KeypadScreen() {
-  const { loginWithStudentId, startAnonymous, endSession, unknownReason, markActivity, simStudents } =
-    useKiosk()
+  const {
+    loginWithStudentId,
+    startAnonymous,
+    endSession,
+    unknownReason,
+    markActivity,
+    simStudents,
+    enrollIntent,
+  } = useKiosk()
   const [value, setValue] = useState('')
   const [error, setError] = useState('')
+  const [checking, setChecking] = useState(false)
 
-  const submit = () => {
-    const ok = loginWithStudentId(value)
+  // loginWithStudentId คืน Promise ต้องรอผลจริง
+  // ไม่งั้นค่าที่ได้เป็น Promise ซึ่งเป็นจริงเสมอ และข้อความผิดพลาดจะไม่ขึ้นเลย
+  const submit = async () => {
+    if (checking) return
+    setChecking(true)
+    const ok = await loginWithStudentId(value)
+    setChecking(false)
     if (!ok) {
       setError('ไม่พบรหัสนักศึกษานี้ในระบบ กรุณาตรวจสอบอีกครั้ง')
       setValue('')
@@ -36,9 +49,13 @@ export default function KeypadScreen() {
       ) : null}
 
       <div className="flex flex-1 flex-col px-12 py-10">
-        <h1 className="text-h2 font-bold text-brand-900">กรอกรหัสนักศึกษา</h1>
+        <h1 className="text-h2 font-bold text-brand-900">
+          {enrollIntent ? 'ยืนยันตัวตนก่อนลงทะเบียนใบหน้า' : 'กรอกรหัสนักศึกษา'}
+        </h1>
         <p className="mt-3 text-body text-ink-soft">
-          ตัวเลขที่กรอกไปแล้วจะถูกปิดบัง เพื่อความเป็นส่วนตัวขณะยืนใช้งาน
+          {enrollIntent
+            ? 'ระบบต้องรู้ก่อนว่าจะผูกใบหน้ากับรหัสนักศึกษาใด จึงขอให้กรอกรหัสหนึ่งครั้ง'
+            : 'ตัวเลขที่กรอกไปแล้วจะถูกปิดบัง เพื่อความเป็นส่วนตัวขณะยืนใช้งาน'}
         </p>
 
         <div className="mt-10 flex flex-1 flex-col justify-center">

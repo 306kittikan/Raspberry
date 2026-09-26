@@ -49,9 +49,20 @@ def exams(conn: Db, sess: StudentSession) -> dict:
 
 
 @router.get("/face")
-def face_status(conn: Db, sess: VerifiedSession) -> dict:
+def face_status(conn: Db, sess: StudentSession) -> dict:
+    """สถานะข้อมูลใบหน้าของตนเอง
+
+    อ่านได้ด้วยเซสชันแบบกรอกรหัสด้วย เพราะผู้ที่เพิ่งลงทะเบียนใบหน้าเสร็จ
+    ต้องเห็นว่าบันทึกสำเร็จแล้ว และข้อมูลที่เปิดเผยมีเพียง "มี/ไม่มี" กับวันที่
+    ส่วนการลบยังต้องยืนยันด้วยใบหน้าเท่านั้น (ดู delete_face_data ด้านล่าง)
+    """
     status_ = repo.face_status(conn, sess.student_pk)
-    return {**status_, "policyVersion": config.CONSENT_POLICY_VERSION}
+    return {
+        **status_,
+        "policyVersion": config.CONSENT_POLICY_VERSION,
+        # หน้าจอใช้ตัดสินว่าจะเปิดให้กดปุ่มลบได้หรือไม่
+        "canDelete": not sess.restricted,
+    }
 
 
 @router.delete("/face")
