@@ -16,7 +16,13 @@ export default function KeypadScreen() {
     markActivity,
     simStudents,
     enrollIntent,
+    pendingToken,
+    completeEnroll,
   } = useKiosk()
+
+  // มีใบหน้าที่ถ่ายไว้รออยู่ = หน้านี้คือขั้นสุดท้ายของการลงทะเบียน
+  // ไม่ใช่การเข้าสู่ระบบธรรมดา
+  const finishingEnroll = Boolean(pendingToken)
   const [value, setValue] = useState('')
   const [error, setError] = useState('')
   const [checking, setChecking] = useState(false)
@@ -26,7 +32,9 @@ export default function KeypadScreen() {
   const submit = async () => {
     if (checking) return
     setChecking(true)
-    const ok = await loginWithStudentId(value)
+    const ok = finishingEnroll
+      ? await completeEnroll(value)
+      : await loginWithStudentId(value)
     setChecking(false)
     if (!ok) {
       setError('ไม่พบรหัสนักศึกษานี้ในระบบ กรุณาตรวจสอบอีกครั้ง')
@@ -50,11 +58,11 @@ export default function KeypadScreen() {
 
       <div className="flex flex-1 flex-col px-12 py-10">
         <h1 className="text-h2 font-bold text-brand-900">
-          {enrollIntent ? 'ยืนยันตัวตนก่อนลงทะเบียนใบหน้า' : 'กรอกรหัสนักศึกษา'}
+          {finishingEnroll ? 'ใบหน้านี้เป็นของใคร' : 'กรอกรหัสนักศึกษา'}
         </h1>
         <p className="mt-3 text-body text-ink-soft">
-          {enrollIntent
-            ? 'ระบบต้องรู้ก่อนว่าจะผูกใบหน้ากับรหัสนักศึกษาใด จึงขอให้กรอกรหัสหนึ่งครั้ง'
+          {finishingEnroll
+            ? 'ถ่ายใบหน้าเรียบร้อยแล้ว เหลือเพียงกรอกรหัสนักศึกษาเพื่อผูกข้อมูลเข้าด้วยกัน'
             : 'ตัวเลขที่กรอกไปแล้วจะถูกปิดบัง เพื่อความเป็นส่วนตัวขณะยืนใช้งาน'}
         </p>
 

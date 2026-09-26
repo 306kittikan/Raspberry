@@ -26,16 +26,15 @@ const POINTS = [
 /** หน้าขอความยินยอม — ช่องทำเครื่องหมายต้องแตะเอง ห้ามทำเครื่องหมายไว้ล่วงหน้า */
 export default function ConsentScreen() {
   const [agreed, setAgreed] = useState(false)
-  const { giveConsent, startEnrollCapture, endSession, goto, markActivity } = useKiosk()
+  const { startEnrollCapture, endSession, goto, markActivity } = useKiosk()
   const [saving, setSaving] = useState(false)
 
-  // บันทึกความยินยอมลงฐานข้อมูลก่อน แล้วจึงเริ่มถ่าย
-  // ถ้าบันทึกไม่สำเร็จต้องไม่ไปต่อ เพราะฐานข้อมูลจะปฏิเสธการเขียนเวกเตอร์อยู่ดี
+  // ความยินยอมต้องมาก่อนการถ่ายเสมอ ตาม พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคลฯ มาตรา 26
+  // เวลาที่กดปุ่มนี้ถูกจำไว้ที่เซิร์ฟเวอร์ แล้วบันทึกพร้อมเวกเตอร์ในขั้นสุดท้าย
   const proceed = async () => {
     setSaving(true)
-    const ok = await giveConsent()
+    await startEnrollCapture()
     setSaving(false)
-    if (ok) startEnrollCapture()
   }
 
   return (
@@ -94,9 +93,9 @@ export default function ConsentScreen() {
         <div className="mt-auto flex flex-col gap-5 pt-10">
           <Button size="xl" disabled={!agreed || saving} onClick={proceed}>
             {saving
-              ? 'กำลังบันทึกความยินยอม…'
+              ? 'กำลังเปิดกล้อง…'
               : agreed
-                ? 'เริ่มถ่ายใบหน้า'
+                ? 'ยินยอมแล้วถ่ายใบหน้าเลย'
                 : 'กรุณาแตะช่องยินยอมก่อน'}
           </Button>
           <Button size="lg" variant="secondary" onClick={() => goto('unknown')}>

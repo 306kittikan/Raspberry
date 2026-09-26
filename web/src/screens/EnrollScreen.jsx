@@ -21,6 +21,14 @@ const FAILURES = {
     title: 'ใบหน้านี้ถูกลงทะเบียนไว้กับรหัสนักศึกษาอื่นแล้ว',
     detail: 'กรุณาติดต่อสำนักงานสาขาวิชาฯ เพื่อตรวจสอบข้อมูล',
   },
+  duplicate_id: {
+    title: 'รหัสนักศึกษานี้มีข้อมูลใบหน้าอยู่แล้ว',
+    detail: 'หากต้องการลงทะเบียนใหม่ กรุณาติดต่อสำนักงานสาขาวิชาฯ เพื่อลบข้อมูลเดิมก่อน',
+  },
+  expired: {
+    title: 'ใบหน้าที่ถ่ายไว้หมดอายุแล้ว',
+    detail: 'ระบบเก็บไว้ชั่วคราวเพียง 3 นาที เพื่อความปลอดภัย กรุณาถ่ายใหม่อีกครั้ง',
+  },
   consent: {
     title: 'ไม่พบความยินยอมที่ใช้งานได้',
     detail: 'กรุณาเริ่มขั้นตอนใหม่ตั้งแต่หน้าขอความยินยอม',
@@ -31,6 +39,7 @@ const FAILURES = {
 export default function EnrollScreen() {
   const { enrollProgress, enrollError, cameraReady, finishEnroll, cancelEnroll, goto, endSession } =
     useKiosk()
+  // ถ่ายครบแล้วแต่ยังไม่รู้ว่าเป็นของใคร ขั้นต่อไปคือกรอกรหัสนักศึกษา
   const done = enrollProgress >= 100 && !enrollError
   const current = [...STEPS].reverse().find((s) => enrollProgress >= s.at)
   const failure = enrollError
@@ -67,13 +76,13 @@ export default function EnrollScreen() {
           </span>
 
           <h1 className="mt-10 text-h2 font-bold text-brand-900">
-            {failure ? failure.title : done ? 'ลงทะเบียนใบหน้าสำเร็จ' : 'กำลังถ่ายใบหน้า'}
+            {failure ? failure.title : done ? 'ถ่ายใบหน้าเรียบร้อย' : 'กำลังถ่ายใบหน้า'}
           </h1>
           <p className="mt-4 text-body-lg text-ink-soft">
             {failure
               ? failure.detail
               : done
-                ? 'ครั้งต่อไปคุณจะเข้าใช้งานได้ทันทีเมื่อยืนหน้าตู้'
+                ? 'อีกขั้นเดียว — บอกระบบว่าใบหน้านี้เป็นของรหัสนักศึกษาใด'
                 : current?.label}
           </p>
 
@@ -130,7 +139,7 @@ export default function EnrollScreen() {
             </>
           ) : (
             <Button size="xl" className="w-full" disabled={!done} onClick={finishEnroll}>
-              {done ? 'เข้าสู่ตารางเรียนของฉัน' : 'กรุณารอสักครู่…'}
+              {done ? 'ต่อไป — กรอกรหัสนักศึกษา' : 'กรุณารอสักครู่…'}
             </Button>
           )}
         </div>

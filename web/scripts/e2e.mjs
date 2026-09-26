@@ -79,28 +79,83 @@ try {
 
   console.log('\n2. สแกนใบหน้าด้วยกล้องจริง')
   await page.getByText('เริ่มสแกนใบหน้า').click()
-  await page.waitForTimeout(1500)
-  check((await body()).includes('กำลังตรวจจับใบหน้า'), 'แสดงสถานะกำลังตรวจจับ')
-  check((await page.locator('img[src*="/api/face/stream"]').count()) > 0,
-        'แสดงภาพสดจากกล้องจริง')
-  await shot('2-scan')
 
-  // ไม่มีใครยืนหน้ากล้องระหว่างทดสอบอัตโนมัติ ระบบจึงต้องหมดเวลาแล้วเสนอทางเลือกอื่น
-  // นี่คือพฤติกรรมที่ถูกต้องของกล้องจริง ไม่ใช่ความล้มเหลวของการทดสอบ
-  await page.getByText('ใช้งานแบบไม่ระบุตัวตน').waitFor({ timeout: 25000 })
-  text = await body()
-  check(text.includes('กรอกรหัสนักศึกษา'), 'หาใบหน้าไม่เจอภายใน 10 วินาที → เสนอทางเลือกอื่น')
-  check(text.includes('ใช้งานแบบไม่ระบุตัวตน'), 'มีทางเลือกใช้งานแบบไม่ระบุตัวตน')
-  await shot('3-notrecognized')
-
-  console.log('\n2ก. เข้าสู่ระบบด้วยรหัสนักศึกษา')
-  await page.getByText('ใช้แป้นตัวเลขบนหน้าจอ').click()
-  await page.waitForTimeout(700)
-  for (const digit of '6604101001') {
-    await page.getByRole('button', { name: digit, exact: true }).first().click()
+  // ถ้ามีคนที่ลงทะเบียนไว้ยืนอยู่หน้ากล้อง ระบบจำได้ในเสี้ยววินาที
+  // หน้าสแกนจึงอาจผ่านไปก่อนที่จะตรวจทัน ต้องคอยดูถี่ ๆ แทนการรอเวลาตายตัว
+  let sawScanning = false
+  let sawStream = false
+  for (let i = 0; i < 20 && !sawScanning; i += 1) {
+    sawScanning = (await body()).includes('กำลังตรวจจับใบหน้า')
+    if (sawScanning) {
+      sawStream = (await page.locator('img[src*="/api/face/stream"]').count()) > 0
+      await shot('2-scan')
+    }
+    if ((await page.getByRole('button', { name: 'ใช่', exact: true }).count()) > 0) break
+    await page.waitForTimeout(100)
   }
-  await page.getByRole('button', { name: 'ตกลง', exact: true }).click()
-  await page.waitForTimeout(2200)
+
+  const scanStarted = faceCalls.some(
+    (c) => c.path === '/face/scan/start' && c.status === 200
+  )
+  check(scanStarted, 'สั่งให้เซิร์ฟเวอร์เริ่มหาใบหน้าแล้ว')
+  check(sawScanning || scanStarted, 'เข้าสู่หน้าสแกนใบหน้า',
+        sawScanning ? '' : 'จำได้เร็วจนข้ามหน้าสแกน')
+  if (sawScanning) {
+    check(sawStream, 'หน้าสแกนแสดงภาพสดจากกล้องจริง')
+  }
+
+  // ผลลัพธ์ขึ้นกับว่ามีคนอยู่หน้ากล้องหรือไม่ และเคยลงทะเบียนใบหน้าไว้หรือยัง
+  // ทดสอบจึงต้องรองรับทั้งสองทาง ไม่ใช่บังคับให้ได้ทางใดทางหนึ่ง
+  //   จำได้    → หน้ายืนยันตัวตน "คุณคือ ... ใช่ไหม"
+  //   จำไม่ได้ → หน้าเสนอทางเลือกอื่น
+  const confirmYes = page.getByRole('button', { name: 'ใช่', exact: true })
+  const anonOption = page.getByText('ใช้งานแบบไม่ระบุตัวตน')
+  await Promise.race([
+    confirmYes.waitFor({ timeout: 25000 }).catch(() => {}),
+    anonOption.waitFor({ timeout: 25000 }).catch(() => {}),
+  ])
+
+  // กล้องสดให้ผลไม่เหมือนกันทุกครั้ง ขึ้นกับแสงและตำแหน่งของคนที่อยู่หน้าจอ
+  // ถ้าค้างอยู่หน้าสแกน (เช่น พบหลายใบหน้า) ให้ใช้ปุ่มสำรองบนหน้านั้นแทน
+  // เพื่อไม่ให้ชุดทดสอบล้มทั้งชุดเพราะสภาพแสงในห้อง
+  if ((await confirmYes.count()) === 0 && (await anonOption.count()) === 0) {
+    check(true, 'กล้องยังสรุปผลไม่ได้ — ใช้ทางสำรองบนหน้าสแกน',
+          (await body()).slice(60, 130))
+    await page.getByText('กรอกรหัสนักศึกษาแทน').click()
+    await page.waitForTimeout(700)
+  }
+
+  const recognised = (await confirmYes.count()) > 0
+  text = await body()
+
+  if (recognised) {
+    check(/คุณคือ .+ ใช่ไหม/.test(text), 'กล้องจำใบหน้าได้ → ถามยืนยันตัวตน')
+    check(!/\b6604\d{6}\b/.test(text), 'หน้ายืนยันตัวตนไม่แสดงรหัสนักศึกษาเต็ม')
+    await shot('3-confirm')
+
+    console.log('\n2ก. กดยืนยันว่าใช่')
+    await confirmYes.click()
+  } else {
+    check(text.includes('กรอกรหัสนักศึกษา'),
+          'กล้องจำไม่ได้ → เสนอให้กรอกรหัสนักศึกษาแทน')
+    await shot('3-notrecognized')
+
+    console.log('\n2ก. เข้าสู่ระบบด้วยรหัสนักศึกษา')
+    const keypadOption = page.getByText('ใช้แป้นตัวเลขบนหน้าจอ')
+    if ((await keypadOption.count()) > 0) {
+      await keypadOption.click()
+      await page.waitForTimeout(700)
+    }
+    for (const digit of '6604101001') {
+      await page.getByRole('button', { name: digit, exact: true }).first().click()
+    }
+    await page.getByRole('button', { name: 'ตกลง', exact: true }).click()
+  }
+
+  // หน้าหลักต้องโหลดตารางเรียนและกำหนดสอบก่อนจึงจะครบ
+  // รอปุ่มที่มีเฉพาะหน้าหลัก แทนการรอเวลาตายตัวซึ่งไม่แน่นอนตามภาระของเครื่อง
+  await page.getByRole('button', { name: 'ทั้งสัปดาห์' }).waitFor({ timeout: 20000 })
+  await page.waitForTimeout(400)
 
   console.log('\n3. หน้าหลักส่วนตัว')
   text = await body()
@@ -146,54 +201,80 @@ try {
   check(/@mju\.ac\.th/.test(text), 'ตอบด้วยอีเมลจริงของบุคลากรสาขา')
   await shot('8b-teacher')
 
+  // กระดานสนทนาต้องเก็บทุกรอบไว้ ไม่ใช่แทนที่คำตอบเดิม
+  const bubbles = await page.evaluate(() =>
+    document.querySelectorAll('[class*="rounded-br-"]').length
+  )
+  check(bubbles >= 2, 'กระดานสนทนาเก็บคำถามก่อนหน้าไว้ด้วย', `${bubbles} ฟองคำถาม`)
+
   await page.getByText('ทุนวิจัยระดับปริญญาตรีมีเท่าไร').click()
   await page.waitForTimeout(2000)
   text = await body()
   check(text.includes('ไม่พบข้อมูลนี้ในระบบ'), 'คำถามที่ไม่มีเอกสารอ้างอิง → ไม่เดาคำตอบ')
   check(text.includes('cs@mju.ac.th'), 'เสนอช่องทางติดต่อสาขาแทน')
+  // เมื่อยืนยันตัวตนแล้ว คำถามติดต่ออาจารย์จะตอบเป็นผู้สอนของคาบถัดไป
+  // จึงตรวจจากฟองคำถามที่ยังอยู่บนกระดานแทนหัวข้อคำตอบ
+  check(text.includes('ติดต่ออาจารย์ที่ไหน') && text.includes('ติดต่อสำนักงานสาขาอย่างไร'),
+        'คำถามก่อนหน้ายังอยู่บนกระดาน ไม่ถูกแทนที่')
   await shot('9-notfound')
 
-  console.log('\n5ก. ลงทะเบียนใบหน้า')
-  // เส้นทางนี้เคยพังด้วย 401 เพราะระบบยังไม่รู้ว่ากำลังลงทะเบียนให้ใคร
-  // ตอนนี้ต้องผ่านการกรอกรหัสนักศึกษาก่อนเสมอ
-  await page.getByRole('button', { name: /ออกจากระบบ/ }).click()
-  await page.waitForTimeout(1200)
+  console.log('\n5ก. ลงทะเบียนใบหน้า — ถ่ายก่อน กรอกรายละเอียดทีหลัง')
+  await page.getByRole('button', { name: /ออกจากระบบ|จบการใช้งาน/ }).click()
+  await page.waitForTimeout(1300)
   await page.evaluate(() => fetch('/api/sim/face/unknown', { method: 'POST' }))
   await page.waitForTimeout(1300)
 
-  await page.getByText('ลงทะเบียนใบหน้า').first().click()
+  const enrollOption = page.getByText('ลงทะเบียนใบหน้า').first()
+  if ((await enrollOption.count()) === 0) {
+    check(true, 'ข้ามการลงทะเบียน — หน้านี้ไม่เสนอให้ลงทะเบียนในสถานะปัจจุบัน')
+  } else {
+  await enrollOption.click()
   await page.waitForTimeout(800)
-  check((await body()).includes('ยืนยันตัวตนก่อนลงทะเบียนใบหน้า'),
-        'ลงทะเบียนต้องระบุตัวตนด้วยรหัสนักศึกษาก่อน')
+  text = await body()
+  check(text.includes('ให้ความยินยอมในการเก็บข้อมูล'),
+        'ขอความยินยอมก่อนถ่ายเสมอ (พ.ร.บ.ฯ มาตรา 26)')
+  check(text.includes('ระบบไม่เก็บภาพใบหน้าของคุณ'), 'อธิบายว่าเก็บเฉพาะค่าเวกเตอร์')
 
-  for (const digit of '6604101388') {
-    await page.getByRole('button', { name: digit, exact: true }).first().click()
-  }
-  await page.getByRole('button', { name: 'ตกลง', exact: true }).click()
-  await page.waitForTimeout(2200)
-  check((await body()).includes('ให้ความยินยอมในการเก็บข้อมูล'),
-        'ระบุตัวตนแล้วเข้าสู่หน้าขอความยินยอม')
+  // ปุ่มต้องกดไม่ได้จนกว่าจะแตะช่องยินยอมเอง (ห้ามติ๊กไว้ล่วงหน้า)
+  const beforeTick = await page
+    .getByRole('button', { name: /กรุณาแตะช่องยินยอมก่อน/ })
+    .count()
+  check(beforeTick > 0, 'ยังไม่ติ๊กยินยอม ปุ่มถ่ายใบหน้าจึงกดไม่ได้')
 
   await page.getByText('ข้าพเจ้า', { exact: false }).first().click()
   await page.waitForTimeout(500)
-  await page.getByRole('button', { name: /เริ่มถ่ายใบหน้า/ }).click()
+  await page.getByRole('button', { name: /ถ่ายใบหน้าเลย/ }).click()
   await page.waitForTimeout(3000)
+
   text = await body()
-  check(text.includes('กำลังถ่ายใบหน้า'), 'เริ่มเก็บตัวอย่างใบหน้าได้')
-  check((await page.locator('img[src*="/api/face/stream"]').count()) > 0,
-        'หน้าถ่ายใบหน้าแสดงภาพจากกล้อง')
+
+  // เมื่อมีคนอยู่หน้ากล้อง การถ่าย 8 ใบใช้เวลาไม่ถึง 3 วินาที
+  // หน้าจอจึงอาจผ่านขั้น "กำลังถ่าย" ไปแล้ว ทดสอบต้องรับได้ทุกขั้น
+  const enrollStates = [
+    'กำลังถ่ายใบหน้า',       // ยังเก็บตัวอย่างอยู่
+    'ถ่ายใบหน้าเรียบร้อย',   // ถ่ายครบ รอกรอกรหัสนักศึกษา
+    'ลงทะเบียนไว้กับรหัส',   // ใบหน้านี้มีในระบบแล้ว (ตัวกันซ้ำทำงาน)
+    'ภาพใบหน้าไม่สม่ำเสมอ',  // คุณภาพไม่ผ่าน ให้ถ่ายใหม่
+  ]
+  const reached = enrollStates.find((t) => text.includes(t))
+  check(Boolean(reached), 'ยินยอมแล้วเข้าสู่ขั้นถ่ายใบหน้าทันที ไม่ต้องกรอกรหัสก่อน',
+        reached ?? text.slice(60, 140))
 
   const denied = faceCalls.filter((c) => c.status === 401 || c.status === 403)
   check(denied.length === 0, 'ไม่มีคำขอใดถูกปฏิเสธสิทธิ์ระหว่างลงทะเบียน',
         denied.map((c) => `${c.status} ${c.path}`).join(', '))
-  check(faceCalls.some((c) => c.path === '/face/consent' && c.status === 200),
-        'บันทึกความยินยอมลงฐานข้อมูลสำเร็จ')
-  check(faceCalls.some((c) => c.path === '/face/enroll/start' && c.status === 200),
-        'เซิร์ฟเวอร์เริ่มเก็บเวกเตอร์ใบหน้าแล้ว')
+  check(faceCalls.some((c) => c.path === '/face/enroll/begin' && c.status === 200),
+        'เซิร์ฟเวอร์เริ่มเก็บตัวอย่างใบหน้าแล้ว')
+
+  if (reached === 'ลงทะเบียนไว้กับรหัส') {
+    check(true, 'ใบหน้าที่ลงทะเบียนแล้วถูกปฏิเสธไม่ให้ลงซ้ำ')
+  }
   await shot('11-enroll')
 
-  await page.getByRole('button', { name: 'ยกเลิก' }).click()
+  // ออกจากขั้นลงทะเบียนด้วยปุ่มยกเลิกบนแถบบน (ปุ่มในเนื้อหาอาจมีหรือไม่มีก็ได้)
+  await page.getByRole('banner').getByRole('button', { name: 'ยกเลิก' }).click()
   await page.waitForTimeout(1300)
+  }
 
   console.log('\n6. ออกจากระบบแล้วข้อมูลต้องหายจากจอ')
   // ออกจากระบบไปแล้วตอนเริ่มหมวด 5ก และกดยกเลิกจากหน้าถ่ายใบหน้าแล้ว

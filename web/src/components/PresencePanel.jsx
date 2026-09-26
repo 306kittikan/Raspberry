@@ -2,7 +2,8 @@ import React from 'react'
 import { useKiosk } from '../state/KioskProvider'
 import CameraView from './CameraView'
 import { formatClock, formatThaiDate } from '../lib/time'
-import { IconLogo, IconMic, IconSparkle, IconUsers } from './Icons'
+import Logo from './Logo'
+import { IconMic, IconSparkle, IconUsers } from './Icons'
 
 /**
  * แผงด้านข้างสำหรับจอคอมพิวเตอร์แนวนอน
@@ -53,7 +54,7 @@ export default function PresencePanel() {
     <div className="flex h-full w-full flex-col bg-[#04110A] px-10 py-9 text-white">
       {/* ---- หัวแผง ---- */}
       <div className="flex items-center gap-4">
-        <IconLogo className="h-14 w-14 shrink-0 text-brand-500/70" />
+        <Logo className="h-14 w-14 shrink-0" tone="dark" />
         <div className="min-w-0">
           <p className="truncate text-[22px] font-bold leading-tight text-white/85">
             {department?.name ?? 'ตู้บริการข้อมูลอัจฉริยะ'}

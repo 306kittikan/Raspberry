@@ -3,7 +3,7 @@ import { useKiosk } from '../state/KioskProvider'
 import TopBar from '../components/TopBar'
 import OfflineBanner from '../components/OfflineBanner'
 import MicPanel from '../components/MicPanel'
-import AnswerCard from '../components/AnswerCard'
+import ChatBoard from '../components/ChatBoard'
 import { Button, UpdatedAt } from '../components/ui'
 import SourceBadge from '../components/SourceBadge'
 import {
@@ -58,12 +58,9 @@ export default function AssistantScreen() {
           <MicPanel />
         </div>
 
-        {/* ---- พื้นที่แสดงคำตอบ ---- */}
-        {answer || answerPending ? (
-          <div className="mt-8">
-            <AnswerCard answer={answer} pending={answerPending} />
-          </div>
-        ) : null}
+        {/* ---- กระดานสนทนา: คำถามและคำตอบเรียงต่อกัน ---- */}
+        {/* เก็บบนหน้าจอเท่านั้น ล้างทิ้งทันทีเมื่อออกจากระบบ */}
+        <ChatBoard className="mt-8" />
 
         {/* ---- คำถามยอดนิยมแบบแตะได้ ---- */}
         <div className="mt-9">

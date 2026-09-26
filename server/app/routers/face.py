@@ -10,8 +10,11 @@ from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
+import sqlite3
+
 from .. import config, repo, thai
-from ..deps import Db, StudentSession, VerifiedSession
+from ..deps import Db, MaybeSession, VerifiedSession
+from ..session import store as session_store
 from ..services import face as face_service
 from ..services.camera import camera
 from ..services.face_worker import worker
@@ -120,70 +123,129 @@ class ConsentIn(BaseModel):
     policyVersion: str | None = None
 
 
-@router.post("/consent")
-def give_consent(body: ConsentIn, conn: Db, sess: StudentSession) -> dict:
-    """บันทึกความยินยอมให้ประมวลผลข้อมูลใบหน้า
+@router.post("/enroll/begin")
+def enroll_begin(body: ConsentIn) -> dict:
+    """ขั้นที่ 1: ให้ความยินยอมแล้วเริ่มถ่ายใบหน้าทันที
 
-    ต้องเรียกก่อนลงทะเบียนเสมอ และค่า agreed ต้องเป็น true ที่ผู้ใช้กดเอง
-    ฐานข้อมูลบังคับอีกชั้นหนึ่งว่าไม่มีความยินยอมแล้วเขียนเวกเตอร์ไม่ได้
+    ยังไม่ต้องรู้ว่าเป็นใคร ผู้ใช้กรอกรหัสนักศึกษาทีหลัง
+    เพราะกล้องจ่ออยู่ที่หน้าเขาอยู่แล้ว ถ่ายเลยจึงเป็นธรรมชาติกว่า
+    และเวลาที่เสียไปกับการกรอกรหัสก็ไม่ต้องให้ยืนค้างอยู่หน้ากล้อง
+
+    ความยินยอมยังต้องมาก่อนการถ่ายเสมอ ตามที่ พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคลฯ
+    มาตรา 26 กำหนดไว้สำหรับข้อมูลชีวภาพ
+    เวลาที่กดยินยอมถูกจำไว้แล้วบันทึกลงฐานข้อมูลพร้อมเวกเตอร์ในขั้นสุดท้าย
     """
     if not body.agreed:
-        raise HTTPException(status.HTTP_400_BAD_REQUEST, "ต้องให้ความยินยอมก่อนจึงจะดำเนินการต่อได้")
-
-    now = thai.now().isoformat(timespec="seconds")
-    with conn:
-        cur = conn.execute(
-            """INSERT INTO consents (student_id, purpose, policy_version, granted_at, method)
-               VALUES (?, 'face_recognition', ?, ?, 'kiosk_touch')""",
-            (sess.student_pk, body.policyVersion or config.CONSENT_POLICY_VERSION, now),
-        )
-    return {"consentId": cur.lastrowid, "grantedAt": now,
-            "policyVersion": body.policyVersion or config.CONSENT_POLICY_VERSION}
-
-
-@router.post("/enroll/start")
-def enroll_start(conn: Db, sess: StudentSession) -> dict:
-    """เริ่มเก็บตัวอย่างใบหน้า
-
-    ข้อจำกัดด้านความปลอดภัยที่บังคับไว้ที่นี่
-      1. ต้องมีความยินยอมที่ยังไม่ถูกถอน
-      2. ผู้ที่มีข้อมูลใบหน้าอยู่แล้วลงทะเบียนซ้ำไม่ได้
-
-    ข้อ 2 สำคัญมาก เพราะการเข้าสู่ระบบด้วยการกรอกรหัสนักศึกษาไม่มีการยืนยันตัวตน
-    ถ้าไม่กันไว้ ใครก็กรอกรหัสของผู้อื่นแล้วลงทะเบียนใบหน้าตัวเองทับได้
-    ผู้ที่ต้องการลงทะเบียนใหม่ต้องไปลบข้อมูลเดิมที่สำนักงานสาขาก่อน
-    """
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "ต้องให้ความยินยอมก่อนจึงจะถ่ายใบหน้าได้")
     if not camera.available:
         raise HTTPException(
             status.HTTP_503_SERVICE_UNAVAILABLE,
             camera.error or "กล้องไม่พร้อมใช้งาน",
         )
+    if not face_service.engine.ready:
+        raise HTTPException(
+            status.HTTP_503_SERVICE_UNAVAILABLE,
+            face_service.engine.error or "โมเดลรู้จำใบหน้ายังไม่พร้อม",
+        )
 
-    existing = repo.face_status(conn, sess.student_pk)
-    if existing["enrolled"]:
+    policy = body.policyVersion or config.CONSENT_POLICY_VERSION
+    worker.begin_enroll(consent_at=thai.now(), policy_version=policy)
+    return {"capturing": True, "policyVersion": policy}
+
+
+class CompleteEnrollIn(BaseModel):
+    pendingToken: str
+    studentId: str | None = None
+
+
+@router.post("/enroll/complete")
+def enroll_complete(body: CompleteEnrollIn, conn: Db, sess: MaybeSession) -> dict:
+    """ขั้นที่ 2: บอกว่าใบหน้าที่เพิ่งถ่ายเป็นของนักศึกษาคนใด
+
+    ถึงขั้นนี้เท่านั้นที่เวกเตอร์ถูกเขียนลงดิสก์ พร้อมกับบันทึกความยินยอม
+    ในรายการเดียวกัน ถ้าขั้นใดขั้นหนึ่งล้มเหลวจะไม่มีอะไรถูกบันทึกเลย
+    """
+    pending = session_store.take_enrollment(body.pendingToken)
+    if pending is None:
+        raise HTTPException(
+            status.HTTP_410_GONE,
+            "ข้อมูลใบหน้าที่ถ่ายไว้หมดอายุแล้ว กรุณาถ่ายใหม่อีกครั้ง",
+        )
+
+    # รู้ตัวตนได้สองทาง: จากเซสชันที่ยืนยันแล้ว หรือจากรหัสที่เพิ่งกรอก
+    if sess is not None and sess.student_pk is not None:
+        student = repo.get_student(conn, sess.student_pk)
+    elif body.studentId:
+        student = repo.find_student_by_code(conn, body.studentId)
+    else:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "ต้องระบุรหัสนักศึกษา")
+
+    if student is None:
+        raise HTTPException(
+            status.HTTP_404_NOT_FOUND, "ไม่พบรหัสนักศึกษานี้ในระบบของสาขา"
+        )
+
+    # รหัสที่มีข้อมูลใบหน้าอยู่แล้วลงทะเบียนซ้ำไม่ได้
+    # เพราะการกรอกรหัสไม่ได้ยืนยันตัวตน ถ้าไม่กันไว้ใครก็ลงทะเบียนทับของผู้อื่นได้
+    if repo.face_status(conn, student["id"])["enrolled"]:
         raise HTTPException(
             status.HTTP_409_CONFLICT,
             "รหัสนักศึกษานี้มีข้อมูลใบหน้าในระบบแล้ว "
             "หากต้องการลงทะเบียนใหม่ กรุณาติดต่อสำนักงานสาขาวิชาฯ",
         )
 
-    consent = conn.execute(
-        """SELECT id FROM consents
-           WHERE student_id = ? AND purpose = 'face_recognition' AND revoked_at IS NULL
-           ORDER BY id DESC LIMIT 1""",
-        (sess.student_pk,),
-    ).fetchone()
-    if consent is None:
-        raise HTTPException(status.HTTP_403_FORBIDDEN, "ยังไม่ได้บันทึกความยินยอม")
+    now = thai.now().isoformat(timespec="seconds")
+    try:
+        with conn:
+            cur = conn.execute(
+                """INSERT INTO consents
+                       (student_id, purpose, policy_version, granted_at, method)
+                   VALUES (?, 'face_recognition', ?, ?, 'kiosk_touch')""",
+                (student["id"], pending.policy_version,
+                 pending.consent_at.isoformat(timespec="seconds")),
+            )
+            conn.execute(
+                """INSERT INTO face_embeddings
+                       (student_id, consent_id, vector, dim, model, quality, created_at)
+                   VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                (student["id"], cur.lastrowid, face_service.to_blob(pending.vector),
+                 face_service.EMBEDDING_DIM, face_service.MODEL_TAG, pending.quality, now),
+            )
+    except sqlite3.Error as exc:
+        log.warning("บันทึกข้อมูลใบหน้าไม่สำเร็จ: %s", exc)
+        raise HTTPException(
+            status.HTTP_500_INTERNAL_SERVER_ERROR, "บันทึกข้อมูลใบหน้าไม่สำเร็จ"
+        ) from exc
 
-    worker.begin_enroll(sess.student_pk, consent["id"])
-    return {"enrolling": True, "consentId": consent["id"]}
+    log.info("ลงทะเบียนใบหน้าสำเร็จ: %s (quality=%.3f)", student["name"], pending.quality)
+
+    # เปิดเซสชันให้ใช้งานต่อได้เลย
+    # ยังเป็นเซสชันแบบจำกัดเหมือนการกรอกรหัส เพราะรหัสที่กรอกยังไม่ได้ถูกยืนยัน
+    # ครั้งหน้าเมื่อสแกนใบหน้าแล้วระบบจำได้ จะได้เซสชันเต็มเอง
+    new_sess = session_store.start(
+        student_pk=student["id"],
+        restricted=config.KEYPAD_MODE_RESTRICTED,
+        method="face_enroll",
+    )
+    return {
+        "token": new_sess.token,
+        "method": new_sess.method,
+        "restricted": new_sess.restricted,
+        "student": repo.student_public(student, restricted=new_sess.restricted),
+        "quality": round(pending.quality, 3),
+    }
+
+
+class CancelEnrollIn(BaseModel):
+    pendingToken: str | None = None
 
 
 @router.post("/enroll/cancel")
-def enroll_cancel() -> dict:
+def enroll_cancel(body: CancelEnrollIn | None = None) -> dict:
+    """ยกเลิกกลางคัน — ทิ้งใบหน้าที่พักไว้ทันที ไม่รอหมดอายุ"""
     worker.cancel_enroll()
-    return {"enrolling": False}
+    session_store.drop_enrollment(body.pendingToken if body else None)
+    return {"capturing": False}
 
 
 @router.delete("/enroll")

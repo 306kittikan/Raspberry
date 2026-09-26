@@ -121,10 +121,19 @@ export const cameraStreamUrl = () => `${BASE}/api/face/stream?t=${Date.now()}`
 export const faceStatus = () => get('/api/face/status')
 export const startScan = () => post('/api/face/scan/start')
 export const stopScan = () => post('/api/face/scan/stop')
-export const giveConsent = (policyVersion) =>
-  post('/api/face/consent', { agreed: true, policyVersion })
-export const startEnroll = () => post('/api/face/enroll/start')
-export const cancelEnroll = () => post('/api/face/enroll/cancel')
+/** ขั้นที่ 1: ยินยอมแล้วถ่ายใบหน้าทันที ยังไม่ต้องรู้ว่าเป็นใคร */
+export const beginEnroll = (policyVersion) =>
+  post('/api/face/enroll/begin', { agreed: true, policyVersion })
+
+/** ขั้นที่ 2: บอกว่าใบหน้าที่ถ่ายไว้เป็นของรหัสนักศึกษาใด แล้วรับเซสชันกลับมา */
+export async function completeEnroll(pendingToken, studentId) {
+  const data = await post('/api/face/enroll/complete', { pendingToken, studentId })
+  setSessionToken(data.token)
+  return data
+}
+
+export const cancelEnroll = (pendingToken) =>
+  post('/api/face/enroll/cancel', pendingToken ? { pendingToken } : {})
 
 // ------------------------------------------------------------
 // ช่องทางเสียง

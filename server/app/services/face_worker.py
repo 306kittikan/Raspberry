@@ -18,6 +18,7 @@ import sqlite3
 import threading
 import time
 from dataclasses import dataclass, field
+from datetime import datetime
 from typing import Any
 
 import numpy as np
@@ -44,8 +45,14 @@ ENROLL_MIN_QUALITY = 0.60
 
 @dataclass(slots=True)
 class _EnrollJob:
-    student_pk: int
-    consent_id: int
+    """งานเก็บตัวอย่างใบหน้าหนึ่งครั้ง
+
+    ตอนเริ่มยังไม่รู้ว่าเป็นของใคร เพราะผู้ใช้ถ่ายใบหน้าก่อนแล้วค่อยกรอกรหัสนักศึกษา
+    เวกเตอร์ที่ได้จึงถูกพักไว้ในหน่วยความจำ รอจนกว่าจะรู้ตัวตนจึงเขียนลงฐานข้อมูล
+    """
+
+    consent_at: datetime
+    policy_version: str
     samples: list[np.ndarray] = field(default_factory=list)
     last_sample_at: float = 0.0
 
@@ -107,10 +114,10 @@ class FaceWorker:
             if self._mode == "scanning":
                 self._mode = "idle"
 
-    def begin_enroll(self, student_pk: int, consent_id: int) -> None:
+    def begin_enroll(self, consent_at: datetime, policy_version: str) -> None:
         with self._lock:
             self._mode = "enrolling"
-            self._enroll = _EnrollJob(student_pk=student_pk, consent_id=consent_id)
+            self._enroll = _EnrollJob(consent_at=consent_at, policy_version=policy_version)
 
     def cancel_enroll(self) -> None:
         with self._lock:
@@ -269,47 +276,42 @@ class FaceWorker:
             self._emit("enroll", {"state": "capturing", "progress": progress})
             return
 
-        # เก็บครบแล้ว — ตรวจคุณภาพก่อนบันทึก
+        # เก็บครบแล้ว — ตรวจคุณภาพก่อนพักไว้
         quality = face.sample_quality(job.samples)
         with self._lock:
             self._mode = "idle"
             self._enroll = None
 
         if quality < ENROLL_MIN_QUALITY:
-            log.warning("ตัวอย่างใบหน้าไม่สอดคล้องกัน (quality=%.3f) ไม่บันทึก", quality)
+            log.warning("ตัวอย่างใบหน้าไม่สอดคล้องกัน (quality=%.3f) ไม่เก็บไว้", quality)
             self._emit("enroll", {"state": "failed", "reason": "quality",
                                   "quality": round(quality, 3)})
             return
 
         vector = face.average_embedding(job.samples)
 
-        # กันการลงทะเบียนใบหน้าที่ตรงกับคนอื่นซึ่งลงทะเบียนไว้แล้ว
-        others = [(pk, v) for pk, v in face.load_enrolled(conn) if pk != job.student_pk]
-        clash = face.match(vector, others)
+        # ใบหน้านี้ตรงกับคนที่ลงทะเบียนไว้แล้วหรือไม่
+        # ตรวจตั้งแต่ตอนนี้เพื่อไม่ให้ผู้ใช้เสียเวลากรอกรหัสแล้วค่อยมาถูกปฏิเสธ
+        clash = face.match(vector, face.load_enrolled(conn))
         if clash.student_pk is not None:
-            log.warning("ใบหน้าที่ลงทะเบียนตรงกับผู้ใช้อื่น (score=%.3f) ปฏิเสธ", clash.score)
+            log.warning("ใบหน้าที่ถ่ายตรงกับผู้ที่ลงทะเบียนแล้ว (score=%.3f) ปฏิเสธ", clash.score)
             self._emit("enroll", {"state": "failed", "reason": "duplicate"})
             return
 
-        try:
-            with conn:
-                conn.execute(
-                    """INSERT INTO face_embeddings
-                           (student_id, consent_id, vector, dim, model, quality, created_at)
-                       VALUES (?, ?, ?, ?, ?, ?, ?)""",
-                    (job.student_pk, job.consent_id, face.to_blob(vector),
-                     face.EMBEDDING_DIM, face.MODEL_TAG, quality,
-                     time.strftime("%Y-%m-%dT%H:%M:%S%z")),
-                )
-        except sqlite3.Error as exc:
-            # trigger ในฐานข้อมูลปฏิเสธเมื่อความยินยอมไม่ถูกต้องหรือถูกถอนแล้ว
-            log.warning("บันทึกเวกเตอร์ใบหน้าไม่สำเร็จ: %s", exc)
-            self._emit("enroll", {"state": "failed", "reason": "consent"})
-            return
-
-        log.info("ลงทะเบียนใบหน้าสำเร็จ student_pk=%s quality=%.3f", job.student_pk, quality)
-        self._emit("enroll", {"state": "done", "progress": 100,
-                              "quality": round(quality, 3)})
+        # พักไว้ในหน่วยความจำ ยังไม่เขียนลงดิสก์จนกว่าจะรู้ว่าเป็นของใคร
+        pending = session_store.hold_enrollment(
+            vector=vector,
+            quality=quality,
+            consent_at=job.consent_at,
+            policy_version=job.policy_version,
+        )
+        log.info("ถ่ายใบหน้าเสร็จ (quality=%.3f) รอระบุตัวตน", quality)
+        self._emit("enroll", {
+            "state": "captured",
+            "progress": 100,
+            "pendingToken": pending.token,
+            "quality": round(quality, 3),
+        })
 
     @staticmethod
     def _enroll_progress(job: _EnrollJob) -> int:
