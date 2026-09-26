@@ -1,0 +1,12 @@
+# ---- แกนหลัก (จำเป็นเสมอ) ----
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+python-dotenv==1.0.1
+tzdata==2024.2            # Windows ไม่มีฐานข้อมูลเขตเวลาในตัว
+
+# ---- ผู้ช่วย AI (ใช้เฉพาะตอนออนไลน์) ----
+anthropic==0.42.0
+
+# ---- รู้จำใบหน้า (ติดตั้งเพิ่มเมื่อมีกล้อง: pip install -r requirements-face.txt) ----
+# ดู requirements-face.txt

@@ -1,0 +1,19 @@
+# ไลบรารีสำหรับการรู้จำใบหน้า ติดตั้งเมื่อมีกล้องแล้วเท่านั้น
+#
+#   pip install -r requirements-face.txt
+#
+# ไม่รวมไว้ใน requirements.txt เพราะไฟล์เหล่านี้ใหญ่ (หลายร้อย MB)
+# และไม่จำเป็นสำหรับการพัฒนาหน้าจอหรือ API
+
+numpy>=1.26
+opencv-python-headless>=4.10       # อ่านภาพจากกล้อง USB และแปลงสี
+onnxruntime>=1.20                  # รันโมเดล SCRFD + ArcFace (มี wheel สำหรับ ARM64)
+insightface>=0.7.3                 # ชุดโมเดล buffalo_s (ตรวจจับ + เวกเตอร์ 512 มิติ)
+
+# บน Raspberry Pi ที่ใช้ Pi Camera Module ให้ติดตั้งเพิ่มผ่าน apt แทน pip
+#   sudo apt install -y python3-picamera2
+# แล้วสร้าง venv ด้วย --system-site-packages เพื่อให้มองเห็น picamera2
+#
+# หมายเหตุสำหรับ Windows: insightface ต้องใช้ตัวคอมไพล์ C++
+# ถ้าติดตั้งไม่ผ่าน ให้ลง Microsoft C++ Build Tools ก่อน
+# หรือพัฒนาส่วนกล้องบน Raspberry Pi โดยตรง

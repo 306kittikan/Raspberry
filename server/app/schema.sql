@@ -1,0 +1,233 @@
+-- ============================================================
+-- ตู้บริการข้อมูลอัจฉริยะ · สาขาวิชาวิทยาการคอมพิวเตอร์ ม.แม่โจ้
+-- โครงสร้างฐานข้อมูล SQLite
+--
+-- หลักการสำคัญที่บังคับไว้ในระดับ schema (ไม่ใช่แค่ในโค้ด):
+--   1. face_embeddings.consent_id เป็น NOT NULL + FK  →  เขียนเวกเตอร์ใบหน้า
+--      โดยไม่มีความยินยอมไม่ได้เลย และการถอนความยินยอมลบเวกเตอร์ตามไปด้วย
+--   2. ไม่มีคอลัมน์ใดเก็บ "ภาพ" ใบหน้า เก็บได้เฉพาะเวกเตอร์
+--   3. usage_events ไม่มี FK ไปยัง students  →  สถิติไม่ผูกกับตัวบุคคล
+-- ============================================================
+
+PRAGMA foreign_keys = ON;
+
+-- ------------------------------------------------------------
+-- ข้อมูลสาขา (แถวเดียว)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS department (
+  id               INTEGER PRIMARY KEY CHECK (id = 1),
+  name             TEXT NOT NULL,
+  faculty          TEXT NOT NULL,
+  abbr             TEXT NOT NULL,
+  office_location  TEXT NOT NULL,
+  office_hours     TEXT NOT NULL,
+  office_phone     TEXT NOT NULL,
+  office_email     TEXT NOT NULL
+);
+
+-- ------------------------------------------------------------
+-- ภาคการศึกษา
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS terms (
+  id               INTEGER PRIMARY KEY AUTOINCREMENT,
+  code             TEXT NOT NULL UNIQUE,        -- '2569-1'
+  label            TEXT NOT NULL,               -- 'ภาคการศึกษาที่ 1 ปีการศึกษา 2569'
+  is_current       INTEGER NOT NULL DEFAULT 0 CHECK (is_current IN (0, 1)),
+  data_updated_at  TEXT                         -- ISO8601 เวลาที่นำเข้าตารางเรียนล่าสุด
+);
+-- มีภาคการศึกษาปัจจุบันได้ทีละภาคเดียว
+CREATE UNIQUE INDEX IF NOT EXISTS ix_terms_current
+  ON terms (is_current) WHERE is_current = 1;
+
+-- ------------------------------------------------------------
+-- ประกาศของสาขา (วนแสดงบนหน้าจอพัก)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS announcements (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  tag         TEXT NOT NULL,
+  title       TEXT NOT NULL,
+  detail      TEXT NOT NULL,
+  starts_on   TEXT,                             -- ISO date, NULL = แสดงทันที
+  ends_on     TEXT,                             -- ISO date, NULL = ไม่มีวันหมดอายุ
+  sort_order  INTEGER NOT NULL DEFAULT 0,
+  active      INTEGER NOT NULL DEFAULT 1 CHECK (active IN (0, 1))
+);
+
+-- ------------------------------------------------------------
+-- นักศึกษา · รายวิชา · ห้องเรียน
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS students (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  student_id  TEXT NOT NULL UNIQUE,             -- รหัสนักศึกษา
+  name        TEXT NOT NULL,
+  year        INTEGER,
+  program     TEXT,
+  advisor     TEXT,
+  created_at  TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS courses (
+  id    INTEGER PRIMARY KEY AUTOINCREMENT,
+  code  TEXT NOT NULL UNIQUE,                   -- 'ทว 331'
+  name  TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS rooms (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  code        TEXT NOT NULL UNIQUE,             -- 'ศว 2301'
+  building    TEXT,
+  floor       INTEGER,
+  directions  TEXT                              -- วิธีเดินไปห้อง (ข้อมูลจริง ไม่ใช่ข้อความที่ระบบแต่งเอง)
+);
+
+-- ------------------------------------------------------------
+-- ตารางเรียน
+-- แยก sections / enrollments เพราะคาบเดียวกันมีนักศึกษาหลายคนเรียนร่วมกัน
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS sections (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  term_id     INTEGER NOT NULL REFERENCES terms(id)   ON DELETE CASCADE,
+  course_id   INTEGER NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+  room_id     INTEGER          REFERENCES rooms(id)   ON DELETE SET NULL,
+  day         INTEGER NOT NULL CHECK (day BETWEEN 1 AND 7),   -- 1=จันทร์ ... 7=อาทิตย์
+  start_time  TEXT NOT NULL,                    -- 'HH:MM'
+  end_time    TEXT NOT NULL,
+  teacher     TEXT,
+  CHECK (start_time < end_time),
+  UNIQUE (term_id, course_id, day, start_time)
+);
+
+CREATE TABLE IF NOT EXISTS enrollments (
+  student_id  INTEGER NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+  section_id  INTEGER NOT NULL REFERENCES sections(id) ON DELETE CASCADE,
+  PRIMARY KEY (student_id, section_id)
+);
+
+-- กำหนดสอบผูกกับรายวิชา นักศึกษาได้กำหนดสอบจากวิชาที่ลงทะเบียนโดยอัตโนมัติ
+CREATE TABLE IF NOT EXISTS exams (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  term_id     INTEGER NOT NULL REFERENCES terms(id)   ON DELETE CASCADE,
+  course_id   INTEGER NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+  room_id     INTEGER          REFERENCES rooms(id)   ON DELETE SET NULL,
+  exam_type   TEXT NOT NULL,                    -- 'สอบกลางภาค' | 'สอบปลายภาค'
+  exam_date   TEXT NOT NULL,                    -- ISO date
+  start_time  TEXT NOT NULL,
+  end_time    TEXT NOT NULL,
+  UNIQUE (term_id, course_id, exam_type)
+);
+
+-- ------------------------------------------------------------
+-- ความยินยอม (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคลฯ มาตรา 26)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS consents (
+  id              INTEGER PRIMARY KEY AUTOINCREMENT,
+  student_id      INTEGER NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+  purpose         TEXT NOT NULL DEFAULT 'face_recognition',
+  policy_version  TEXT NOT NULL,                -- ฉบับคำประกาศที่ผู้ใช้เห็นตอนกดยินยอม
+  granted_at      TEXT NOT NULL,
+  revoked_at      TEXT,                         -- NULL = ยังยินยอมอยู่
+  method          TEXT NOT NULL DEFAULT 'kiosk_touch'
+);
+CREATE INDEX IF NOT EXISTS ix_consents_student ON consents (student_id, purpose);
+
+-- ------------------------------------------------------------
+-- เวกเตอร์ใบหน้า  (ไม่เก็บภาพ เก็บเฉพาะค่าเวกเตอร์)
+-- consent_id เป็น NOT NULL → ไม่มีความยินยอม = เขียนลงตารางนี้ไม่ได้
+-- ON DELETE CASCADE → ลบ consent ทิ้ง เวกเตอร์หายตามทันที
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS face_embeddings (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  student_id  INTEGER NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+  consent_id  INTEGER NOT NULL REFERENCES consents(id) ON DELETE CASCADE,
+  vector      BLOB    NOT NULL,                 -- float32 little-endian, L2-normalised
+  dim         INTEGER NOT NULL,
+  model       TEXT    NOT NULL,                 -- เช่น 'buffalo_s/w600k_mbf'
+  quality     REAL,
+  created_at  TEXT    NOT NULL
+);
+CREATE INDEX IF NOT EXISTS ix_face_student ON face_embeddings (student_id);
+
+-- กันการเขียนเวกเตอร์ทับความยินยอมที่ถอนไปแล้ว หรือของนักศึกษาคนอื่น
+CREATE TRIGGER IF NOT EXISTS trg_face_requires_live_consent
+BEFORE INSERT ON face_embeddings
+FOR EACH ROW
+BEGIN
+  SELECT RAISE(ABORT, 'ความยินยอมไม่ถูกต้องหรือถูกถอนแล้ว')
+  WHERE NOT EXISTS (
+    SELECT 1 FROM consents c
+    WHERE c.id = NEW.consent_id
+      AND c.student_id = NEW.student_id
+      AND c.purpose = 'face_recognition'
+      AND c.revoked_at IS NULL
+  );
+END;
+
+-- ------------------------------------------------------------
+-- คำถามยอดนิยม (ปุ่มแตะบนหน้าผู้ช่วย)
+--   source: 'db'   = ตอบจากฐานข้อมูลโดยตรง ไม่ผ่าน AI ใช้ได้ตอนออฟไลน์
+--           'ai'   = ส่งให้ผู้ช่วย AI ต้องมีเอกสารอ้างอิงเสมอ
+--           'none' = ไม่มีข้อมูลในระบบ ห้ามเดาคำตอบ
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS quick_questions (
+  id          TEXT PRIMARY KEY,
+  label       TEXT NOT NULL,
+  kind        TEXT NOT NULL,                    -- ประเภทคำถาม ใช้เป็นมิติของสถิติ
+  source      TEXT NOT NULL CHECK (source IN ('db', 'ai', 'none')),
+  personal    INTEGER NOT NULL DEFAULT 0 CHECK (personal IN (0, 1)),
+  sort_order  INTEGER NOT NULL DEFAULT 0,
+  active      INTEGER NOT NULL DEFAULT 1 CHECK (active IN (0, 1))
+);
+
+-- ------------------------------------------------------------
+-- คลังเอกสารสำหรับผู้ช่วย AI (RAG)
+-- ทุกคำตอบของ AI ต้องชี้กลับมาที่ documents.citation_label ได้เสมอ
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS documents (
+  id              INTEGER PRIMARY KEY AUTOINCREMENT,
+  title           TEXT NOT NULL,
+  citation_label  TEXT NOT NULL,                -- ข้อความที่แสดงบนป้าย "อ้างอิง: ..."
+  source_path     TEXT,
+  effective_date  TEXT,
+  created_at      TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS doc_chunks (
+  id           INTEGER PRIMARY KEY AUTOINCREMENT,
+  document_id  INTEGER NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+  ordinal      INTEGER NOT NULL,
+  page         TEXT,                            -- 'หน้า 18'
+  content      TEXT NOT NULL,
+  UNIQUE (document_id, ordinal)
+);
+
+-- trigram tokenizer ค้นภาษาไทยได้โดยไม่ต้องตัดคำ (ไทยไม่เว้นวรรคระหว่างคำ)
+CREATE VIRTUAL TABLE IF NOT EXISTS doc_chunks_fts USING fts5 (
+  content,
+  content = 'doc_chunks',
+  content_rowid = 'id',
+  tokenize = 'trigram'
+);
+
+CREATE TRIGGER IF NOT EXISTS trg_doc_chunks_ai AFTER INSERT ON doc_chunks BEGIN
+  INSERT INTO doc_chunks_fts (rowid, content) VALUES (NEW.id, NEW.content);
+END;
+CREATE TRIGGER IF NOT EXISTS trg_doc_chunks_ad AFTER DELETE ON doc_chunks BEGIN
+  INSERT INTO doc_chunks_fts (doc_chunks_fts, rowid, content) VALUES ('delete', OLD.id, OLD.content);
+END;
+CREATE TRIGGER IF NOT EXISTS trg_doc_chunks_au AFTER UPDATE ON doc_chunks BEGIN
+  INSERT INTO doc_chunks_fts (doc_chunks_fts, rowid, content) VALUES ('delete', OLD.id, OLD.content);
+  INSERT INTO doc_chunks_fts (rowid, content) VALUES (NEW.id, NEW.content);
+END;
+
+-- ------------------------------------------------------------
+-- สถิติการใช้งาน  (ไม่มีข้อมูลระบุตัวตนโดยเจตนา — ไม่มี FK ไป students)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS usage_events (
+  id             INTEGER PRIMARY KEY AUTOINCREMENT,
+  occurred_at    TEXT NOT NULL,
+  question_kind  TEXT,
+  channel        TEXT    CHECK (channel IN ('เสียง', 'แตะ')),
+  answer_source  TEXT    CHECK (answer_source IN ('ฐานข้อมูล', 'AI', 'ไม่พบ')),
+  latency_ms     INTEGER
+);
+CREATE INDEX IF NOT EXISTS ix_usage_time ON usage_events (occurred_at);
