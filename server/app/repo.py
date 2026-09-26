@@ -349,6 +349,216 @@ def face_status(conn: sqlite3.Connection, student_pk: int) -> dict[str, Any]:
 
 
 # ------------------------------------------------------------
+# ทะเบียนผู้ลงทะเบียนใบหน้า
+#
+# ข้อมูลใบหน้าเป็นข้อมูลชีวภาพตาม พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคลฯ มาตรา 26
+# สาขาในฐานะผู้ควบคุมข้อมูลจึงต้องตอบได้เสมอว่า
+#   เก็บข้อมูลของใครไว้บ้าง · เก็บเมื่อไร · ด้วยความยินยอมฉบับใด
+# และต้องลบให้ได้เมื่อเจ้าของข้อมูลร้องขอ
+# ------------------------------------------------------------
+def registration_registry(conn: sqlite3.Connection) -> list[dict[str, Any]]:
+    """รายชื่อผู้ที่มีข้อมูลใบหน้าอยู่ในระบบ พร้อมที่มาของความยินยอม"""
+    rows = conn.execute(
+        """
+        SELECT s.student_id, s.name, s.year, s.program, s.is_synthetic,
+               f.created_at AS registered_at, f.quality, f.model, f.dim,
+               c.id AS consent_id, c.granted_at, c.policy_version, c.method
+        FROM face_embeddings f
+        JOIN students s ON s.id = f.student_id
+        JOIN consents c ON c.id = f.consent_id AND c.revoked_at IS NULL
+        ORDER BY f.created_at DESC
+        """
+    ).fetchall()
+
+    return [
+        {
+            "studentId": r["student_id"],
+            "name": r["name"],
+            "year": r["year"],
+            "program": r["program"],
+            "isSynthetic": bool(r["is_synthetic"]),
+            "registeredAt": r["registered_at"],
+            "quality": r["quality"],
+            "model": r["model"],
+            "dim": r["dim"],
+            "consentId": r["consent_id"],
+            "consentGrantedAt": r["granted_at"],
+            "policyVersion": r["policy_version"],
+            "consentMethod": r["method"],
+        }
+        for r in rows
+    ]
+
+
+def student_record(conn: sqlite3.Connection, student_code: str) -> dict[str, Any] | None:
+    """ข้อมูลทั้งหมดที่ระบบเก็บไว้เกี่ยวกับนักศึกษาหนึ่งคน
+
+    ใช้ตอบคำขอ "ขอดูข้อมูลของฉัน" ตามสิทธิของเจ้าของข้อมูล
+    เวกเตอร์ใบหน้าไม่ถูกส่งออกมาเป็นตัวเลข เพราะเป็นข้อมูลชีวภาพ
+    บอกเพียงว่ามีอยู่กี่รายการ เก็บเมื่อไร และใช้โมเดลใด
+    """
+    student = find_student_by_code(conn, student_code)
+    if student is None:
+        return None
+
+    consents = conn.execute(
+        """SELECT id, purpose, policy_version, granted_at, revoked_at, method
+           FROM consents WHERE student_id = ? ORDER BY id""",
+        (student["id"],),
+    ).fetchall()
+
+    faces = conn.execute(
+        """SELECT id, consent_id, dim, model, quality, created_at
+           FROM face_embeddings WHERE student_id = ? ORDER BY id""",
+        (student["id"],),
+    ).fetchall()
+
+    term = get_current_term(conn)
+    schedule = get_schedule(conn, student["id"], term["id"]) if term else []
+
+    return {
+        "student": {
+            "studentId": student["student_id"],
+            "name": student["name"],
+            "year": student["year"],
+            "program": student["program"],
+            "advisor": student["advisor"],
+            "isSynthetic": bool(student["is_synthetic"]),
+            "createdAt": student["created_at"],
+        },
+        "consents": [
+            {
+                "id": c["id"],
+                "purpose": c["purpose"],
+                "policyVersion": c["policy_version"],
+                "grantedAt": c["granted_at"],
+                "revokedAt": c["revoked_at"],
+                "method": c["method"],
+            }
+            for c in consents
+        ],
+        "faceEmbeddings": [
+            {
+                "id": f["id"],
+                "consentId": f["consent_id"],
+                "dimensions": f["dim"],
+                "model": f["model"],
+                "quality": f["quality"],
+                "createdAt": f["created_at"],
+                "note": "เก็บเป็นค่าเวกเตอร์เท่านั้น ไม่มีภาพใบหน้า และย้อนกลับเป็นภาพไม่ได้",
+            }
+            for f in faces
+        ],
+        "enrolledCourses": len(schedule),
+    }
+
+
+def forget_student(conn: sqlite3.Connection, student_code: str, now: str) -> dict[str, Any] | None:
+    """ลบข้อมูลใบหน้าและถอนความยินยอมของนักศึกษาหนึ่งคน
+
+    ใช้เมื่อเจ้าของข้อมูลมาขอลบที่สำนักงานสาขา
+    จำเป็นต้องมีช่องทางนี้ เพราะการลบผ่านหน้าตู้ต้องยืนยันตัวตนด้วยใบหน้าก่อน
+    ถ้าระบบจำหน้าไม่ได้ เจ้าของข้อมูลจะลบข้อมูลตัวเองไม่ได้เลย
+
+    เก็บบันทึกการถอนความยินยอมไว้เป็นหลักฐาน แต่ลบเวกเตอร์ทิ้งจริง
+    """
+    student = find_student_by_code(conn, student_code)
+    if student is None:
+        return None
+
+    with conn:
+        revoked = conn.execute(
+            """UPDATE consents SET revoked_at = ?
+               WHERE student_id = ? AND purpose = 'face_recognition' AND revoked_at IS NULL""",
+            (now, student["id"]),
+        ).rowcount
+        deleted = conn.execute(
+            "DELETE FROM face_embeddings WHERE student_id = ?", (student["id"],)
+        ).rowcount
+
+    return {
+        "studentId": student["student_id"],
+        "name": student["name"],
+        "vectorsDeleted": deleted,
+        "consentsRevoked": revoked,
+        "at": now,
+    }
+
+
+def orphan_consents(conn: sqlite3.Connection) -> list[dict[str, Any]]:
+    """ความยินยอมที่ไม่มีเวกเตอร์ใบหน้าผูกอยู่และยังไม่ถูกถอน
+
+    เกิดจากผู้ใช้กดยินยอมแล้วเดินจากไปก่อนถ่ายเสร็จ
+    ปล่อยค้างไว้ไม่ได้ เพราะเป็นบันทึกว่า "ผู้นี้ยินยอมให้เก็บข้อมูลชีวภาพ"
+    ทั้งที่ระบบไม่ได้เก็บอะไรไว้จริง
+    """
+    rows = conn.execute(
+        """
+        SELECT c.id, c.granted_at, c.policy_version, s.student_id, s.name
+        FROM consents c
+        JOIN students s ON s.id = c.student_id
+        LEFT JOIN face_embeddings f ON f.consent_id = c.id
+        WHERE c.revoked_at IS NULL AND f.id IS NULL
+        ORDER BY c.id
+        """
+    ).fetchall()
+    return [
+        {
+            "id": r["id"],
+            "studentId": r["student_id"],
+            "name": r["name"],
+            "grantedAt": r["granted_at"],
+            "policyVersion": r["policy_version"],
+        }
+        for r in rows
+    ]
+
+
+def clear_orphan_consents(conn: sqlite3.Connection, now: str) -> int:
+    """ถอนความยินยอมที่ค้างอยู่โดยไม่มีข้อมูลใดผูกไว้"""
+    ids = [c["id"] for c in orphan_consents(conn)]
+    if not ids:
+        return 0
+    with conn:
+        conn.executemany(
+            "UPDATE consents SET revoked_at = ? WHERE id = ?",
+            [(now, cid) for cid in ids],
+        )
+    return len(ids)
+
+
+def upsert_student(
+    conn: sqlite3.Connection,
+    *,
+    student_id: str,
+    name: str,
+    year: int | None,
+    program: str | None,
+    advisor: str | None,
+    now: str,
+) -> str:
+    """เพิ่มหรืออัปเดตนักศึกษาหนึ่งคน คืนค่า 'added' หรือ 'updated'
+
+    ใช้กับการนำเข้ารายชื่อจากสาขา ไม่ลบใครออกโดยอัตโนมัติ
+    เพราะการลบนักศึกษาจะลบเวกเตอร์ใบหน้าตามไปด้วย (ON DELETE CASCADE)
+    ซึ่งต้องเป็นการตัดสินใจของคน ไม่ใช่ผลข้างเคียงของการนำเข้าไฟล์
+    """
+    existing = find_student_by_code(conn, student_id)
+    conn.execute(
+        """INSERT INTO students (student_id, name, year, program, advisor, is_synthetic, created_at)
+           VALUES (?, ?, ?, ?, ?, 0, ?)
+           ON CONFLICT(student_id) DO UPDATE SET
+               name = excluded.name,
+               year = excluded.year,
+               program = excluded.program,
+               advisor = excluded.advisor,
+               is_synthetic = 0""",
+        (student_id, name, year, program, advisor, now),
+    )
+    return "updated" if existing is not None else "added"
+
+
+# ------------------------------------------------------------
 # สถิติการใช้งาน (ไม่มีข้อมูลระบุตัวตน)
 # ------------------------------------------------------------
 def log_usage(

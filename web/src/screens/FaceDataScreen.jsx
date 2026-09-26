@@ -59,12 +59,26 @@ export default function FaceDataScreen() {
                 </div>
               </div>
 
+              {faceEnrolled && !canDeleteFace ? (
+                <div className="mt-8 rounded-[24px] border-2 border-alert-100 bg-alert-50 p-8">
+                  <p className="flex items-center gap-3 text-label font-bold text-alert-900">
+                    <IconWarning className="h-8 w-8 shrink-0" /> ลบข้อมูลจากหน้านี้ไม่ได้
+                  </p>
+                  <p className="mt-3 text-body leading-snug text-alert-900/90">
+                    คุณเข้าใช้งานด้วยการกรอกรหัสนักศึกษา ซึ่งยังไม่ได้ยืนยันว่าเป็นเจ้าของรหัสจริง
+                    หากต้องการลบข้อมูลใบหน้า ให้สแกนใบหน้าเข้าระบบก่อน
+                    หรือติดต่อสำนักงานสาขาวิชาฯ เพื่อให้เจ้าหน้าที่ดำเนินการให้
+                  </p>
+                </div>
+              ) : null}
+
               <div className="mt-8 rounded-[24px] border-2 border-brand-100 bg-brand-50 p-8">
                 <p className="flex items-center gap-3 text-label font-bold text-brand-800">
                   <IconShield className="h-8 w-8" /> ระบบเก็บอะไรไว้บ้าง
                 </p>
                 <ul className="mt-4 space-y-3 text-body text-ink-soft">
                   <li>· ค่าเวกเตอร์ใบหน้า (ชุดตัวเลข) ใช้เทียบตัวตนเท่านั้น</li>
+                  <li>· ย้อนกลับเป็นภาพใบหน้าไม่ได้</li>
                   <li>· ไม่มีการเก็บภาพใบหน้าหรือวิดีโอจากกล้อง</li>
                   <li>· ไม่มีการส่งข้อมูลใบหน้าออกนอกระบบของสาขา</li>
                 </ul>
