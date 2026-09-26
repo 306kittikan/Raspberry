@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import logging
 import threading
+import time
 from typing import Any
 
 import numpy as np
@@ -32,6 +33,9 @@ from .. import config
 log = logging.getLogger("kiosk.stt")
 
 SAMPLE_RATE = 16_000
+# เว้นช่วงก่อนลองโหลดโมเดลใหม่หลังล้มเหลว
+# การโหลดใช้เวลาหลายวินาทีและกินหน่วยความจำมาก ลองถี่เกินไปจะยิ่งทำให้แย่ลง
+RELOAD_COOLDOWN_S = 30.0
 # เสียงที่สั้นกว่านี้ไม่น่าจะเป็นคำถาม มักเป็นเสียงกระแทกหรือแตะจอ
 MIN_AUDIO_SECONDS = 0.4
 MAX_AUDIO_SECONDS = 15.0
@@ -41,7 +45,9 @@ class SpeechEngine:
     def __init__(self) -> None:
         self._model: Any = None
         self._lock = threading.Lock()
+        self._load_lock = threading.Lock()
         self._error: str | None = None
+        self._last_try_at = 0.0
 
     @property
     def ready(self) -> bool:
@@ -51,9 +57,29 @@ class SpeechEngine:
     def error(self) -> str | None:
         return self._error
 
+    def ensure_ready(self) -> bool:
+        """พร้อมใช้งานหรือยัง ถ้ายังให้ลองโหลดใหม่เป็นระยะ
+
+        โมเดลอาจโหลดไม่ผ่านตอนเปิดเครื่องเพราะหน่วยความจำยังไม่ว่างพอ
+        ถ้าไม่ลองใหม่เลย ช่องทางเสียงจะตายไปทั้งวันจนกว่าจะมีคนเริ่มบริการใหม่
+        ทั้งที่ปัญหาหายไปเองภายในไม่กี่นาที
+        """
+        if self._model is not None:
+            return True
+        if time.monotonic() - self._last_try_at < RELOAD_COOLDOWN_S:
+            return False
+        # มีคนกำลังโหลดอยู่แล้ว ไม่ต้องโหลดซ้อน เพราะกินหน่วยความจำสองเท่า
+        if not self._load_lock.acquire(blocking=False):
+            return False
+        try:
+            return self.load()
+        finally:
+            self._load_lock.release()
+
     def load(self) -> bool:
         if self._model is not None:
             return True
+        self._last_try_at = time.monotonic()
         try:
             from faster_whisper import WhisperModel
 

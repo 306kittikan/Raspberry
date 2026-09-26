@@ -49,6 +49,10 @@ ENROLL_NO_FACE_S = 12.0
 ENROLL_TIMEOUT_S = 40.0
 # ส่งสถานะ "ยังหาใบหน้าไม่เจอ" ถี่แค่ไหน ไม่ต้องส่งทุกเฟรม
 ENROLL_HINT_EVERY_S = 1.0
+# เว้นช่วงก่อนลองกู้กล้องอีกครั้งหลังขัดข้อง
+# กล้องที่ถูกถอดสายออกจะไม่กลับมา การลองใหม่ทุกครั้งที่มีคนกดจึงเปลืองเปล่า
+# และการเปิดกล้องซ้ำ ๆ ทำให้คำขออื่นช้าตามไปด้วย
+RESTART_COOLDOWN_S = 15.0
 
 
 @dataclass(slots=True)
@@ -76,6 +80,10 @@ class FaceWorker:
         self._conn_factory = None
 
         self._lock = threading.Lock()
+        self._restart_lock = threading.Lock()
+        self._running = False                     # ลูปกล้องยังมีชีวิตอยู่หรือไม่
+        self._down_reason: str | None = None      # ลูปตายเพราะอะไร
+        self._last_restart_at = 0.0
         self._mode = "idle"                       # idle | scanning | enrolling
         self._scan_started_at = 0.0
         self._enroll: _EnrollJob | None = None
@@ -92,17 +100,67 @@ class FaceWorker:
 
         SQLite ห้ามใช้การเชื่อมต่อเดียวกันข้ามเธรด จึงต้องเปิดของตัวเอง
         """
-        if not camera.start():
-            return False
-        if not face.engine.load():
-            return False
-
+        # จำไว้ก่อนเปิดกล้อง เพื่อให้ ensure_running() กู้ได้ทีหลัง
+        # แม้ตอนเปิดเครื่องยังไม่มีกล้องเสียบอยู่
         self._loop = loop
         self._conn_factory = conn_factory
+
+        if not camera.start():
+            self._down_reason = camera.error
+            return False
+        if not face.engine.load():
+            self._down_reason = face.engine.error
+            return False
+
+        self._launch()
+        return True
+
+    def _launch(self) -> None:
         self._stop.clear()
+        self._down_reason = None
+        self._running = True   # ตั้งก่อนเริ่มเธรด กันไม่ให้มีคนสั่งเปิดซ้อนอีกตัว
         self._thread = threading.Thread(target=self._run, name="face-worker", daemon=True)
         self._thread.start()
-        return True
+
+    def ensure_running(self) -> tuple[bool, str | None]:
+        """ลูปกล้องยังทำงานอยู่หรือไม่ ถ้าตายไปแล้วให้ลองกู้กลับมา
+
+        ตู้เปิดต่อเนื่องหลายวัน ความขัดข้องชั่วคราว เช่น หน่วยความจำไม่พอ
+        หรือสาย USB หลวม ต้องกู้เองได้ ไม่ใช่รอให้เจ้าหน้าที่มาเริ่มบริการใหม่
+        คืนค่า (สำเร็จ, เหตุผลถ้าไม่สำเร็จ) ให้เส้นทาง API เอาไปบอกผู้ใช้
+        """
+        if self._running:
+            return True, None
+        if self._loop is None or self._conn_factory is None:
+            return False, "ระบบกล้องยังไม่เริ่มทำงาน"
+
+        def down() -> str:
+            return self._down_reason or camera.error or "กล้องไม่พร้อมใช้งาน"
+
+        # มีคนกำลังกู้อยู่แล้ว ไม่ต้องกู้ซ้อน
+        if not self._restart_lock.acquire(blocking=False):
+            return False, down()
+        try:
+            if self._running:
+                return True, None
+            now = time.time()
+            if now - self._last_restart_at < RESTART_COOLDOWN_S:
+                return False, down()
+            self._last_restart_at = now
+
+            camera.stop()
+            if not camera.start():
+                self._down_reason = camera.error
+                return False, down()
+            if not face.engine.load():
+                self._down_reason = face.engine.error
+                return False, down()
+
+            self._launch()
+            log.info("เริ่มการทำงานของกล้องใหม่หลังขัดข้อง")
+            return True, None
+        finally:
+            self._restart_lock.release()
 
     def stop(self) -> None:
         self._stop.set()
@@ -146,6 +204,8 @@ class FaceWorker:
         with self._lock:
             return {
                 "mode": self._mode,
+                "running": self._running,
+                "downReason": self._down_reason,
                 "present": self._present,
                 "modelReady": face.engine.ready,
                 "modelError": face.engine.error,
@@ -167,6 +227,7 @@ class FaceWorker:
     def _run(self) -> None:
         conn: sqlite3.Connection = self._conn_factory()
         last_seq = -1
+        self._running = True
         log.info("เริ่มทำงานกล้องและการรู้จำใบหน้า")
 
         try:
@@ -174,8 +235,7 @@ class FaceWorker:
                 frame, seq = camera.wait_for_frame(last_seq, timeout=1.0)
                 if frame is None:
                     if not camera.available:
-                        self._emit("face", {"result": "camera_error",
-                                            "detail": camera.error or "กล้องไม่พร้อมใช้งาน"})
+                        self._down_reason = camera.error or "กล้องไม่พร้อมใช้งาน"
                         break
                     continue
                 last_seq = seq
@@ -196,11 +256,34 @@ class FaceWorker:
                 else:
                     # โหมดเฝ้าดู ไม่ต้องประมวลผลถี่ ประหยัดซีพียูของ Raspberry Pi
                     time.sleep(0.25)
-        except Exception:  # noqa: BLE001
+        except Exception as exc:  # noqa: BLE001 — กล้องล้มต้องไม่ทำให้ตู้ทั้งตู้ล่ม
             log.exception("ลูปกล้องหยุดทำงาน")
+            self._down_reason = str(exc) or exc.__class__.__name__
         finally:
             conn.close()
-            log.info("หยุดการทำงานของกล้อง")
+            self._running = False
+            self._abandon()
+
+    def _abandon(self) -> None:
+        """ลูปกล้องจบลงแล้ว ต้องไม่ทิ้งสถานะค้างไว้
+
+        ถ้าปล่อยให้ mode ยังเป็น scanning หรือ enrolling หน้าจอจะหมุนรอผล
+        ที่ไม่มีวันมาถึง เพราะไม่มีใครประมวลผลเฟรมให้อีกแล้ว
+        และตัวจับเวลาทุกตัวก็อยู่ในลูปเดียวกันนั้น จึงไม่มีอะไรมาปลดล็อกให้
+        ผู้ใช้จะติดอยู่หน้านั้นจนกว่าจะมีเจ้าหน้าที่มาเริ่มบริการใหม่
+        """
+        with self._lock:
+            self._mode = "idle"
+            self._enroll = None
+            self._present = False
+        log.info("หยุดการทำงานของกล้อง")
+
+        if self._stop.is_set():
+            return   # ปิดตามคำสั่งตอนปิดเซิร์ฟเวอร์ ไม่ต้องแจ้งหน้าจอ
+
+        # แจ้งทุกหน้าจอให้สลับไปใช้การกรอกรหัสนักศึกษา
+        self._emit("face", {"result": "camera_error",
+                            "detail": self._down_reason or "กล้องหยุดทำงานกะทันหัน"})
 
     # ------------------------------------------------------------
     def _update_presence(self, seen: bool) -> None:

@@ -90,6 +90,85 @@ def pick_inactive() -> tuple[str, str] | None:
 
 
 # ------------------------------------------------------------
+def _ws_url(path: str) -> str:
+    return BASE.replace("https://", "wss://").replace("http://", "ws://") + path
+
+
+def listen_events(seconds: float, trigger) -> list[dict]:
+    """เปิด WebSocket ฟังเหตุการณ์ที่เซิร์ฟเวอร์ผลักออกมา
+
+    เหตุการณ์จากกล้องไม่ได้ตอบกลับมาในคำขอ HTTP แต่ถูกส่งไปทุกหน้าจอที่ต่ออยู่
+    การทดสอบจึงต้องทำตัวเป็นหน้าจอหนึ่งเครื่อง
+    """
+    import asyncio
+
+    import websockets
+
+    async def run() -> list[dict]:
+        got: list[dict] = []
+        async with websockets.connect(_ws_url("/ws/kiosk")) as ws:
+            await asyncio.sleep(0.3)   # ให้เซิร์ฟเวอร์ลงทะเบียนหน้าจอก่อน
+            trigger()
+            loop = asyncio.get_running_loop()
+            deadline = loop.time() + seconds
+            while loop.time() < deadline:
+                try:
+                    raw = await asyncio.wait_for(ws.recv(), timeout=deadline - loop.time())
+                except (asyncio.TimeoutError, TimeoutError):
+                    break
+                got.append(json.loads(raw))
+        return got
+
+    return asyncio.run(run())
+
+
+def make_wav(seconds: float) -> bytes:
+    """สร้างไฟล์เสียงเงียบในหน่วยความจำ
+
+    เสียงเงียบไม่ใช่คำพูด ระบบต้องบอกว่าไม่ได้ยินชัดเจน ไม่ใช่แต่งข้อความขึ้นมา
+    จึงใช้ทดสอบกฎ "ห้ามเดาคำตอบ" ของช่องทางเสียงได้โดยไม่ต้องมีคนพูดจริง
+    """
+    import wave
+    from io import BytesIO
+
+    rate = 16_000
+    buf = BytesIO()
+    with wave.open(buf, "wb") as wav:
+        wav.setnchannels(1)
+        wav.setsampwidth(2)
+        wav.setframerate(rate)
+        wav.writeframes(b"\x00\x00" * int(rate * seconds))
+    return buf.getvalue()
+
+
+def send_audio(audio: bytes, token: str | None = None) -> list[dict]:
+    """ส่งเสียงเข้าช่องทาง /ws/voice แล้วรอจนได้ผลสุดท้าย"""
+    import asyncio
+
+    import websockets
+
+    async def run() -> list[dict]:
+        got: list[dict] = []
+        async with websockets.connect(_ws_url("/ws/voice"), max_size=8 * 1024 * 1024) as ws:
+            await ws.send(json.dumps({"type": "start"}))
+            await ws.send(audio)
+            await ws.send(json.dumps({"type": "stop", "token": token, "online": False}))
+            loop = asyncio.get_running_loop()
+            deadline = loop.time() + 60
+            while loop.time() < deadline:
+                try:
+                    raw = await asyncio.wait_for(ws.recv(), timeout=deadline - loop.time())
+                except (asyncio.TimeoutError, TimeoutError):
+                    break
+                message = json.loads(raw)
+                got.append(message)
+                if message.get("state") in {"answer", "unclear", "error"}:
+                    break
+        return got
+
+    return asyncio.run(run())
+
+
 def uc01_recognised_face() -> None:
     case("UC-01", "นักศึกษาที่ลงทะเบียนใบหน้าแล้ว ยืนหน้าตู้")
 
@@ -397,8 +476,11 @@ def uc17_enroll_timeout() -> None:
         check(False, "เริ่มขั้นตอนถ่ายใบหน้าได้", "HTTP 200", f"HTTP {status}")
         return
 
-    print("           (รอไม่เกิน 25 วินาทีเพื่อดูว่าระบบเลิกเองหรือไม่)")
-    deadline = time.time() + 25
+    # ต้องรอให้พ้นเพดานเวลารวม (40 วินาที) ไม่ใช่แค่เพดาน "ไม่เห็นใบหน้า" (12 วินาที)
+    # เพราะถ้ามีคนยืนอยู่หน้ากล้องจริงแต่ถ่ายไม่ผ่านสักที ตัวจับเวลาแรกจะถูกรีเซ็ตเรื่อย ๆ
+    # และเพดานรวมคือด่านสุดท้ายที่กันไม่ให้ตู้ค้างอยู่ในโหมดถ่ายตลอดไป
+    print("           (รอไม่เกิน 50 วินาทีเพื่อดูว่าระบบเลิกเองหรือไม่)")
+    deadline = time.time() + 50
     mode = "enrolling"
     while time.time() < deadline:
         time.sleep(2)
@@ -408,8 +490,8 @@ def uc17_enroll_timeout() -> None:
             break
 
     check(mode != "enrolling",
-          "ระบบเลิกเก็บตัวอย่างเองเมื่อไม่มีใครอยู่หน้ากล้อง",
-          "mode != enrolling ภายใน 25 วินาที", f"mode={mode} หลังรอ 25 วินาที")
+          "ระบบเลิกเก็บตัวอย่างเองเมื่อถ่ายไม่สำเร็จ ไม่ค้างในโหมดถ่าย",
+          "mode != enrolling ภายใน 50 วินาที", f"mode={mode} หลังรอ 50 วินาที")
 
     call("POST", "/api/face/enroll/cancel", body={})
 
@@ -434,6 +516,171 @@ def uc20_stale_scan() -> None:
     check(worker.get("mode") != "scanning",
           "กล้องเลิกหาใบหน้าทันที ไม่ทำงานต่อจนหมดเวลา",
           "mode != scanning", str(worker.get("mode")))
+
+
+def uc07_voice(token: str) -> None:
+    case("UC-07", "ถามด้วยเสียง")
+
+    status, voice = call("GET", "/api/voice/status")
+    if not check(status == 200 and voice.get("ready"),
+                 "ระบบถอดความเสียงพร้อมใช้งาน", "ready=true",
+                 f"HTTP {status} · {json.dumps(voice, ensure_ascii=False)[:70]}"):
+        return
+
+    # เสียงเงียบ 1.5 วินาที — ไม่มีคำพูดให้ถอด
+    messages = send_audio(make_wav(1.5), token=token)
+    states = [m.get("state") for m in messages]
+    check("processing" in states, "เซิร์ฟเวอร์รับเสียงแล้วเริ่มถอดความ",
+          "มีสถานะ processing", str(states))
+
+    final = messages[-1] if messages else {}
+    check(final.get("state") in {"unclear", "answer", "error"},
+          "ได้ผลกลับมาเสมอ ไม่ค้างรอ", "มีสถานะสุดท้าย", str(states))
+    heard = str(final.get("transcript", ""))[:40]
+    check(final.get("state") == "unclear",
+          "เสียงที่ไม่ใช่คำพูด → บอกว่าไม่ได้ยินชัดเจน ไม่แต่งข้อความขึ้นมาเอง",
+          "state=unclear", f"{final.get('state')} · {heard}")
+    check(bool(final.get("answer")),
+          "มีคำแนะนำให้ผู้ใช้ลองใหม่ ไม่ใช่จอว่าง", "มีข้อความตอบกลับ",
+          str(final.get("answer"))[:40])
+
+    # เสียงสั้นมาก เช่น เสียงแตะจอ ต้องถูกปฏิเสธตั้งแต่ต้น ไม่เอาไปถอดความ
+    messages = send_audio(make_wav(0.15), token=token)
+    final = messages[-1] if messages else {}
+    check(final.get("state") == "unclear" and final.get("reason") == "too_short",
+          "เสียงสั้นเกินไปถูกปฏิเสธ ไม่นำไปถอดความ",
+          "unclear/too_short", f"{final.get('state')}/{final.get('reason')}")
+
+    # ข้อมูลเสียงเสียหาย ต้องไม่ทำให้ช่องทางเสียงล่ม
+    messages = send_audio(b"\x00\x01\x02\x03" * 4096, token=token)
+    final = messages[-1] if messages else {}
+    check(final.get("state") in {"unclear", "error"},
+          "เสียงที่ถอดรหัสไม่ได้ถูกจัดการอย่างสุภาพ ไม่ทำให้ตู้ล่ม",
+          "unclear หรือ error", str(final.get("state")))
+
+    # สิ่งที่พูดเป็นข้อมูลส่วนบุคคลได้ จึงต้องไม่ถูกเก็บลงฐานข้อมูล
+    from app import db as db_module
+
+    conn = db_module.connect()
+    columns = {r["name"] for r in conn.execute("PRAGMA table_info(usage_events)")}
+    conn.close()
+    check(not (columns & {"text", "transcript", "question_text"}),
+          "ตารางสถิติไม่มีช่องเก็บข้อความที่ผู้ใช้พูด",
+          "ไม่มีคอลัมน์ข้อความ", str(sorted(columns)))
+
+
+def uc12_staff_delete() -> None:
+    case("UC-12", "เจ้าหน้าที่ลบข้อมูลให้เมื่อมีผู้มาติดต่อ")
+
+    from app import db as db_module, repo, thai
+
+    conn = db_module.connect(Path(":memory:"))
+    db_module.init_db(conn)
+    now = thai.now().isoformat(timespec="seconds")
+    code = "6600009001"
+
+    repo.upsert_student(conn, student_id=code, name="ทดสอบ ลบข้อมูล",
+                        year=1, program=None, advisor=None, now=now)
+    pk = repo.find_student_by_code(conn, code)["id"]
+    with conn:
+        consent = conn.execute(
+            """INSERT INTO consents (student_id, purpose, policy_version, granted_at, method)
+               VALUES (?, 'face_recognition', '2569-1', ?, 'kiosk_touch')""",
+            (pk, now),
+        ).lastrowid
+        conn.execute(
+            """INSERT INTO face_embeddings
+                   (student_id, consent_id, vector, dim, model, quality, created_at)
+               VALUES (?, ?, ?, 512, 'ทดสอบ', 0.9, ?)""",
+            (pk, consent, b"\x00" * 2048, now),
+        )
+
+    check(len(repo.registration_registry(conn)) == 1,
+          "เตรียมผู้ลงทะเบียนสำหรับทดสอบ", "1 คน",
+          str(len(repo.registration_registry(conn))))
+
+    result = repo.forget_student(conn, code, now)
+    check(result is not None and result["vectorsDeleted"] == 1,
+          "เจ้าหน้าที่ลบข้อมูลใบหน้าได้ โดยเจ้าของไม่ต้องสแกนหน้ายืนยัน",
+          "ลบเวกเตอร์ 1 รายการ", json.dumps(result, ensure_ascii=False))
+    check(result["consentsRevoked"] == 1,
+          "บันทึกการถอนความยินยอมไว้เป็นหลักฐาน", "ถอน 1 รายการ",
+          str(result["consentsRevoked"]))
+    check(not repo.registration_registry(conn),
+          "หายออกจากทะเบียนผู้ลงทะเบียนแล้ว", "เหลือ 0 คน",
+          str(len(repo.registration_registry(conn))))
+
+    record = repo.student_record(conn, code)
+    check(record is not None and not record["faceEmbeddings"],
+          "ลบเฉพาะข้อมูลใบหน้า ตัวนักศึกษายังอยู่ในทะเบียนเรียน",
+          "ยังมีนักศึกษา แต่ไม่มีเวกเตอร์", str(record is not None))
+
+    revoked = conn.execute(
+        "SELECT revoked_at FROM consents WHERE id = ?", (consent,)
+    ).fetchone()["revoked_at"]
+    check(revoked == now, "ความยินยอมถูกประทับเวลาถอนไว้", now, str(revoked))
+
+    check(repo.forget_student(conn, "0000000000", now) is None,
+          "ขอลบรหัสที่ไม่มีในระบบ ต้องบอกว่าไม่พบ ไม่ใช่รายงานว่าลบสำเร็จ",
+          "None", str(repo.forget_student(conn, "0000000000", now)))
+    conn.close()
+
+
+def uc15_multi_face() -> None:
+    case("UC-15", "พบหลายใบหน้าพร้อมกัน")
+
+    events = listen_events(2.5, lambda: call("POST", "/api/sim/face/multi"))
+    multi = [e for e in events
+             if e.get("kind") == "face" and e.get("result") == "multi"]
+    if not check(bool(multi), "ตู้แจ้งเหตุการณ์ 'พบหลายใบหน้า' ไปยังหน้าจอ",
+                 "มีเหตุการณ์ face/multi",
+                 str([(e.get("kind"), e.get("result")) for e in events])):
+        return
+
+    leaked = [k for k in ("candidateToken", "name", "studentId", "score") if k in multi[0]]
+    check(not leaked,
+          "ไม่บอกชื่อหรือให้โทเค็นเข้าใช้งานเมื่อมีหลายคนอยู่หน้าตู้",
+          "ไม่มีข้อมูลบุคคลติดมา", str(leaked))
+
+
+def uc16_camera_down() -> None:
+    case("UC-16", "กล้องใช้งานไม่ได้")
+
+    events = listen_events(2.5, lambda: call("POST", "/api/sim/face/camera_error"))
+    broken = [e for e in events
+              if e.get("kind") == "face" and e.get("result") == "camera_error"]
+    check(bool(broken), "ตู้แจ้งเหตุการณ์ 'กล้องใช้งานไม่ได้' ไปยังหน้าจอ",
+          "มีเหตุการณ์ face/camera_error",
+          str([(e.get("kind"), e.get("result")) for e in events]))
+
+    status, worker = call("GET", "/api/face/status")
+    camera = worker.get("camera") or {}
+    check(status == 200 and {"available", "error"} <= set(camera),
+          "หน้าจอถามสถานะกล้องได้ว่าใช้ได้หรือไม่ และพังเพราะอะไร",
+          "มี camera.available และ camera.error",
+          json.dumps(camera, ensure_ascii=False)[:70])
+
+    # "เปิดกล้องสำเร็จตอนบูต" กับ "ลูปกล้องยังทำงานอยู่ตอนนี้" ไม่ใช่เรื่องเดียวกัน
+    # ลูปอาจตายกลางทางโดยที่ตัวกล้องยังเปิดอยู่ เช่น หน่วยความจำไม่พอ
+    check("running" in worker,
+          "รายงานด้วยว่าลูปประมวลผลภาพยังทำงานอยู่จริงหรือไม่",
+          "มีฟิลด์ running", str(sorted(worker)))
+    if worker.get("running") is False:
+        check(bool(worker.get("downReason")),
+              "ถ้าลูปตาย ต้องบอกสาเหตุไว้ให้เจ้าหน้าที่ตามต่อได้",
+              "มี downReason", str(worker.get("downReason")))
+
+    # ถ้าไม่มีช่องทางสำรอง กล้องเสียหนึ่งตัวจะทำให้ตู้ทั้งตู้ใช้งานไม่ได้
+    students = pick_students(1)
+    if check(bool(students), "มีนักศึกษาในฐานข้อมูลไว้ทดสอบ", "อย่างน้อย 1 คน", "0 คน"):
+        code, sess = login_student(students[0])
+        check(code == 200, "กล้องเสียแล้วยังเข้าใช้งานด้วยการกรอกรหัสนักศึกษาได้",
+              "HTTP 200", f"HTTP {code}")
+        if code == 200:
+            check(sess.get("restricted") is True,
+                  "ช่องทางสำรองยังถูกจำกัดสิทธิเหมือนเดิม ไม่ใช่ทางลัดข้ามการยืนยันตัวตน",
+                  "restricted=true", str(sess.get("restricted")))
+            call("DELETE", "/api/session", token=sess["token"])
 
 
 def uc19_registry() -> None:
@@ -474,12 +721,16 @@ CASES = {
     "UC-04": ("ใช้งานแบบไม่ระบุตัวตน", uc04_anonymous),
     "UC-05": ("ถามด้วยการแตะปุ่มคำถามยอดนิยม", None),
     "UC-06": ("ถามด้วยการพิมพ์ข้อความ", None),
+    "UC-07": ("ถามด้วยเสียง", None),
     "UC-08": ("ถามคำถามที่ไม่มีคำตอบในระบบ", None),
     "UC-09": ("ใช้งานขณะอินเทอร์เน็ตขัดข้อง", None),
     "UC-10": ("ข้อมูลส่วนบุคคลต้องปิดก่อนยืนยันตัวตน", uc10_privacy),
     "UC-11": ("นักศึกษาลบข้อมูลใบหน้าของตนเองที่ตู้", uc11_self_delete),
+    "UC-12": ("เจ้าหน้าที่ลบข้อมูลให้เมื่อมีผู้มาติดต่อ", uc12_staff_delete),
     "UC-13": ("ออกจากระบบแล้วเซสชันใช้ไม่ได้ทันที", uc13_session_expiry),
     "UC-14": ("ผู้ที่ไม่ได้เป็นนักศึกษาแล้วใช้ตู้ไม่ได้", uc14_inactive),
+    "UC-15": ("พบหลายใบหน้าพร้อมกัน", uc15_multi_face),
+    "UC-16": ("กล้องใช้งานไม่ได้", uc16_camera_down),
     "UC-17": ("ผู้ใช้เดินจากไปกลางขั้นตอนลงทะเบียน", uc17_enroll_timeout),
     "UC-19": ("ทะเบียนผู้ลงทะเบียนใบหน้า", uc19_registry),
     "UC-20": ("ผู้ใช้เลิกรอสแกนแล้วไปทำอย่างอื่น", uc20_stale_scan),
@@ -489,6 +740,7 @@ CASES = {
 WITH_SESSION = {
     "UC-05": uc05_tap_questions,
     "UC-06": uc06_typed,
+    "UC-07": uc07_voice,
     "UC-08": uc08_unknown,
     "UC-09": uc09_offline,
 }

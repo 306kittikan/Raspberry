@@ -86,6 +86,24 @@ def stream() -> StreamingResponse:
     )
 
 
+def _require_camera() -> None:
+    """ต้องมีกล้องที่ทำงานอยู่จริงก่อนจึงเริ่มสแกนหรือถ่ายใบหน้าได้
+
+    ตรวจว่าลูปประมวลผลภาพยังทำงานอยู่จริง ไม่ใช่แค่ว่าเปิดกล้องสำเร็จตอนเปิดเครื่อง
+    เพราะลูปกล้องอาจตายไปแล้วระหว่างทาง เช่น หน่วยความจำไม่พอ
+    ถ้าปล่อยผ่าน หน้าจอจะขึ้นว่ากำลังสแกนแล้วรอผลที่ไม่มีวันมา
+    """
+    ok, detail = worker.ensure_running()
+    if not ok:
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE,
+                            detail or "กล้องไม่พร้อมใช้งาน")
+    if not face_service.engine.ready:
+        raise HTTPException(
+            status.HTTP_503_SERVICE_UNAVAILABLE,
+            face_service.engine.error or "โมเดลรู้จำใบหน้ายังไม่พร้อม",
+        )
+
+
 # ------------------------------------------------------------
 # สแกนใบหน้า
 # ------------------------------------------------------------
@@ -95,16 +113,7 @@ def scan_start() -> dict:
 
     ผลลัพธ์ไม่ได้คืนที่นี่ แต่ส่งผ่าน WebSocket เพราะการรู้จำใช้เวลาหลายเฟรม
     """
-    if not camera.available:
-        raise HTTPException(
-            status.HTTP_503_SERVICE_UNAVAILABLE,
-            camera.error or "กล้องไม่พร้อมใช้งาน",
-        )
-    if not face_service.engine.ready:
-        raise HTTPException(
-            status.HTTP_503_SERVICE_UNAVAILABLE,
-            face_service.engine.error or "โมเดลรู้จำใบหน้ายังไม่พร้อม",
-        )
+    _require_camera()
     worker.begin_scan()
     return {"scanning": True, "timeoutSeconds": 10}
 
@@ -137,16 +146,7 @@ def enroll_begin(body: ConsentIn) -> dict:
     """
     if not body.agreed:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "ต้องให้ความยินยอมก่อนจึงจะถ่ายใบหน้าได้")
-    if not camera.available:
-        raise HTTPException(
-            status.HTTP_503_SERVICE_UNAVAILABLE,
-            camera.error or "กล้องไม่พร้อมใช้งาน",
-        )
-    if not face_service.engine.ready:
-        raise HTTPException(
-            status.HTTP_503_SERVICE_UNAVAILABLE,
-            face_service.engine.error or "โมเดลรู้จำใบหน้ายังไม่พร้อม",
-        )
+    _require_camera()
 
     policy = body.policyVersion or config.CONSENT_POLICY_VERSION
     worker.begin_enroll(consent_at=thai.now(), policy_version=policy)

@@ -45,10 +45,12 @@ _SOURCE_LABEL = {"db": "ฐานข้อมูล", "ai": "AI", "none": "ไ�
 
 
 @router.get("/api/voice/status")
-def voice_status() -> dict:
+async def voice_status() -> dict:
+    # ถามสถานะคือจังหวะที่ดีในการลองกู้ เพราะหน้าจอถามก่อนเปิดปุ่มไมโครโฟนเสมอ
+    ready = await asyncio.to_thread(stt.engine.ensure_ready)
     return {
         "enabled": config.STT_ENABLED,
-        "ready": stt.engine.ready,
+        "ready": ready,
         "error": stt.engine.error,
         "model": config.STT_MODEL,
     }
@@ -113,7 +115,7 @@ async def voice_socket(ws: WebSocket) -> None:
 
 
 async def _handle_utterance(ws: WebSocket, raw: bytes, command: dict) -> None:
-    if not stt.engine.ready:
+    if not await asyncio.to_thread(stt.engine.ensure_ready):
         await ws.send_json({"state": "error", "reason": "stt_not_ready",
                             "detail": stt.engine.error})
         return

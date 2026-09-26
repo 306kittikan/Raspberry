@@ -66,6 +66,63 @@ const shot = async (name) => {
 }
 const body = async () => (await page.locator('body').innerText()).replace(/\s+/g, ' ')
 
+const logout = async () => {
+  await page.getByRole('button', { name: /ออกจากระบบ|จบการใช้งาน/ }).click()
+  await page.waitForTimeout(1300)
+}
+
+/** เข้าหน้าที่เสนอทางเลือกอื่น (กรอกรหัสนักศึกษา / ลงทะเบียนใบหน้า)
+ *
+ * เดินตามเส้นทางจริงบนหน้าจอ ไม่ยิงเหตุการณ์จำลองจากหน้าอื่น
+ * เพราะตู้รับผลการสแกนเฉพาะตอนที่ผู้ใช้อยู่หน้าสแกนเท่านั้น (UC-20)
+ * ถ้ากล้องจำหน้าได้ ให้ตอบ "ไม่ใช่" ซึ่งพาไปหน้าเดียวกัน
+ */
+const gotoOtherOptions = async () => {
+  const scan = page.getByText('เริ่มสแกนใบหน้า')
+  if ((await scan.count()) > 0) {
+    await scan.click()
+    await page.waitForTimeout(500)
+  }
+
+  const keypadOption = page.getByText('ใช้แป้นตัวเลขบนหน้าจอ')
+  const notMe = page.getByRole('button', { name: 'ไม่ใช่', exact: true })
+  await Promise.race([
+    keypadOption.waitFor({ timeout: 15000 }).catch(() => {}),
+    notMe.waitFor({ timeout: 15000 }).catch(() => {}),
+  ])
+
+  if ((await notMe.count()) > 0) {
+    await notMe.click()
+    await page.waitForTimeout(900)
+  }
+
+  // กล้องสดอาจสรุปผลไม่ได้เลย เช่น แสงน้อยหรือมีหลายคน — ใช้ปุ่มสำรองบนหน้าสแกน
+  if ((await keypadOption.count()) === 0) {
+    const fallback = page.getByText('กรอกรหัสนักศึกษาแทน')
+    if ((await fallback.count()) > 0) {
+      await fallback.click()
+      await page.waitForTimeout(700)
+    }
+  }
+}
+
+/** กรอกรหัสนักศึกษาบนแป้นตัวเลขแล้วกดตกลง */
+const typeStudentId = async (studentId) => {
+  const keypadOption = page.getByText('ใช้แป้นตัวเลขบนหน้าจอ')
+  if ((await keypadOption.count()) > 0) {
+    await keypadOption.click()
+    await page.waitForTimeout(700)
+  }
+  for (const digit of studentId) {
+    await page.getByRole('button', { name: digit, exact: true }).first().click()
+  }
+  await page.getByRole('button', { name: 'ตกลง', exact: true }).click()
+}
+
+// บัญชีสาธิตเป็นคนเดียวที่มีตารางเรียนตัวอย่างอยู่ในฐานข้อมูล
+// รายชื่อที่นำเข้าจากระบบทะเบียนยังไม่มีตารางเรียน เพราะยังไม่มีแหล่งข้อมูลจริง
+const DEMO_STUDENT = '6604101001'
+
 try {
   console.log('1. หน้าจอพัก')
   await page.goto(BASE, { waitUntil: 'networkidle' })
@@ -141,20 +198,36 @@ try {
     await shot('3-notrecognized')
 
     console.log('\n2ก. เข้าสู่ระบบด้วยรหัสนักศึกษา')
-    const keypadOption = page.getByText('ใช้แป้นตัวเลขบนหน้าจอ')
-    if ((await keypadOption.count()) > 0) {
-      await keypadOption.click()
-      await page.waitForTimeout(700)
-    }
-    for (const digit of '6604101001') {
-      await page.getByRole('button', { name: digit, exact: true }).first().click()
-    }
-    await page.getByRole('button', { name: 'ตกลง', exact: true }).click()
+    await typeStudentId(DEMO_STUDENT)
   }
 
   // หน้าหลักต้องโหลดตารางเรียนและกำหนดสอบก่อนจึงจะครบ
   // รอปุ่มที่มีเฉพาะหน้าหลัก แทนการรอเวลาตายตัวซึ่งไม่แน่นอนตามภาระของเครื่อง
-  await page.getByRole('button', { name: 'ทั้งสัปดาห์' }).waitFor({ timeout: 20000 })
+  //
+  // นักศึกษาที่นำเข้าจากระบบทะเบียนยังไม่มีข้อมูลตารางเรียน หน้าหลักจึงขึ้น
+  // ข้อความบอกตรง ๆ แทนแท็บตาราง ซึ่งเป็นพฤติกรรมที่ถูกต้องและต้องตรวจด้วย
+  // จากนั้นค่อยสลับไปบัญชีสาธิตเพื่อทดสอบส่วนที่ต้องใช้ตารางเรียน
+  const weekTab = page.getByRole('button', { name: 'ทั้งสัปดาห์' })
+  const noSchedule = page.getByText('ยังไม่มีข้อมูลตารางเรียน')
+  await Promise.race([
+    weekTab.waitFor({ timeout: 20000 }).catch(() => {}),
+    noSchedule.waitFor({ timeout: 20000 }).catch(() => {}),
+  ])
+
+  if ((await weekTab.count()) === 0) {
+    check((await noSchedule.count()) > 0,
+          'ผู้ที่ยังไม่มีข้อมูลตารางเรียน เห็นข้อความบอกตรง ๆ ไม่ใช่จอว่างหรือข้อมูลของคนอื่น',
+          (await body()).slice(0, 90))
+    check((await body()).includes('สำนักงานสาขา'),
+          'บอกช่องทางติดต่อไว้ให้ ไม่ใช่ปล่อยให้ผู้ใช้ค้าง')
+    await shot('4-noschedule')
+
+    console.log('\n2ข. สลับไปบัญชีสาธิตที่มีตารางเรียน เพื่อทดสอบส่วนที่เหลือ')
+    await logout()
+    await gotoOtherOptions()
+    await typeStudentId(DEMO_STUDENT)
+    await weekTab.waitFor({ timeout: 20000 })
+  }
   await page.waitForTimeout(400)
 
   console.log('\n3. หน้าหลักส่วนตัว')
@@ -219,10 +292,8 @@ try {
   await shot('9-chat-thread')
 
   console.log('\n5ก. ลงทะเบียนใบหน้า — ถ่ายก่อน กรอกรายละเอียดทีหลัง')
-  await page.getByRole('button', { name: /ออกจากระบบ|จบการใช้งาน/ }).click()
-  await page.waitForTimeout(1300)
-  await page.evaluate(() => fetch('/api/sim/face/unknown', { method: 'POST' }))
-  await page.waitForTimeout(1300)
+  await logout()
+  await gotoOtherOptions()
 
   const enrollOption = page.getByText('ลงทะเบียนใบหน้า').first()
   if ((await enrollOption.count()) === 0) {
