@@ -15,9 +15,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from . import config, deps
+from . import config, db as db_module, deps
 from .events import hub
-from .routers import assistant, auth, kiosk, me, sim
+from .services import face_worker, stt
+from .routers import assistant, auth, face, kiosk, me, sim, voice
 
 logging.basicConfig(
     level=logging.INFO,
@@ -31,12 +32,38 @@ WEB_DIST = config.ROOT_DIR / "web" / "dist"
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    import asyncio
+
     deps.open_db()
     log.info("ฐานข้อมูล: %s", config.DB_PATH)
     log.info("ผู้ช่วย AI: %s", "พร้อมใช้งาน" if config.AI_ENABLED else "ปิดอยู่ (ไม่มีกุญแจ)")
     if config.SIM_MODE:
         log.warning("โหมดจำลองเปิดอยู่ — ห้ามเปิดโหมดนี้บนตู้ที่ให้บริการจริง")
+
+    # ---- กล้องและการรู้จำใบหน้า ----
+    # โหลดในเธรดแยกเพราะใช้เวลาหลายวินาที ถ้ารอตรงนี้ตู้จะเปิดหน้าจอช้า
+    # ระหว่างที่ยังโหลดไม่เสร็จ ระบบใช้การกรอกรหัสนักศึกษาแทนได้ตามปกติ
+    loop = asyncio.get_running_loop()
+
+    async def boot_face() -> None:
+        ok = await asyncio.to_thread(face_worker.worker.start, loop, db_module.connect)
+        log.info("กล้องและการรู้จำใบหน้า: %s", "พร้อมใช้งาน" if ok else "ไม่พร้อม")
+
+    async def boot_stt() -> None:
+        if not config.STT_ENABLED:
+            log.info("ช่องทางเสียง: ปิดอยู่ในการตั้งค่า")
+            return
+        ok = await asyncio.to_thread(stt.engine.load)
+        log.info("ช่องทางเสียง (%s): %s", config.STT_MODEL,
+                 "พร้อมใช้งาน" if ok else "ไม่พร้อม")
+
+    tasks = [asyncio.create_task(boot_face()), asyncio.create_task(boot_stt())]
+
     yield
+
+    for task in tasks:
+        task.cancel()
+    face_worker.worker.stop()
     deps.close_db()
 
 
@@ -60,6 +87,8 @@ app.include_router(kiosk.router)
 app.include_router(auth.router)
 app.include_router(me.router)
 app.include_router(assistant.router)
+app.include_router(face.router)
+app.include_router(voice.router)
 if config.SIM_MODE:
     app.include_router(sim.router)
 

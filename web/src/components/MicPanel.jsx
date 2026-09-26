@@ -7,19 +7,24 @@ const BARS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 /**
  * ปุ่มไมโครโฟนขนาดใหญ่ + สถานะ 3 แบบที่ต่างกันชัดเจน
  *   พร้อมฟัง / กำลังฟัง (แถบคลื่นเสียงเคลื่อนไหว) / กำลังประมวลผล
- * เมื่อออฟไลน์จะเป็นสีเทาพร้อมคำอธิบาย เพราะสั่งงานด้วยเสียงต้องใช้ผู้ช่วย AI
+ *
+ * การถอดเสียงเป็นข้อความทำที่เซิร์ฟเวอร์ของตู้เอง ไม่ต้องใช้อินเทอร์เน็ต
+ * ขณะออฟไลน์จึงยังพูดถามตารางเรียนได้ตามปกติ
+ * ปุ่มจะเป็นสีเทาเฉพาะตอนที่ระบบถอดเสียงยังไม่พร้อมเท่านั้น
  */
 export default function MicPanel() {
-  const { micState, transcript, online, startListening } = useKiosk()
-  const disabled = !online
+  const { micState, transcript, sttReady, voiceSupported, startListening } = useKiosk()
+  const disabled = !sttReady || !voiceSupported
 
-  const label = disabled
-    ? 'สั่งงานด้วยเสียงไม่พร้อมใช้งาน'
-    : micState === 'listening'
-      ? 'กำลังฟัง…'
-      : micState === 'processing'
-        ? 'กำลังประมวลผล…'
-        : 'พร้อมฟัง — แตะเพื่อพูด'
+  const label = !voiceSupported
+    ? 'เบราว์เซอร์นี้ใช้ไมโครโฟนไม่ได้'
+    : !sttReady
+      ? 'ระบบถอดเสียงยังไม่พร้อม'
+      : micState === 'listening'
+        ? 'กำลังฟัง… แตะอีกครั้งเมื่อพูดจบ'
+        : micState === 'processing'
+          ? 'กำลังประมวลผล…'
+          : 'พร้อมฟัง — แตะเพื่อพูด'
 
   const ring = disabled
     ? 'border-brand-100 bg-white'
@@ -40,7 +45,7 @@ export default function MicPanel() {
           <button
             type="button"
             onClick={startListening}
-            disabled={disabled || micState !== 'idle'}
+            disabled={disabled || micState === 'processing'}
             aria-label="พูดคำถาม"
             className={`press relative flex h-[184px] w-[184px] items-center justify-center rounded-full border-4 ${
               disabled
@@ -75,7 +80,7 @@ export default function MicPanel() {
 
           {disabled ? (
             <p className="mt-3 text-body text-ink-soft">
-              ต้องเชื่อมต่ออินเทอร์เน็ตจึงจะสั่งงานด้วยเสียงได้ ระหว่างนี้แตะเลือกคำถามด้านล่างได้ตามปกติ
+              ระหว่างนี้แตะเลือกคำถามด้านล่างได้ตามปกติ
             </p>
           ) : micState === 'listening' ? (
             <div className="mt-6 flex h-[72px] items-center gap-[10px]">

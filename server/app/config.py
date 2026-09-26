@@ -58,6 +58,15 @@ FACE_MATCH_THRESHOLD = float(os.getenv("KIOSK_FACE_THRESHOLD", "0.45"))
 FACE_MATCH_MARGIN = float(os.getenv("KIOSK_FACE_MARGIN", "0.05"))
 CAMERA_SOURCE = os.getenv("KIOSK_CAMERA", "auto")  # auto | picamera | <index> | off
 
+# ---- แปลงเสียงพูดเป็นข้อความ (ภาษาไทย) ----
+# tiny/base/small/medium — base สมดุลที่สุดสำหรับ Raspberry Pi 5
+# small แม่นกว่าแต่ช้ากว่าราวสองเท่า
+STT_MODEL = os.getenv("KIOSK_STT_MODEL", "base")
+STT_MODEL_DIR = Path(os.getenv("KIOSK_STT_MODEL_DIR", SERVER_DIR / "models" / "whisper"))
+# True = ห้ามดาวน์โหลดโมเดลระหว่างใช้งาน ต้องเตรียมไฟล์ไว้ก่อน (ใช้กับตู้จริง)
+STT_OFFLINE_ONLY = _flag("KIOSK_STT_OFFLINE_ONLY", False)
+STT_ENABLED = _flag("KIOSK_STT_ENABLED", True)
+
 # ---- ผู้ช่วย AI ----
 ANTHROPIC_MODEL = os.getenv("KIOSK_AI_MODEL", "claude-opus-5")
 AI_ENABLED = _flag("KIOSK_AI_ENABLED", True) and bool(

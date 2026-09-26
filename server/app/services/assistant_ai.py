@@ -155,3 +155,15 @@ async def answer(
         "title": base.get("label") or question,
         "lines": parsed.lines[:4],
     }
+
+
+async def answer_open(
+    conn: sqlite3.Connection, question: str, base: dict[str, Any] | None = None
+) -> dict[str, Any]:
+    """ตอบคำถามปลายเปิดที่ผู้ใช้พูดเอง ไม่ได้มาจากปุ่มคำถามยอดนิยม
+
+    กติกาเหมือนเดิมทุกข้อ: ต้องค้นเอกสารเจอก่อน และโมเดลเลือกได้แค่หมายเลขชิ้นเอกสาร
+    ต่างกันแค่ตรงที่ข้อความคำถามมาจากเสียงพูด จึงใช้ข้อความนั้นเป็นหัวข้อคำตอบ
+    """
+    ctx = base or {"questionId": None, "kind": "คำถามปลายเปิด", "label": question}
+    return await answer(conn, ctx, question)

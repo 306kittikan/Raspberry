@@ -71,20 +71,32 @@ try {
   check(!/\b6604\d{6}\b/.test(text), 'ไม่มีรหัสนักศึกษาปรากฏก่อนยืนยันตัวตน')
   await shot('1-idle')
 
-  console.log('\n2. สแกนใบหน้า → ยืนยันตัวตน')
+  console.log('\n2. สแกนใบหน้าด้วยกล้องจริง')
   await page.getByText('เริ่มสแกนใบหน้า').click()
-  await page.waitForTimeout(800)
+  await page.waitForTimeout(1500)
   check((await body()).includes('กำลังตรวจจับใบหน้า'), 'แสดงสถานะกำลังตรวจจับ')
+  check((await page.locator('img[src*="/api/face/stream"]').count()) > 0,
+        'แสดงภาพสดจากกล้องจริง')
   await shot('2-scan')
 
-  await page.getByRole('button', { name: 'ใช่', exact: true }).waitFor({ timeout: 15000 })
+  // ไม่มีใครยืนหน้ากล้องระหว่างทดสอบอัตโนมัติ ระบบจึงต้องหมดเวลาแล้วเสนอทางเลือกอื่น
+  // นี่คือพฤติกรรมที่ถูกต้องของกล้องจริง ไม่ใช่ความล้มเหลวของการทดสอบ
+  await page.getByText('ใช้งานแบบไม่ระบุตัวตน').waitFor({ timeout: 25000 })
   text = await body()
-  check(/คุณคือ .+ ใช่ไหม/.test(text), 'ถามยืนยันตัวตนพร้อมชื่อที่ระบบจำได้')
-  await shot('3-confirm')
+  check(text.includes('กรอกรหัสนักศึกษา'), 'หาใบหน้าไม่เจอภายใน 10 วินาที → เสนอทางเลือกอื่น')
+  check(text.includes('ใช้งานแบบไม่ระบุตัวตน'), 'มีทางเลือกใช้งานแบบไม่ระบุตัวตน')
+  await shot('3-notrecognized')
+
+  console.log('\n2ก. เข้าสู่ระบบด้วยรหัสนักศึกษา')
+  await page.getByText('ใช้แป้นตัวเลขบนหน้าจอ').click()
+  await page.waitForTimeout(700)
+  for (const digit of '6604101001') {
+    await page.getByRole('button', { name: digit, exact: true }).first().click()
+  }
+  await page.getByRole('button', { name: 'ตกลง', exact: true }).click()
+  await page.waitForTimeout(2200)
 
   console.log('\n3. หน้าหลักส่วนตัว')
-  await page.getByRole('button', { name: 'ใช่', exact: true }).click()
-  await page.waitForTimeout(2000)
   text = await body()
   check(text.includes('••••'), 'แสดงรหัสนักศึกษาแบบปิดบังเท่านั้น')
   check(!/\b6604\d{6}\b/.test(text), 'ไม่มีรหัสนักศึกษาเต็มบนหน้าจอ')

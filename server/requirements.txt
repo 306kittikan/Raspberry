@@ -8,5 +8,17 @@ tzdata==2024.2            # Windows ไม่มีฐานข้อมูล�
 # ---- ผู้ช่วย AI (ใช้เฉพาะตอนออนไลน์) ----
 anthropic==0.42.0
 
-# ---- รู้จำใบหน้า (ติดตั้งเพิ่มเมื่อมีกล้อง: pip install -r requirements-face.txt) ----
-# ดู requirements-face.txt
+# ---- กล้องและการรู้จำใบหน้า ----
+numpy>=1.26
+opencv-python>=4.10       # อ่านภาพจากกล้อง USB และเข้ารหัส JPEG สำหรับสตรีม
+onnxruntime>=1.20         # รันโมเดล SCRFD + ArcFace (มี wheel สำหรับ ARM64)
+insightface>=0.7.3        # ชุดโมเดล buffalo_s (ตรวจจับ + เวกเตอร์ 512 มิติ)
+
+# ---- แปลงเสียงพูดภาษาไทยเป็นข้อความ ----
+faster-whisper>=1.1       # ทำงานออฟไลน์ ติดตั้ง PyAV มาด้วยจึงถอดรหัส webm/opus ได้เลย
+
+# บน Raspberry Pi ที่ใช้ Pi Camera Module ให้ติดตั้งเพิ่มผ่าน apt
+#   sudo apt install -y python3-picamera2
+# แล้วสร้าง venv ด้วย --system-site-packages เพื่อให้มองเห็น picamera2
+#
+# ใช้ opencv-python-headless แทน opencv-python ได้บน Pi ที่ไม่มีหน้าจอ X

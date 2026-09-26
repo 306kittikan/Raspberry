@@ -113,6 +113,25 @@ export async function ask(questionId, { channel = 'แตะ', online = true } =
 export const unclearAnswer = () => get('/api/assistant/unclear').then((d) => d.answer)
 
 // ------------------------------------------------------------
+// กล้องและการรู้จำใบหน้า
+// ------------------------------------------------------------
+/** ที่อยู่ภาพสดจากกล้อง ใช้ใส่ใน <img src> ได้โดยตรง */
+export const cameraStreamUrl = () => `${BASE}/api/face/stream?t=${Date.now()}`
+
+export const faceStatus = () => get('/api/face/status')
+export const startScan = () => post('/api/face/scan/start')
+export const stopScan = () => post('/api/face/scan/stop')
+export const giveConsent = (policyVersion) =>
+  post('/api/face/consent', { agreed: true, policyVersion })
+export const startEnroll = () => post('/api/face/enroll/start')
+export const cancelEnroll = () => post('/api/face/enroll/cancel')
+
+// ------------------------------------------------------------
+// ช่องทางเสียง
+// ------------------------------------------------------------
+export const voiceStatus = () => get('/api/voice/status')
+
+// ------------------------------------------------------------
 // โหมดจำลอง (เปิดเฉพาะตอนพัฒนา)
 // ------------------------------------------------------------
 export const sim = {

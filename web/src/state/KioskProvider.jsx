@@ -8,6 +8,7 @@ import React, {
   useState,
 } from 'react'
 import * as api from '../lib/api'
+import { createVoiceChannel, isSupported as voiceSupported } from '../lib/voice'
 import { CHANNEL, SOURCE, logEvent } from '../lib/logger'
 
 // ------------------------------------------------------------
@@ -21,6 +22,7 @@ export const TIMING = {
   FACE_TIMEOUT_MS: 10_000, // หาใบหน้าไม่เจอเกิน 10 วินาที
   VOICE_LISTEN_MS: 2_200,
   VOICE_PROCESS_MS: 1_200,
+  VOICE_MAX_MS: 15_000, // อัดนานสุดก่อนหยุดให้เอง
 }
 
 /** หน้าจอที่ถือว่าอยู่ใน "ช่วงใช้งาน" และต้องนับเวลาไม่ใช้งาน */
@@ -78,6 +80,11 @@ export function KioskProvider({ children }) {
   const [online, setOnline] = useState(() => navigator.onLine)
   const [cameraOk, setCameraOk] = useState(true)
   const [faceSim, setFaceSim] = useState('recognized') // recognized | unknown | multi | notfound
+  // ความพร้อมของอุปกรณ์จริง ถ้ายังไม่พร้อมจะใช้โหมดจำลองแทนโดยอัตโนมัติ
+  const [cameraReady, setCameraReady] = useState(false)
+  const [sttReady, setSttReady] = useState(false)
+  const [consentId, setConsentId] = useState(null)
+  const [enrollError, setEnrollError] = useState(null)
   const [voiceUnclear, setVoiceUnclear] = useState(false)
   const [forceNoSchedule, setForceNoSchedule] = useState(false)
   const [activeStudentIdx, setActiveStudentIdx] = useState(0)
@@ -131,6 +138,23 @@ export function KioskProvider({ children }) {
       .students()
       .then((d) => alive && setSimStudents(d.students))
       .catch(() => {})
+
+    // กล้องและโมเดลโหลดในเบื้องหลัง จึงต้องถามซ้ำจนกว่าจะพร้อม
+    const pollDevices = () => {
+      api.faceStatus()
+        .then((d) => {
+          if (!alive) return
+          const ok = Boolean(d.camera?.available && d.modelReady)
+          setCameraReady(ok)
+          setCameraOk(Boolean(d.camera?.available))
+          if (!ok) setTimeout(pollDevices, 3000)
+        })
+        .catch(() => alive && setTimeout(pollDevices, 5000))
+      api.voiceStatus()
+        .then((d) => alive && setSttReady(Boolean(d.ready)))
+        .catch(() => {})
+    }
+    pollDevices()
     return () => {
       alive = false
     }
@@ -283,8 +307,18 @@ export function KioskProvider({ children }) {
     setCandidate(null)
     setScreen('scan')
 
-    // โหมดจำลอง: ขอให้เซิร์ฟเวอร์ปล่อยเหตุการณ์ตามผลที่แผงทดสอบเลือกไว้
-    // เมื่อมีกล้องจริง ส่วนนี้จะถูกแทนที่ด้วยบริการกล้องที่ผลักเหตุการณ์เข้ามาเอง
+    // กล้องจริงพร้อม: ให้เซิร์ฟเวอร์เริ่มหาใบหน้า ผลจะมาทาง WebSocket
+    if (cameraReady) {
+      setFaceSim('searching')
+      api.startScan().catch(() => {
+        setCameraOk(false)
+        setUnknownReason('camera')
+        setScreen('keypad')
+      })
+      return
+    }
+
+    // ยังไม่มีกล้อง (หรือโมเดลยังโหลดไม่เสร็จ): ใช้เหตุการณ์จำลองตามที่แผงทดสอบเลือกไว้
     if (!cameraOk) {
       later(() => api.sim.faceProblem('camera_error').catch(() => {}), 600)
       return
@@ -298,7 +332,7 @@ export function KioskProvider({ children }) {
           : api.sim.faceProblem(faceSim)
       call.catch(() => {})
     }, delay)
-  }, [activeStudentIdx, cameraOk, clearTimers, faceSim, later, markActivity, simStudents])
+  }, [activeStudentIdx, cameraOk, cameraReady, clearTimers, faceSim, later, markActivity, simStudents])
 
   // ------------------------------------------------------------
   // เหตุการณ์จากกล้อง/ไมโครโฟน/เซ็นเซอร์
@@ -325,10 +359,22 @@ export function KioskProvider({ children }) {
           setScreen('unknown')
         } else if (ev.result === 'camera_error') {
           setCameraOk(false)
+          setCameraReady(false)
           setUnknownReason('camera')
           setScreen('keypad')
         }
-        // 'multi' : ค้างอยู่หน้าสแกนพร้อมคำเตือน ไม่แสดงข้อมูลใด ๆ
+        // 'multi' และ 'too_far' : ค้างอยู่หน้าสแกนพร้อมคำแนะนำ ไม่แสดงข้อมูลใด ๆ
+        return
+      }
+
+      if (ev.kind === 'enroll') {
+        if (typeof ev.progress === 'number') setEnrollProgress(ev.progress)
+        if (ev.state === 'done') {
+          setEnrollProgress(100)
+          setEnrollError(null)
+        } else if (ev.state === 'failed') {
+          setEnrollError(ev.reason || 'unknown')
+        }
         return
       }
 
@@ -414,31 +460,53 @@ export function KioskProvider({ children }) {
   // ------------------------------------------------------------
   // ลงทะเบียนใบหน้า
   // ------------------------------------------------------------
-  const startEnrollCapture = useCallback(() => {
+  /** บันทึกความยินยอม — ต้องทำก่อนถ่ายใบหน้าเสมอ */
+  const giveConsent = useCallback(async () => {
+    markActivity()
+    try {
+      const res = await api.giveConsent(boot?.consentPolicyVersion)
+      setConsentId(res.consentId)
+      return true
+    } catch (err) {
+      setEnrollError(err.detail || 'consent_failed')
+      return false
+    }
+  }, [boot, markActivity])
+
+  const startEnrollCapture = useCallback(async () => {
     markActivity()
     setEnrollProgress(0)
+    setEnrollError(null)
     setScreen('enroll')
-    const step = () => {
-      setEnrollProgress((p) => {
-        if (p >= 100) return 100
-        const next = Math.min(100, p + 4)
-        if (next < 100) later(step, 140)
-        return next
-      })
+    try {
+      await api.startEnroll()
+    } catch (err) {
+      // 409 = รหัสนี้มีข้อมูลใบหน้าอยู่แล้ว ต้องไปลบที่สำนักงานสาขาก่อน
+      setEnrollError(err.detail || 'enroll_failed')
     }
-    later(step, 400)
-  }, [later, markActivity])
+  }, [markActivity])
 
   const finishEnroll = useCallback(async () => {
     markActivity()
-    // เมื่อมีกล้องจริง ขั้นนี้จะส่งเวกเตอร์ใบหน้าขึ้นเซิร์ฟเวอร์พร้อมรหัสความยินยอม
-    // ตอนนี้ใช้การเข้าสู่ระบบด้วยรหัสนักศึกษาของผู้ที่เลือกไว้ในแผงทดสอบแทน
-    const target = simStudents[activeStudentIdx]
-    if (target && (await loginWithStudentId(target.studentId))) {
+    // เวกเตอร์ถูกบันทึกโดยเซิร์ฟเวอร์ตั้งแต่ตอนถ่ายครบแล้ว
+    // ขั้นนี้แค่ดึงสถานะล่าสุดมาแสดงและพาไปหน้าหลัก
+    try {
+      const face = await api.getFaceStatus()
+      setFaceEnrolled(face.enrolled)
+      setFaceEnrolledAtLabel(face.enrolledAtLabel)
+    } catch {
       setFaceEnrolled(true)
-      track('ลงทะเบียนใบหน้าสำเร็จ', CHANNEL.TOUCH, SOURCE.DB)
     }
-  }, [activeStudentIdx, loginWithStudentId, markActivity, simStudents, track])
+    await loadPersonalData({ withFace: false })
+    setScreen('home')
+    track('ลงทะเบียนใบหน้าสำเร็จ', CHANNEL.TOUCH, SOURCE.DB)
+  }, [loadPersonalData, markActivity, track])
+
+  const cancelEnroll = useCallback(() => {
+    api.cancelEnroll().catch(() => {})
+    setEnrollProgress(0)
+    setEnrollError(null)
+  }, [])
 
   const deleteFaceData = useCallback(async () => {
     markActivity()
@@ -479,35 +547,89 @@ export function KioskProvider({ children }) {
     [markActivity, online, track]
   )
 
-  /** เริ่มฟังเสียง — เมื่อมีไมโครโฟนจริง ขั้นนี้จะเป็นการเปิดสตรีมเสียงไปยังเซิร์ฟเวอร์ */
-  const startListening = useCallback(() => {
-    if (micState !== 'idle') return
+  // ------------------------------------------------------------
+  // ช่องทางเสียง — อัดจากไมโครโฟนจริง ส่งให้เซิร์ฟเวอร์ถอดความ
+  // ------------------------------------------------------------
+  const voiceRef = useRef(null)
+  const trackRef = useRef(track)
+  trackRef.current = track
+
+  useEffect(() => {
+    if (!voiceSupported()) return undefined
+    const channel = createVoiceChannel((msg) => {
+      if (msg.state === 'listening') {
+        setMicState('listening')
+      } else if (msg.state === 'processing') {
+        setMicState('processing')
+      } else if (msg.state === 'transcript') {
+        // แสดงสิ่งที่ระบบได้ยินก่อนตอบ เพื่อให้ผู้ใช้ตรวจสอบได้
+        setTranscript(msg.text)
+      } else if (msg.state === 'answer') {
+        setMicState('idle')
+        setAnswer(msg.answer)
+        const src = msg.answer?.source
+        trackRef.current(
+          msg.answer?.kind || 'คำถามด้วยเสียง',
+          CHANNEL.VOICE,
+          src === 'db' ? SOURCE.DB : SOURCE.AI
+        )
+      } else if (msg.state === 'unclear') {
+        setMicState('idle')
+        setAnswer(msg.answer)
+      } else if (msg.state === 'error') {
+        setMicState('idle')
+      }
+    })
+    voiceRef.current = channel
+    return () => {
+      channel.close()
+      voiceRef.current = null
+    }
+  }, [])
+
+  /** แตะหนึ่งครั้งเริ่มพูด แตะอีกครั้งพูดจบ — ชัดเจนกว่าการตัดเสียงอัตโนมัติบนตู้ที่มีเสียงรบกวน */
+  const startListening = useCallback(async () => {
     markActivity()
+    const channel = voiceRef.current
+
+    // ไมโครโฟนยังไม่พร้อม — ยังใช้ปุ่มคำถามได้ตามปกติ
+    if (!channel || !sttReady) {
+      setAnswer({
+        source: 'none',
+        title: 'สั่งงานด้วยเสียงยังไม่พร้อมใช้งาน',
+        lines: ['กรุณาแตะเลือกคำถามด้านล่างแทน'],
+      })
+      return
+    }
+
+    if (channel.recording) {
+      channel.stop({ token: api.getSessionToken(), online })
+      setMicState('processing')
+      return
+    }
+
     setAnswer(null)
     setTranscript('')
+    const ok = await channel.start()
+    if (!ok) {
+      setMicState('idle')
+      setAnswer({
+        source: 'none',
+        title: 'เข้าถึงไมโครโฟนไม่ได้',
+        lines: ['กรุณาอนุญาตให้ใช้ไมโครโฟน หรือแตะเลือกคำถามด้านล่างแทน'],
+      })
+      return
+    }
     setMicState('listening')
 
-    later(async () => {
-      if (voiceUnclear) {
-        setMicState('idle')
-        setAnswer(await api.unclearAnswer().catch(() => null))
-        return
+    // กันกรณีผู้ใช้เดินจากไปโดยไม่กดหยุด
+    later(() => {
+      if (voiceRef.current?.recording) {
+        voiceRef.current.stop({ token: api.getSessionToken(), online })
+        setMicState('processing')
       }
-      const pool = (boot?.quickQuestions || []).filter((q) => !q.personal || student)
-      if (pool.length === 0) {
-        setMicState('idle')
-        return
-      }
-      const pick = pool[Math.floor(Math.random() * pool.length)]
-      setTranscript(pick.label)
-      setMicState('processing')
-
-      later(async () => {
-        await askQuestion(pick.id, CHANNEL.VOICE)
-        setMicState('idle')
-      }, TIMING.VOICE_PROCESS_MS)
-    }, TIMING.VOICE_LISTEN_MS)
-  }, [askQuestion, boot, later, markActivity, micState, student, voiceUnclear])
+    }, TIMING.VOICE_MAX_MS)
+  }, [later, markActivity, online, sttReady])
 
   const simulateUnclear = useCallback(() => {
     markActivity()
@@ -623,8 +745,13 @@ export function KioskProvider({ children }) {
       // อุปกรณ์
       online,
       cameraOk,
+      cameraReady,
+      sttReady,
+      voiceSupported: voiceSupported(),
       faceSim,
       voiceUnclear,
+      consentId,
+      enrollError,
       simStudents,
       activeStudent,
       activeStudentIdx,
@@ -654,8 +781,10 @@ export function KioskProvider({ children }) {
       confirmCandidate,
       loginWithStudentId,
       startAnonymous,
+      giveConsent,
       startEnrollCapture,
       finishEnroll,
+      cancelEnroll,
       deleteFaceData,
       askQuestion,
       startListening,
@@ -666,12 +795,14 @@ export function KioskProvider({ children }) {
     [
       now, screen, boot, bootError, student, isAuthenticated, anonymous,
       effectiveSchedule, effectiveExams, hasSchedule, faceEnrolled, faceEnrolledAtLabel,
-      online, cameraOk, faceSim, voiceUnclear, simStudents, activeStudent,
+      online, cameraOk, cameraReady, sttReady, faceSim, voiceUnclear,
+      consentId, enrollError, simStudents, activeStudent,
       activeStudentIdx, unknownReason, candidate, micState, transcript,
       answer, answerPending, enrollProgress, devOpen, events, logoutCountdown,
       markActivity, detectPresence, goto, startScan, confirmCandidate,
-      loginWithStudentId, startAnonymous, startEnrollCapture, finishEnroll,
-      deleteFaceData, askQuestion, startListening, endSession, track, sim,
+      loginWithStudentId, startAnonymous, giveConsent, startEnrollCapture,
+      finishEnroll, cancelEnroll, deleteFaceData, askQuestion, startListening,
+      endSession, track, sim,
     ]
   )
 

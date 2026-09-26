@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import * as api from '../lib/api'
 import { useKiosk } from '../state/KioskProvider'
 import { Button } from '../components/ui'
 import OfflineBanner from '../components/OfflineBanner'
@@ -34,7 +35,12 @@ function FaceGuide({ tone }) {
 }
 
 export default function FaceScanScreen() {
-  const { cameraOk, faceSim, endSession, goto, markActivity, setUnknownReason } = useKiosk()
+  const { cameraOk, cameraReady, faceSim, endSession, goto, markActivity, setUnknownReason } =
+    useKiosk()
+
+  // ที่อยู่สตรีมสร้างครั้งเดียวต่อการเข้าหน้านี้ ถ้าเปลี่ยนทุกครั้งที่เรนเดอร์
+  // เบราว์เซอร์จะเปิดการเชื่อมต่อใหม่เรื่อย ๆ จนภาพกระตุก
+  const streamUrl = useMemo(() => api.cameraStreamUrl(), [])
 
   // หน้าจอนี้ทำหน้าที่แสดงผลอย่างเดียว
   // การตัดสินว่าจำหน้าได้/ไม่ได้ และการเปลี่ยนหน้าจอ เป็นของ KioskProvider
@@ -58,22 +64,33 @@ export default function FaceScanScreen() {
       <div className="relative flex-1 overflow-hidden bg-[#0C1A13]">
         {cameraOk ? (
           <>
-            <div
-              className="absolute inset-0 opacity-70"
-              style={{
-                background:
-                  'radial-gradient(circle at 50% 42%, #24493A 0%, #14291F 45%, #0A1611 100%)',
-              }}
-            />
-            {/* เส้นตารางบาง ๆ แทนภาพวิดีโอ (ไม่ใช้ blur เพื่อความลื่นบน Raspberry Pi) */}
-            <div
-              className="absolute inset-0 opacity-15"
-              style={{
-                backgroundImage:
-                  'linear-gradient(#9FD8BA 1px, transparent 1px), linear-gradient(90deg, #9FD8BA 1px, transparent 1px)',
-                backgroundSize: '60px 60px',
-              }}
-            />
+            {cameraReady ? (
+              /* ภาพสดจากกล้องผ่านสตรีม MJPEG — แท็ก img แสดงได้เลยโดยไม่ต้องใช้จาวาสคริปต์
+                 กลับด้านซ้ายขวาเหมือนกระจก เพื่อให้ผู้ใช้ขยับตัวตามได้ถูก */
+              <img
+                src={streamUrl}
+                alt=""
+                className="absolute inset-0 h-full w-full scale-x-[-1] object-cover"
+              />
+            ) : (
+              <>
+                <div
+                  className="absolute inset-0 opacity-70"
+                  style={{
+                    background:
+                      'radial-gradient(circle at 50% 42%, #24493A 0%, #14291F 45%, #0A1611 100%)',
+                  }}
+                />
+                <div
+                  className="absolute inset-0 opacity-15"
+                  style={{
+                    backgroundImage:
+                      'linear-gradient(#9FD8BA 1px, transparent 1px), linear-gradient(90deg, #9FD8BA 1px, transparent 1px)',
+                    backgroundSize: '60px 60px',
+                  }}
+                />
+              </>
+            )}
 
             <FaceGuide tone={tone} />
 
@@ -126,9 +143,11 @@ export default function FaceScanScreen() {
           </div>
         ) : null}
 
-        {searching ? (
+        {searching || faceSim === 'too_far' ? (
           <p className="mt-5 text-center text-body text-ink-soft">
-            ขยับเข้าใกล้ตู้เล็กน้อย และมองตรงมาที่กรอบ ({Math.min(elapsed, 10)}/10 วินาที)
+            {faceSim === 'too_far'
+              ? 'ขยับเข้าใกล้ตู้อีกนิด ระบบเห็นใบหน้าแล้วแต่ยังเล็กเกินไป'
+              : `ขยับเข้าใกล้ตู้เล็กน้อย และมองตรงมาที่กรอบ (${Math.min(elapsed, 10)}/10 วินาที)`}
           </p>
         ) : null}
 
