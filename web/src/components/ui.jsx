@@ -9,7 +9,7 @@ const VARIANTS = {
   danger:
     'bg-danger-600 text-white border-2 border-danger-600 active:bg-danger-700 disabled:bg-danger-100 disabled:border-danger-100',
   outlineDanger:
-    'bg-white text-danger-700 border-2 border-danger-600 active:bg-danger-50',
+    'bg-white text-danger-700 border-2 border-danger-600 active:bg-danger-50 disabled:text-ink-mute disabled:border-brand-100',
   dark: 'bg-brand-900 text-white border-2 border-brand-900 active:bg-black',
   ghost: 'bg-transparent text-brand-800 border-2 border-transparent active:bg-brand-100',
 }
@@ -32,7 +32,7 @@ export function Button({
   return (
     <button
       type="button"
-      className={`press tap inline-flex items-center justify-center gap-4 ${SIZES[size]} ${VARIANTS[variant]} ${className}`}
+      className={`press tap inline-flex items-center justify-center gap-4 ${SIZES[size]} ${VARIANTS[variant]} disabled:cursor-not-allowed disabled:opacity-60 ${className}`}
       {...rest}
     >
       {Icon ? <Icon className="h-10 w-10 shrink-0" /> : null}
