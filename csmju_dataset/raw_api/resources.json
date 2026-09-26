@@ -1,0 +1,65 @@
+[
+ {
+  "id": "de7a21b7-6633-464c-b6bf-5b8421227154",
+  "key": "room_booking_link",
+  "value": "https://maejo.link/csmjuroom",
+  "description": "ระบบจองห้องสาขา (Room Booking Link)",
+  "createdAt": "2026-08-18T05:50:46.003Z",
+  "updatedAt": "2026-08-18T05:50:46.003Z",
+  "deletedAt": null
+ },
+ {
+  "id": "1bfdf152-8adc-4c90-93a2-fb100a7bbdea",
+  "key": "room_schedule_link",
+  "value": "https://erp.mju.ac.th/reserveRoomCalendarPublic.aspx?&DId=6",
+  "description": "ปฏิทินตารางห้องหลักสูตร (Room Schedule Link)",
+  "createdAt": "2026-08-18T05:50:45.997Z",
+  "updatedAt": "2026-08-18T05:50:45.997Z",
+  "deletedAt": null
+ },
+ {
+  "id": "616914b2-03ab-44c7-922c-e36b31fc6df7",
+  "key": "line_link",
+  "value": "https://line.me/R/ti/p/%40053vfccm",
+  "description": "Do not delete, line page link.",
+  "createdAt": "2026-08-18T05:50:45.992Z",
+  "updatedAt": "2026-08-18T05:50:45.992Z",
+  "deletedAt": null
+ },
+ {
+  "id": "1cd61ab8-6989-41a3-823d-2bd73a8ea5c2",
+  "key": "facebook_link",
+  "value": "https://www.facebook.com/computersciencemju",
+  "description": "Do not delete, facebook page link.",
+  "createdAt": "2026-08-18T05:50:45.988Z",
+  "updatedAt": "2026-08-18T05:50:45.988Z",
+  "deletedAt": null
+ },
+ {
+  "id": "b5e24eee-e78c-43cb-b214-d8014122f875",
+  "key": "admission_link",
+  "value": "https://admission.mju.ac.th",
+  "description": "Admission link for MJU",
+  "createdAt": "2026-08-18T05:50:45.982Z",
+  "updatedAt": "2026-08-18T05:50:45.982Z",
+  "deletedAt": null
+ },
+ {
+  "id": "b4f08929-217f-461e-9e3d-f4f1e781488d",
+  "key": "introduction_video_id",
+  "value": "88JeU0ShY60",
+  "description": "YouTube video ID for introduction video",
+  "createdAt": "2026-08-18T05:50:45.978Z",
+  "updatedAt": "2026-08-18T05:50:45.978Z",
+  "deletedAt": null
+ },
+ {
+  "id": "d4814fb0-d185-48d9-af47-ce5e8e0b660d",
+  "key": "youtube_link",
+  "value": "https://www.youtube.com/@comscimaejo",
+  "description": "YouTube link for Computer Science MJU channel",
+  "createdAt": "2026-08-18T05:50:45.972Z",
+  "updatedAt": "2026-08-18T05:50:45.972Z",
+  "deletedAt": null
+ }
+]

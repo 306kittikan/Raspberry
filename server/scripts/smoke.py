@@ -52,6 +52,17 @@ def main() -> int:
     )
     check(len(boot["quickQuestions"]) >= 9, "มีคำถามยอดนิยมครบ",
           f"{len(boot['quickQuestions'])} ข้อ")
+    check(len(boot["announcements"]) > 0, "มีประกาศจากข่าวจริงของสาขา",
+          f"{len(boot['announcements'])} รายการ")
+    check(boot["hasSyntheticSchedule"] is True,
+          "ระบบรู้ตัวว่าตารางเรียนยังเป็นข้อมูลสมมติ")
+    dept = boot["department"]
+    check(dept["officeLocation"] is not None and "ชั้น 6" in dept["officeLocation"],
+          "ที่ตั้งสำนักงานตรงกับเว็บไซต์จริง", str(dept["officeLocation"])[:40])
+    check(dept["officePhone"] == "(+66) 053 873890-3",
+          "เบอร์โทรตรงกับเว็บไซต์จริง", str(dept["officePhone"]))
+    check(dept["officeHours"] is None,
+          "เวลาทำการเป็นค่าว่าง (ไม่มีในข้อมูลจริง จึงไม่แต่งขึ้นมา)")
     check(boot["term"]["dataUpdatedLabel"] is not None, "มีวันที่อัปเดตข้อมูลล่าสุด",
           str(boot["term"]["dataUpdatedLabel"]))
 
@@ -105,7 +116,7 @@ def main() -> int:
         ("next-class", "db"),
         ("room-floor", "db"),
         ("exam-subject", "db"),
-        ("office-hours", "db"),
+        ("office-contact", "db"),
         ("scholarship-detail", "none"),
     ]:
         status, res = call(base, "POST", "/api/assistant/ask", token=token,
@@ -114,6 +125,18 @@ def main() -> int:
         check(status == 200 and ans["source"] == expect,
               f"คำถาม '{ans.get('label') or qid}' → แหล่ง {ans['source']}",
               ans["title"])
+
+    status, res = call(base, "POST", "/api/assistant/ask", token=token,
+                       body={"questionId": "contact-teacher"})
+    ans = res["answer"]
+    check(ans["source"] == "db" and any("@mju.ac.th" in l for l in ans["lines"]),
+          "ตอบผู้สอนด้วยอีเมลจริงของบุคลากร", ans["title"])
+
+    status, res = call(base, "POST", "/api/assistant/ask", token=token,
+                       body={"questionId": "room-floor"})
+    ans = res["answer"]
+    check(not any("None" in l for l in ans["lines"]),
+          "คำตอบเรื่องห้องไม่มีค่าว่างหลุดออกมา", " / ".join(ans["lines"])[:70])
 
     status, res = call(base, "POST", "/api/assistant/ask", token=token,
                        body={"questionId": "add-drop", "online": False})

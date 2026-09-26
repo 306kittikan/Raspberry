@@ -1,0 +1,62 @@
+[
+ {
+  "id": "300e02d6-81e7-4a70-a359-080d986e6ca0",
+  "title": "สมัครเรียน",
+  "url": "https://admissions.mju.ac.th",
+  "icon": "GraduationCap",
+  "order": 1,
+  "isActive": true,
+  "isExternal": true,
+  "requiresAuth": false,
+  "position": "quick_link",
+  "parentId": null,
+  "createdAt": "2026-09-02T07:56:18.059Z",
+  "updatedAt": "2026-09-02T07:56:18.059Z",
+  "deletedAt": null
+ },
+ {
+  "id": "66b634a8-d586-4d4c-aa2a-30e1a0329a06",
+  "title": "หลักสูตร",
+  "url": "/programs",
+  "icon": "BookOpenText",
+  "order": 2,
+  "isActive": true,
+  "isExternal": false,
+  "requiresAuth": false,
+  "position": "quick_link",
+  "parentId": null,
+  "createdAt": "2026-09-02T07:56:18.061Z",
+  "updatedAt": "2026-09-02T07:56:18.061Z",
+  "deletedAt": null
+ },
+ {
+  "id": "7845886c-c59d-4dea-b1c5-66d48dbb322d",
+  "title": "ทุนการศึกษา",
+  "url": "#",
+  "icon": "Wallet",
+  "order": 3,
+  "isActive": true,
+  "isExternal": false,
+  "requiresAuth": false,
+  "position": "quick_link",
+  "parentId": null,
+  "createdAt": "2026-09-02T07:56:18.175Z",
+  "updatedAt": "2026-09-02T07:56:18.175Z",
+  "deletedAt": null
+ },
+ {
+  "id": "932a880f-dc51-4775-8897-205e92216998",
+  "title": "ปฏิทินกิจกรรม",
+  "url": "/newsroom#events-calendar",
+  "icon": "CalendarDays",
+  "order": 4,
+  "isActive": true,
+  "isExternal": false,
+  "requiresAuth": false,
+  "position": "quick_link",
+  "parentId": null,
+  "createdAt": "2026-09-02T07:56:18.179Z",
+  "updatedAt": "2026-09-02T07:56:18.179Z",
+  "deletedAt": null
+ }
+]

@@ -88,9 +88,12 @@ try {
   text = await body()
   check(text.includes('••••'), 'แสดงรหัสนักศึกษาแบบปิดบังเท่านั้น')
   check(!/\b6604\d{6}\b/.test(text), 'ไม่มีรหัสนักศึกษาเต็มบนหน้าจอ')
-  check(/ทว \d{3}/.test(text), 'แสดงรหัสวิชาของคาบถัดไป')
+  check(/10301\d{3}/.test(text), 'แสดงรหัสวิชาจริงของคาบถัดไป')
   check(text.includes('ข้อมูลอัปเดตล่าสุด'), 'แสดงวันที่อัปเดตข้อมูล')
   check(text.includes('ข้อมูลจากระบบของสาขา'), 'ติดป้ายบอกแหล่งที่มาของข้อมูล')
+  check(text.includes('ตารางเรียนเป็นข้อมูลตัวอย่าง'),
+        'เตือนผู้ใช้ว่าตารางเรียนยังไม่ใช่ของจริง')
+  check(/Lab \d|Lect \d|Lab Network/.test(text), 'แสดงห้องเรียนจริงของสาขา')
   await shot('4-home')
 
   console.log('\n4. แท็บทั้งสัปดาห์และกำหนดสอบ')
@@ -118,6 +121,12 @@ try {
         'ตอบคำถามตารางเรียนได้')
   check(text.includes('ข้อมูลจากระบบของสาขา'), 'คำตอบมีป้ายบอกที่มา (ฐานข้อมูล)')
   await shot('8-answer')
+
+  await page.getByText('ติดต่ออาจารย์ที่ไหน').click()
+  await page.waitForTimeout(2000)
+  text = await body()
+  check(/@mju\.ac\.th/.test(text), 'ตอบด้วยอีเมลจริงของบุคลากรสาขา')
+  await shot('8b-teacher')
 
   await page.getByText('ทุนวิจัยระดับปริญญาตรีมีเท่าไร').click()
   await page.waitForTimeout(2000)

@@ -1,11 +1,18 @@
-"""นำเข้าข้อมูลตั้งต้นลงฐานข้อมูล
+"""เตรียมฐานข้อมูลสำหรับพัฒนาและสาธิต
 
-    python -m app.seed            # สร้าง/เติมข้อมูล (ข้ามของที่มีแล้ว)
-    python -m app.seed --reset    # ลบฐานข้อมูลเดิมแล้วสร้างใหม่
+    python -m app.seed              # นำเข้าข้อมูลจริง + สร้างข้อมูลสาธิต
+    python -m app.seed --reset      # ลบฐานข้อมูลเดิมแล้วทำใหม่
+    python -m app.seed --real-only  # นำเข้าเฉพาะข้อมูลจริง (สำหรับตู้ที่ให้บริการจริง)
 
-ข้อมูลชุดนี้ย้ายมาจาก web/src/data/mockData.js ที่ใช้ตอนทำต้นแบบหน้าจอ
-เมื่อสาขาส่งไฟล์ตารางเรียนจริงมา ให้เขียนสคริปต์นำเข้าแยกต่างหาก
-โดยใช้โครงตารางเดียวกันนี้ ไม่ต้องแก้ไฟล์นี้
+ไฟล์นี้สร้างเฉพาะสิ่งที่ยังไม่มีข้อมูลจริง ได้แก่ นักศึกษา ตารางเรียน และกำหนดสอบ
+ส่วนที่เหลือมาจาก csmju_dataset ผ่าน app.import_csmju
+
+ตารางเรียนที่สร้างขึ้นใช้ "ห้องจริงและรายวิชาจริง" มีเพียงการจับคู่วัน เวลา
+และผู้สอนเท่านั้นที่สมมติขึ้น ทุกแถวถูกทำเครื่องหมาย is_synthetic = 1
+และหน้าจอจะขึ้นป้ายเตือนให้ผู้ใช้ทราบ
+
+เมื่อได้ตารางเรียนจริงจากสาขาแล้ว ให้เขียนสคริปต์นำเข้าแยกต่างหาก
+โดยใช้โครงตารางเดียวกันนี้และตั้ง is_synthetic = 0
 """
 
 from __future__ import annotations
@@ -15,19 +22,7 @@ import sqlite3
 import sys
 
 from . import config, db as db_module, thai
-
-# ------------------------------------------------------------
-# ข้อมูลสาขาและภาคการศึกษา
-# ------------------------------------------------------------
-DEPARTMENT = {
-    "name": "สาขาวิชาวิทยาการคอมพิวเตอร์",
-    "faculty": "คณะวิทยาศาสตร์ มหาวิทยาลัยแม่โจ้",
-    "abbr": "CS",
-    "office_location": "สำนักงานสาขาวิชาฯ ชั้น 2 อาคารจุฬาภรณ์",
-    "office_hours": "จันทร์–ศุกร์ 08.30–16.30 น.",
-    "office_phone": "053-873-870",
-    "office_email": "cs@mju.ac.th",
-}
+from .import_csmju import DEFAULT_DATASET, import_all
 
 TERM = {
     "code": "2569-1",
@@ -35,67 +30,24 @@ TERM = {
     "data_updated_at": "2026-09-22T06:00:00+07:00",
 }
 
-ANNOUNCEMENTS = [
-    ("ลงทะเบียน", "เปิดลงทะเบียนเพิ่ม–ถอนรายวิชา",
-     "ถึงวันศุกร์ที่ 3 ตุลาคม 2569 ผ่านระบบ ERP ของมหาวิทยาลัย", None, "2026-10-03"),
-    ("สหกิจศึกษา", "ปฐมนิเทศสหกิจศึกษา รุ่นที่ 12",
-     "วันพุธที่ 8 ตุลาคม 2569 เวลา 13.00 น. ห้องประชุมจุฬาภรณ์ ชั้น 3", None, "2026-10-08"),
-    ("กิจกรรม", "MJU CS Hackathon 2026 เปิดรับสมัครทีม",
-     "ทีมละ 3 คน สมัครได้ถึง 30 กันยายน 2569 ที่สำนักงานสาขาวิชาฯ", None, "2026-09-30"),
-    ("ทุนการศึกษา", "ทุนช่วยเหลือนักศึกษา ภาคเรียนที่ 1/2569",
-     "ยื่นเอกสารที่งานกิจการนักศึกษา ภายใน 10 ตุลาคม 2569", None, "2026-10-10"),
-]
-
-# code → (อาคาร, ชั้น, คำแนะนำการเดินทาง)
-ROOMS = {
-    "ศว 2301": ("อาคารจุฬาภรณ์", 3, "ขึ้นลิฟต์ฝั่งซ้ายของโถงทางเข้า แล้วเลี้ยวขวา"),
-    "ศว 2202": ("อาคารจุฬาภรณ์", 2, "ขึ้นบันไดกลาง แล้วเลี้ยวซ้ายสุดทางเดิน"),
-    "ศว 2204": ("อาคารจุฬาภรณ์", 2, None),
-    "ศว 2305": ("อาคารจุฬาภรณ์", 3, None),
-    "ศว 2401": ("อาคารจุฬาภรณ์", 4, None),
-    "ศว 2403": ("อาคารจุฬาภรณ์", 4, None),
-    "ศว 3105": ("อาคารจุฬาภรณ์", 1, None),
-    "ศว 3202": ("อาคารจุฬาภรณ์", 2, None),
-    "ศว 3301": ("อาคารจุฬาภรณ์", 3, None),
-    "ศว 1101": ("อาคารวิทยาศาสตร์", 1, None),
-    "ศศ 1105": ("อาคารศิลปศาสตร์", 1, None),
-    "ศศ 1203": ("อาคารศิลปศาสตร์", 2, None),
-}
-
-COURSES = {
-    "ทว 331": "การเขียนโปรแกรมบนเว็บ",
-    "ทว 322": "ระบบฐานข้อมูล",
-    "ทว 341": "ปัญญาประดิษฐ์เบื้องต้น",
-    "ทว 351": "เครือข่ายคอมพิวเตอร์",
-    "ทว 352": "ปฏิบัติการเครือข่ายคอมพิวเตอร์",
-    "ทว 355": "ความมั่นคงปลอดภัยไซเบอร์",
-    "ทว 361": "วิศวกรรมซอฟต์แวร์",
-    "ทว 371": "การวิเคราะห์ข้อมูลขนาดใหญ่",
-    "ทว 381": "ปฏิสัมพันธ์ระหว่างมนุษย์กับคอมพิวเตอร์",
-    "ทว 497": "โครงงานวิทยาการคอมพิวเตอร์ 1",
-    "คณ 211": "คณิตศาสตร์ดิสครีต",
-    "ศท 141": "ภาษาอังกฤษสำหรับงานคอมพิวเตอร์",
-    "ศท 142": "การสื่อสารเชิงวิชาชีพ",
-}
-
-# (day, start, end, course_code, room_code, teacher)
+# รายวิชาจริงจากหลักสูตรวิทยาการคอมพิวเตอร์ (รหัสตรงกับ courses ที่นำเข้ามา)
+# (วัน, เริ่ม, จบ, รหัสวิชา, รหัสห้อง, ผู้สอน)
+# ผู้สอนเป็นบุคลากรจริงของสาขา แต่การจับคู่วิชา–ผู้สอน–เวลา เป็นการสมมติ
 SECTIONS = [
-    (1, "09:00", "12:00", "ทว 331", "ศว 2301", "อ.ดร. ธนากร พงศ์พันธุ์"),
-    (1, "13:00", "15:00", "ทว 322", "ศว 2202", "ผศ.ดร. วราภรณ์ สุขสวัสดิ์"),
-    (1, "10:00", "12:00", "ทว 341", "ศว 3105", "อ.ดร. ปรีชา วงศ์คำ"),
-    (2, "10:00", "12:00", "ทว 341", "ศว 3105", "อ.ดร. ปรีชา วงศ์คำ"),
-    (2, "08:00", "11:00", "ทว 371", "ศว 2305", "อ.ดร. ธนากร พงศ์พันธุ์"),
-    (2, "13:00", "15:00", "ทว 322", "ศว 2202", "ผศ.ดร. วราภรณ์ สุขสวัสดิ์"),
-    (2, "15:00", "17:00", "ศท 142", "ศศ 1105", "อ. มาลี ทองคำ"),
-    (3, "08:00", "10:00", "คณ 211", "ศว 1101", "อ. สุนิสา ปัญญาดี"),
-    (3, "10:00", "12:00", "ทว 351", "ศว 2204", "อ.ดร. ณัฐพล อินต๊ะ"),
-    (3, "13:00", "16:00", "ทว 352", "ศว 2401", "อ.ดร. ณัฐพล อินต๊ะ"),
-    (3, "13:00", "16:00", "ทว 381", "ศว 2403", "ผศ. กิตติพงษ์ ศรีวิชัย"),
-    (4, "09:00", "12:00", "ทว 361", "ศว 3202", "ผศ. กิตติพงษ์ ศรีวิชัย"),
-    (4, "13:00", "15:00", "ศท 141", "ศศ 1203", "อ. Emily Carter"),
-    (4, "13:00", "15:00", "ทว 355", "ศว 2204", "อ.ดร. ณัฐพล อินต๊ะ"),
-    (5, "09:00", "12:00", "ทว 497", "ศว 3301", "ผศ.ดร. วราภรณ์ สุขสวัสดิ์"),
-    (5, "13:00", "16:00", "ทว 497", "ศว 3301", "อ.ดร. ธนากร พงศ์พันธุ์"),
+    (1, "09:00", "12:00", "10301141-68", "6", "ผศ.ภานุวัฒน์ เมฆะ"),
+    (1, "13:00", "15:00", "10301222-68", "8", "ผศ.ดร.พาสน์ ปราโมกข์ชน"),
+    (1, "10:00", "12:00", "10301231-68", "7", "ผศ.ดร.ปวีณ เขื่อนแก้ว"),
+    (2, "10:00", "12:00", "10301231-68", "7", "ผศ.ดร.ปวีณ เขื่อนแก้ว"),
+    (2, "08:00", "11:00", "10301349", "5", "ผศ.ดร.พาสน์ ปราโมกข์ชน"),
+    (2, "13:00", "15:00", "10301222-68", "8", "ผศ.ดร.พาสน์ ปราโมกข์ชน"),
+    (3, "08:00", "10:00", "10301151", "2", "ผศ.ภานุวัฒน์ เมฆะ"),
+    (3, "10:00", "12:00", "10301357-68", "2", "ผศ.ภานุวัฒน์ เมฆะ"),
+    (3, "13:00", "16:00", "10301243", "1", "ผศ.ดร.ปวีณ เขื่อนแก้ว"),
+    (3, "13:00", "16:00", "10301337", "3", "ผศ.ดร.ปวีณ เขื่อนแก้ว"),
+    (4, "09:00", "12:00", "10301341-68", "4", "ผศ.ดร.พาสน์ ปราโมกข์ชน"),
+    (4, "13:00", "15:00", "10301354-68", "2", "ผศ.ภานุวัฒน์ เมฆะ"),
+    (5, "09:00", "12:00", "10301338", "9", "ผศ.ดร.ปวีณ เขื่อนแก้ว"),
+    (5, "13:00", "16:00", "10301337", "3", "ผศ.ดร.ปวีณ เขื่อนแก้ว"),
 ]
 
 STUDENTS = [
@@ -104,12 +56,13 @@ STUDENTS = [
         "name": "สมชาย ใจดี",
         "year": 3,
         "program": "วิทยาการคอมพิวเตอร์",
-        "advisor": "ผศ.ดร. วราภรณ์ สุขสวัสดิ์",
-        # (day, start, course_code) — ชี้ไปยังคาบใน SECTIONS
+        "advisor": "ผศ.ดร.พาสน์ ปราโมกข์ชน",
+        # (วัน, เวลาเริ่ม, รหัสวิชา) ชี้ไปยังคาบใน SECTIONS
         "sections": [
-            (1, "09:00", "ทว 331"), (1, "13:00", "ทว 322"), (2, "10:00", "ทว 341"),
-            (3, "08:00", "คณ 211"), (3, "10:00", "ทว 351"), (3, "13:00", "ทว 352"),
-            (4, "09:00", "ทว 361"), (4, "13:00", "ศท 141"), (5, "09:00", "ทว 497"),
+            (1, "09:00", "10301141-68"), (1, "13:00", "10301222-68"),
+            (2, "10:00", "10301231-68"), (3, "08:00", "10301151"),
+            (3, "10:00", "10301357-68"), (3, "13:00", "10301243"),
+            (4, "09:00", "10301341-68"), (5, "09:00", "10301338"),
         ],
     },
     {
@@ -117,251 +70,174 @@ STUDENTS = [
         "name": "ปาริชาต แสงทอง",
         "year": 3,
         "program": "วิทยาการคอมพิวเตอร์",
-        "advisor": "อ.ดร. ธนากร พงศ์พันธุ์",
+        "advisor": "ผศ.ภานุวัฒน์ เมฆะ",
         "sections": [
-            (1, "10:00", "ทว 341"), (2, "08:00", "ทว 371"), (2, "13:00", "ทว 322"),
-            (2, "15:00", "ศท 142"), (3, "13:00", "ทว 381"), (4, "09:00", "ทว 361"),
-            (4, "13:00", "ทว 355"), (5, "13:00", "ทว 497"),
+            (1, "10:00", "10301231-68"), (2, "08:00", "10301349"),
+            (2, "13:00", "10301222-68"), (3, "13:00", "10301337"),
+            (4, "09:00", "10301341-68"), (4, "13:00", "10301354-68"),
+            (5, "13:00", "10301337"),
         ],
     },
 ]
 
-# (course_code, ประเภท, วันที่, เวลาเริ่ม, เวลาจบ, ห้องสอบ)
+# (รหัสวิชา, ประเภท, วันที่, เวลาเริ่ม, เวลาจบ, รหัสห้อง)
 EXAMS = [
-    ("ทว 331", "สอบกลางภาค", "2026-10-12", "09:00", "11:00", "ศว 2301"),
-    ("ทว 322", "สอบกลางภาค", "2026-10-14", "13:00", "15:00", "ศว 2202"),
-    ("ทว 341", "สอบกลางภาค", "2026-10-16", "09:00", "11:00", "ศว 3105"),
-    ("ทว 371", "สอบกลางภาค", "2026-10-13", "09:00", "11:00", "ศว 2305"),
-    ("ทว 355", "สอบกลางภาค", "2026-10-15", "13:00", "15:00", "ศว 2204"),
-    ("ทว 381", "สอบกลางภาค", "2026-10-19", "09:00", "11:00", "ศว 2403"),
+    ("10301141-68", "สอบกลางภาค", "2026-10-12", "09:00", "11:00", "6"),
+    ("10301222-68", "สอบกลางภาค", "2026-10-14", "13:00", "15:00", "8"),
+    ("10301231-68", "สอบกลางภาค", "2026-10-16", "09:00", "11:00", "7"),
+    ("10301349", "สอบกลางภาค", "2026-10-13", "09:00", "11:00", "5"),
+    ("10301354-68", "สอบกลางภาค", "2026-10-15", "13:00", "15:00", "2"),
+    ("10301337", "สอบกลางภาค", "2026-10-19", "09:00", "11:00", "3"),
 ]
 
-# (id, label, kind, source, personal, ลำดับ)
+# (id, ข้อความบนปุ่ม, ประเภทคำถาม, แหล่งคำตอบ, ต้องยืนยันตัวตน, ลำดับ)
 QUICK_QUESTIONS = [
     ("room-floor", "ห้องนี้อยู่ชั้นไหน", "ตำแหน่งห้องเรียน", "db", 1, 10),
     ("contact-teacher", "ติดต่ออาจารย์ที่ไหน", "ติดต่ออาจารย์", "db", 0, 20),
     ("exam-subject", "กำหนดสอบวิชานี้", "กำหนดสอบ", "db", 1, 30),
     ("next-class", "คาบต่อไปเรียนที่ไหน", "ตารางเรียน", "db", 1, 40),
-    ("office-hours", "สำนักงานสาขาเปิดกี่โมง", "บริการสำนักงาน", "db", 0, 50),
+    ("office-contact", "ติดต่อสำนักงานสาขาอย่างไร", "บริการสำนักงาน", "db", 0, 50),
     ("add-drop", "เพิ่ม–ถอนรายวิชาทำอย่างไร", "ระเบียบการศึกษา", "ai", 0, 60),
     ("coop", "สหกิจศึกษาต้องเตรียมอะไร", "สหกิจศึกษา", "ai", 0, 70),
-    ("wifi", "ใช้ Wi-Fi มหาวิทยาลัยอย่างไร", "บริการไอที", "ai", 0, 80),
-    ("scholarship-detail", "ทุนวิจัยระดับปริญญาตรีมีเท่าไร", "ทุนการศึกษา", "none", 0, 90),
-]
-
-# เอกสารอ้างอิงของผู้ช่วย AI
-# (ชื่อเอกสาร, ข้อความอ้างอิงที่แสดงบนจอ, วันที่มีผล, [(หน้า, เนื้อหา), ...])
-DOCUMENTS = [
-    (
-        "คู่มือนักศึกษา ปีการศึกษา 2569",
-        "คู่มือนักศึกษา ปีการศึกษา 2569",
-        "2026-06-01",
-        [
-            (
-                "หน้า 18",
-                "การเพิ่มและถอนรายวิชา นักศึกษายื่นคำร้องผ่านระบบ ERP ของมหาวิทยาลัย "
-                "ภายในสองสัปดาห์แรกของภาคการศึกษา คำร้องต้องได้รับความเห็นชอบจาก "
-                "อาจารย์ที่ปรึกษาก่อนจึงจะบันทึกผลได้ หากพ้นกำหนดให้ยื่นคำร้องพิเศษ "
-                "ที่สำนักงานสาขาวิชาฯ พร้อมเหตุผลประกอบ",
-            ),
-            (
-                "หน้า 24",
-                "การลาพักการศึกษา นักศึกษาต้องยื่นคำร้องก่อนวันสุดท้ายของการลงทะเบียน "
-                "และชำระค่าธรรมเนียมรักษาสภาพนักศึกษาทุกภาคการศึกษาที่ลาพัก",
-            ),
-        ],
-    ),
-    (
-        "ประกาศสาขาวิชาฯ เรื่องสหกิจศึกษา ฉบับที่ 3/2569",
-        "ประกาศสาขาวิชาฯ เรื่องสหกิจศึกษา ฉบับที่ 3/2569",
-        "2026-07-15",
-        [
-            (
-                None,
-                "คุณสมบัติผู้เข้าร่วมสหกิจศึกษา ต้องผ่านรายวิชาบังคับไม่น้อยกว่า 90 หน่วยกิต "
-                "และมีเกรดเฉลี่ยสะสมไม่ต่ำกว่า 2.00 เอกสารที่ต้องเตรียมได้แก่ ใบสมัคร "
-                "แฟ้มสะสมผลงาน และหนังสือขอความอนุเคราะห์จากสาขาวิชาฯ "
-                "นักศึกษาต้องเข้าร่วมปฐมนิเทศสหกิจศึกษาก่อนออกปฏิบัติงานทุกครั้ง",
-            ),
-        ],
-    ),
-    (
-        "คู่มือการใช้งานเครือข่าย MJU-WiFi ฉบับปี 2569",
-        "คู่มือการใช้งานเครือข่าย MJU-WiFi ฉบับปี 2569",
-        "2026-05-01",
-        [
-            (
-                None,
-                "การเชื่อมต่อเครือข่ายไร้สายของมหาวิทยาลัย เลือกเครือข่ายชื่อ MJU-WiFi "
-                "แล้วเข้าสู่ระบบด้วยบัญชีอินเทอร์เน็ตของมหาวิทยาลัย "
-                "หนึ่งบัญชีเชื่อมต่อพร้อมกันได้สูงสุด 3 อุปกรณ์ "
-                "หากเข้าใช้งานไม่ได้ให้ติดต่อศูนย์เทคโนโลยีสารสนเทศ ชั้น 1 อาคารสำนักหอสมุด",
-            ),
-        ],
-    ),
+    ("curriculum", "หลักสูตรเรียนอะไรบ้าง", "หลักสูตร", "ai", 0, 80),
+    ("facilities", "สาขามีห้องปฏิบัติการอะไรบ้าง", "อาคารสถานที่", "ai", 0, 90),
+    ("scholarship-detail", "ทุนวิจัยระดับปริญญาตรีมีเท่าไร", "ทุนการศึกษา", "none", 0, 100),
 ]
 
 
-# ------------------------------------------------------------
-def seed(conn: sqlite3.Connection) -> None:
+def seed_quick_questions(conn: sqlite3.Connection) -> None:
+    conn.execute("DELETE FROM quick_questions")
+    for qid, label, kind, source, personal, order in QUICK_QUESTIONS:
+        conn.execute(
+            """INSERT INTO quick_questions (id, label, kind, source, personal, sort_order)
+               VALUES (?, ?, ?, ?, ?, ?)""",
+            (qid, label, kind, source, personal, order),
+        )
+
+
+def seed_term(conn: sqlite3.Connection) -> int:
+    conn.execute(
+        """INSERT INTO terms (code, label, is_current, data_updated_at)
+           VALUES (:code, :label, 1, :data_updated_at)
+           ON CONFLICT(code) DO UPDATE SET
+               label = excluded.label, data_updated_at = excluded.data_updated_at""",
+        TERM,
+    )
+    return conn.execute("SELECT id FROM terms WHERE code = ?", (TERM["code"],)).fetchone()["id"]
+
+
+def seed_demo_schedule(conn: sqlite3.Connection, term_id: int) -> None:
+    """สร้างตารางเรียนสาธิตบนห้องจริงและรายวิชาจริง"""
     now = thai.now().isoformat(timespec="seconds")
 
-    with db_module.transaction(conn):
+    def course_id(code: str) -> int:
+        row = conn.execute("SELECT id FROM courses WHERE code = ?", (code,)).fetchone()
+        if row is None:
+            raise ValueError(f"ไม่พบรายวิชา {code} — นำเข้าข้อมูลจริงก่อนด้วย app.import_csmju")
+        return row["id"]
+
+    def room_id(code: str) -> int:
+        row = conn.execute("SELECT id FROM rooms WHERE code = ?", (code,)).fetchone()
+        if row is None:
+            raise ValueError(f"ไม่พบห้อง {code} — นำเข้าข้อมูลจริงก่อนด้วย app.import_csmju")
+        return row["id"]
+
+    for day, start, end, course, room, teacher in SECTIONS:
         conn.execute(
-            """INSERT OR REPLACE INTO department
-               (id, name, faculty, abbr, office_location, office_hours, office_phone, office_email)
-               VALUES (1, :name, :faculty, :abbr, :office_location, :office_hours,
-                       :office_phone, :office_email)""",
-            DEPARTMENT,
+            """INSERT INTO sections
+                   (term_id, course_id, room_id, day, start_time, end_time, teacher, is_synthetic)
+               VALUES (?, ?, ?, ?, ?, ?, ?, 1)
+               ON CONFLICT(term_id, course_id, day, start_time) DO UPDATE SET
+                   room_id = excluded.room_id, end_time = excluded.end_time,
+                   teacher = excluded.teacher""",
+            (term_id, course_id(course), room_id(room), day, start, end, teacher),
         )
 
+    for student in STUDENTS:
         conn.execute(
-            """INSERT INTO terms (code, label, is_current, data_updated_at)
-               VALUES (:code, :label, 1, :data_updated_at)
-               ON CONFLICT(code) DO UPDATE SET
-                   label = excluded.label,
-                   data_updated_at = excluded.data_updated_at""",
-            TERM,
+            """INSERT INTO students
+                   (student_id, name, year, program, advisor, is_synthetic, created_at)
+               VALUES (?, ?, ?, ?, ?, 1, ?)
+               ON CONFLICT(student_id) DO UPDATE SET
+                   name = excluded.name, year = excluded.year,
+                   program = excluded.program, advisor = excluded.advisor""",
+            (student["student_id"], student["name"], student["year"],
+             student["program"], student["advisor"], now),
         )
-        term_id = conn.execute(
-            "SELECT id FROM terms WHERE code = ?", (TERM["code"],)
+        pk = conn.execute(
+            "SELECT id FROM students WHERE student_id = ?", (student["student_id"],)
         ).fetchone()["id"]
 
-        conn.execute("DELETE FROM announcements")
-        for order, (tag, title, detail, starts, ends) in enumerate(ANNOUNCEMENTS):
+        conn.execute("DELETE FROM enrollments WHERE student_id = ?", (pk,))
+        for day, start, course in student["sections"]:
+            row = conn.execute(
+                """SELECT id FROM sections
+                   WHERE term_id = ? AND course_id = ? AND day = ? AND start_time = ?""",
+                (term_id, course_id(course), day, start),
+            ).fetchone()
+            if row is None:
+                raise ValueError(f"ไม่พบคาบเรียน {course} วัน {day} เวลา {start}")
             conn.execute(
-                """INSERT INTO announcements (tag, title, detail, starts_on, ends_on, sort_order)
-                   VALUES (?, ?, ?, ?, ?, ?)""",
-                (tag, title, detail, starts, ends, order),
+                "INSERT OR IGNORE INTO enrollments (student_id, section_id) VALUES (?, ?)",
+                (pk, row["id"]),
             )
 
-        for code, (building, floor, directions) in ROOMS.items():
-            conn.execute(
-                """INSERT INTO rooms (code, building, floor, directions) VALUES (?, ?, ?, ?)
-                   ON CONFLICT(code) DO UPDATE SET
-                       building = excluded.building,
-                       floor = excluded.floor,
-                       directions = excluded.directions""",
-                (code, building, floor, directions),
-            )
-
-        for code, name in COURSES.items():
-            conn.execute(
-                """INSERT INTO courses (code, name) VALUES (?, ?)
-                   ON CONFLICT(code) DO UPDATE SET name = excluded.name""",
-                (code, name),
-            )
-
-        def course_id(code: str) -> int:
-            return conn.execute("SELECT id FROM courses WHERE code = ?", (code,)).fetchone()["id"]
-
-        def room_id(code: str) -> int:
-            return conn.execute("SELECT id FROM rooms WHERE code = ?", (code,)).fetchone()["id"]
-
-        for day, start, end, course, room, teacher in SECTIONS:
-            conn.execute(
-                """INSERT INTO sections
-                       (term_id, course_id, room_id, day, start_time, end_time, teacher)
-                   VALUES (?, ?, ?, ?, ?, ?, ?)
-                   ON CONFLICT(term_id, course_id, day, start_time) DO UPDATE SET
-                       room_id = excluded.room_id,
-                       end_time = excluded.end_time,
-                       teacher = excluded.teacher""",
-                (term_id, course_id(course), room_id(room), day, start, end, teacher),
-            )
-
-        for student in STUDENTS:
-            conn.execute(
-                """INSERT INTO students (student_id, name, year, program, advisor, created_at)
-                   VALUES (?, ?, ?, ?, ?, ?)
-                   ON CONFLICT(student_id) DO UPDATE SET
-                       name = excluded.name, year = excluded.year,
-                       program = excluded.program, advisor = excluded.advisor""",
-                (student["student_id"], student["name"], student["year"],
-                 student["program"], student["advisor"], now),
-            )
-            pk = conn.execute(
-                "SELECT id FROM students WHERE student_id = ?", (student["student_id"],)
-            ).fetchone()["id"]
-
-            conn.execute("DELETE FROM enrollments WHERE student_id = ?", (pk,))
-            for day, start, course in student["sections"]:
-                row = conn.execute(
-                    """SELECT id FROM sections
-                       WHERE term_id = ? AND course_id = ? AND day = ? AND start_time = ?""",
-                    (term_id, course_id(course), day, start),
-                ).fetchone()
-                if row is None:
-                    raise ValueError(f"ไม่พบคาบเรียน {course} วัน {day} เวลา {start}")
-                conn.execute(
-                    "INSERT OR IGNORE INTO enrollments (student_id, section_id) VALUES (?, ?)",
-                    (pk, row["id"]),
-                )
-
-        for course, kind, date_, start, end, room in EXAMS:
-            conn.execute(
-                """INSERT INTO exams
-                       (term_id, course_id, room_id, exam_type, exam_date, start_time, end_time)
-                   VALUES (?, ?, ?, ?, ?, ?, ?)
-                   ON CONFLICT(term_id, course_id, exam_type) DO UPDATE SET
-                       room_id = excluded.room_id, exam_date = excluded.exam_date,
-                       start_time = excluded.start_time, end_time = excluded.end_time""",
-                (term_id, course_id(course), room_id(room), kind, date_, start, end),
-            )
-
-        for qid, label, kind, source, personal, order in QUICK_QUESTIONS:
-            conn.execute(
-                """INSERT INTO quick_questions (id, label, kind, source, personal, sort_order)
-                   VALUES (?, ?, ?, ?, ?, ?)
-                   ON CONFLICT(id) DO UPDATE SET
-                       label = excluded.label, kind = excluded.kind,
-                       source = excluded.source, personal = excluded.personal,
-                       sort_order = excluded.sort_order""",
-                (qid, label, kind, source, personal, order),
-            )
-
-        conn.execute("DELETE FROM documents")  # ลบลูกตาม ON DELETE CASCADE
-        for title, citation, effective, chunks in DOCUMENTS:
-            cur = conn.execute(
-                """INSERT INTO documents (title, citation_label, effective_date, created_at)
-                   VALUES (?, ?, ?, ?)""",
-                (title, citation, effective, now),
-            )
-            doc_id = cur.lastrowid
-            for ordinal, (page, content) in enumerate(chunks):
-                conn.execute(
-                    """INSERT INTO doc_chunks (document_id, ordinal, page, content)
-                       VALUES (?, ?, ?, ?)""",
-                    (doc_id, ordinal, page, content),
-                )
+    for course, kind, date_, start, end, room in EXAMS:
+        conn.execute(
+            """INSERT INTO exams
+                   (term_id, course_id, room_id, exam_type, exam_date,
+                    start_time, end_time, is_synthetic)
+               VALUES (?, ?, ?, ?, ?, ?, ?, 1)
+               ON CONFLICT(term_id, course_id, exam_type) DO UPDATE SET
+                   room_id = excluded.room_id, exam_date = excluded.exam_date,
+                   start_time = excluded.start_time, end_time = excluded.end_time""",
+            (term_id, course_id(course), room_id(room), kind, date_, start, end),
+        )
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="นำเข้าข้อมูลตั้งต้นของตู้บริการข้อมูล")
+    parser = argparse.ArgumentParser(description="เตรียมฐานข้อมูลของตู้บริการข้อมูล")
     parser.add_argument("--reset", action="store_true", help="ลบฐานข้อมูลเดิมแล้วสร้างใหม่")
+    parser.add_argument("--real-only", action="store_true",
+                        help="นำเข้าเฉพาะข้อมูลจริง ไม่สร้างนักศึกษาและตารางเรียนสาธิต")
+    parser.add_argument("--dataset", default=DEFAULT_DATASET)
     args = parser.parse_args(argv)
 
     if args.reset and config.DB_PATH.exists():
         config.DB_PATH.unlink()
         for suffix in ("-wal", "-shm"):
-            extra = config.DB_PATH.with_name(config.DB_PATH.name + suffix)
-            extra.unlink(missing_ok=True)
+            config.DB_PATH.with_name(config.DB_PATH.name + suffix).unlink(missing_ok=True)
         print(f"ลบฐานข้อมูลเดิม: {config.DB_PATH}")
 
     conn = db_module.connect()
     db_module.init_db(conn)
-    seed(conn)
 
-    counts = {
-        name: conn.execute(f"SELECT COUNT(*) AS n FROM {name}").fetchone()["n"]
-        for name in ("students", "courses", "rooms", "sections", "enrollments",
-                     "exams", "announcements", "quick_questions", "doc_chunks")
-    }
+    stats = import_all(conn, args.dataset)
+    print(f"ข้อมูลจริงจากเว็บไซต์สาขา (เก็บเมื่อ {(stats['crawled_at'] or '')[:10]})")
+    for key in ("buildings", "rooms", "personnel", "courses", "contacts",
+                "announcements", "doc_chunks"):
+        print(f"  {key:16s} {stats[key]:5d}")
+
+    with db_module.transaction(conn):
+        seed_quick_questions(conn)
+        term_id = seed_term(conn)
+        if not args.real_only:
+            seed_demo_schedule(conn, term_id)
+
+    if args.real_only:
+        print("\nข้ามข้อมูลสาธิต (--real-only) — ตู้จะยังไม่มีตารางเรียนให้แสดง")
+    else:
+        counts = {
+            name: conn.execute(f"SELECT COUNT(*) AS n FROM {name}").fetchone()["n"]
+            for name in ("students", "sections", "enrollments", "exams")
+        }
+        print("\nข้อมูลสาธิต (สมมติ — ใช้ห้องจริงและรายวิชาจริง)")
+        for name, n in counts.items():
+            print(f"  {name:16s} {n:5d}")
+        print("  ทุกแถวถูกทำเครื่องหมาย is_synthetic = 1 และหน้าจอจะขึ้นป้ายเตือน")
+
     conn.close()
-
-    print(f"นำเข้าข้อมูลลง {config.DB_PATH} เรียบร้อย")
-    for name, n in counts.items():
-        print(f"  {name:18s} {n:4d}")
+    print(f"\nฐานข้อมูล: {config.DB_PATH}")
     return 0
 
 

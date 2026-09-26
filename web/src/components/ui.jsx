@@ -56,12 +56,21 @@ export function SectionTitle({ children, right }) {
 
 /** ข้อความกำกับความสดของข้อมูล ต้องมีทุกหน้าที่แสดงตารางเรียน/กำหนดสอบ */
 export function UpdatedAt({ className = '' }) {
-  const { dataUpdatedLabel } = useKiosk()
-  if (!dataUpdatedLabel) return null
+  const { dataUpdatedLabel, hasSyntheticSchedule } = useKiosk()
+  if (!dataUpdatedLabel && !hasSyntheticSchedule) return null
   return (
-    <p className={`text-[22px] leading-snug text-ink-mute ${className}`}>
-      ข้อมูลอัปเดตล่าสุด: {dataUpdatedLabel}
-    </p>
+    <div className={`leading-snug ${className}`}>
+      {dataUpdatedLabel ? (
+        <p className="text-[22px] text-ink-mute">ข้อมูลอัปเดตล่าสุด: {dataUpdatedLabel}</p>
+      ) : null}
+      {/* ตราบใดที่ยังไม่ได้รับตารางเรียนจริงจากสาขา ต้องบอกผู้ใช้ตรง ๆ
+          ไม่ให้เข้าใจผิดว่าเป็นตารางเรียนของตนเองจริง ๆ */}
+      {hasSyntheticSchedule ? (
+        <p className="mt-1 inline-flex items-center gap-2 rounded-full border-2 border-alert-100 bg-alert-50 px-4 py-1 text-[20px] font-semibold text-alert-900">
+          ตารางเรียนเป็นข้อมูลตัวอย่าง ยังไม่ใช่ตารางจริง
+        </p>
+      ) : null}
+    </div>
   )
 }
 

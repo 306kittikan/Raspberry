@@ -24,11 +24,32 @@ def get_department(conn: sqlite3.Connection) -> dict[str, Any]:
         "name": row["name"],
         "faculty": row["faculty"],
         "abbr": row["abbr"],
+        "website": row["website"],
         "officeLocation": row["office_location"],
+        # เวลาทำการไม่มีในข้อมูลจริง จึงเป็น None ได้ หน้าจอต้องรับมือได้
         "officeHours": row["office_hours"],
         "officePhone": row["office_phone"],
         "officeEmail": row["office_email"],
     }
+
+
+def list_contacts(conn: sqlite3.Connection) -> list[dict[str, Any]]:
+    rows = conn.execute(
+        "SELECT type, title, value, label FROM contacts ORDER BY sort_order, id"
+    ).fetchall()
+    return [
+        {"type": r["type"], "title": r["title"], "value": r["value"], "label": r["label"]}
+        for r in rows
+    ]
+
+
+def has_synthetic_schedule(conn: sqlite3.Connection) -> bool:
+    """ตารางเรียนที่อยู่ในระบบยังเป็นข้อมูลสมมติหรือไม่
+
+    ใช้ขึ้นป้ายเตือนบนหน้าจอ เพื่อไม่ให้ใครเข้าใจผิดว่าเป็นตารางเรียนจริง
+    """
+    row = conn.execute("SELECT 1 FROM sections WHERE is_synthetic = 1 LIMIT 1").fetchone()
+    return row is not None
 
 
 def get_current_term(conn: sqlite3.Connection) -> sqlite3.Row | None:
@@ -36,13 +57,25 @@ def get_current_term(conn: sqlite3.Connection) -> sqlite3.Row | None:
 
 
 def contact_fallback(conn: sqlite3.Connection) -> list[str]:
-    """ข้อความติดต่อสาขา ใช้ซ้ำทุกครั้งที่ไม่พบข้อมูล"""
+    """ข้อความติดต่อสาขา ใช้ซ้ำทุกครั้งที่ไม่พบข้อมูล
+
+    ประกอบจากช่องทางที่มีจริงเท่านั้น ช่องไหนไม่มีข้อมูลก็ไม่แสดง
+    """
     dept = get_department(conn)
-    return [
-        dept["officeLocation"],
-        dept["officeHours"],
-        f"โทร {dept['officePhone']} · อีเมล {dept['officeEmail']}",
-    ]
+    lines: list[str] = []
+    if dept["officeLocation"]:
+        lines.append(f"สำนักงานสาขาวิชาฯ {dept['officeLocation']}")
+    if dept["officeHours"]:
+        lines.append(dept["officeHours"])
+
+    channels = []
+    if dept["officePhone"]:
+        channels.append(f"โทร {dept['officePhone']}")
+    if dept["officeEmail"]:
+        channels.append(f"อีเมล {dept['officeEmail']}")
+    if channels:
+        lines.append(" · ".join(channels))
+    return lines
 
 
 # ------------------------------------------------------------
@@ -129,13 +162,15 @@ def student_public(row: sqlite3.Row, *, restricted: bool = False) -> dict[str, A
 # ตารางเรียน
 # ------------------------------------------------------------
 _SCHEDULE_SQL = """
-    SELECT s.day, s.start_time, s.end_time, s.teacher,
+    SELECT s.day, s.start_time, s.end_time, s.teacher, s.is_synthetic,
            c.code, c.name,
-           r.code AS room, r.building, r.floor, r.directions
+           r.name AS room_name, r.short_name AS room_short, r.room_type,
+           r.floor, r.directions, b.name AS building
     FROM enrollments e
     JOIN sections s ON s.id = e.section_id
     JOIN courses  c ON c.id = s.course_id
-    LEFT JOIN rooms r ON r.id = s.room_id
+    LEFT JOIN rooms     r ON r.id = s.room_id
+    LEFT JOIN buildings b ON b.id = r.building_id
     WHERE e.student_id = ? AND s.term_id = ?
     ORDER BY s.day, s.start_time
 """
@@ -148,11 +183,15 @@ def _section(row: sqlite3.Row) -> dict[str, Any]:
         "end": row["end_time"],
         "code": row["code"],
         "name": row["name"],
-        "room": row["room"],
+        # ชื่อย่อ ('Lab 3') อ่านจากระยะยืนได้ดีกว่าชื่อเต็ม จึงใช้เป็นหลัก
+        "room": row["room_short"] or row["room_name"],
+        "roomFullName": row["room_name"],
+        "roomType": row["room_type"],
         "building": row["building"],
         "floor": row["floor"],
         "teacher": row["teacher"],
         "directions": row["directions"],
+        "isSynthetic": bool(row["is_synthetic"]),
     }
 
 
@@ -166,7 +205,7 @@ def get_exams(conn: sqlite3.Connection, student_pk: int, term_id: int) -> list[d
     rows = conn.execute(
         """
         SELECT DISTINCT x.exam_type, x.exam_date, x.start_time, x.end_time,
-               c.code, c.name, r.code AS room
+               c.code, c.name, COALESCE(r.short_name, r.name) AS room
         FROM enrollments e
         JOIN sections s ON s.id = e.section_id
         JOIN exams    x ON x.course_id = s.course_id AND x.term_id = s.term_id
@@ -235,6 +274,49 @@ def find_next_class(
                     "isToday": offset == 0,
                     "countdown": thai.format_countdown(start - at),
                 }
+    return None
+
+
+# ------------------------------------------------------------
+# บุคลากร
+# ------------------------------------------------------------
+def list_public_personnel(conn: sqlite3.Connection) -> list[dict[str, Any]]:
+    """เฉพาะบุคลากรที่ระบบต้นทางกำหนดให้เปิดเผยข้อมูลได้
+
+    ตู้ตั้งในที่สาธารณะและคนเดินผ่านมองเห็นจอ จึงไม่แสดงคนที่ปิดโปรไฟล์ไว้
+    """
+    rows = conn.execute(
+        """
+        SELECT prefix, fullname_th, academic_position, administrative_position,
+               email, phone, expertise
+        FROM personnel
+        WHERE is_public = 1 AND email IS NOT NULL
+        ORDER BY
+          CASE WHEN administrative_position IS NOT NULL THEN 0 ELSE 1 END,
+          fullname_th
+        """
+    ).fetchall()
+    return [
+        {
+            "name": f"{r['prefix'] or ''}{r['fullname_th']}".strip(),
+            "position": r["administrative_position"] or r["academic_position"],
+            "email": r["email"],
+            "phone": r["phone"],
+            "expertise": r["expertise"],
+        }
+        for r in rows
+    ]
+
+
+def find_teacher(conn: sqlite3.Connection, name: str) -> dict[str, Any] | None:
+    """หาผู้สอนจากชื่อที่ปรากฏในตารางเรียน"""
+    if not name:
+        return None
+    for person in list_public_personnel(conn):
+        # ชื่อในตารางเรียนอาจมีคำนำหน้าไม่ตรงกันทุกตัวอักษร จึงเทียบด้วยการเป็นส่วนหนึ่งของกัน
+        bare = name.replace("ผศ.", "").replace("ดร.", "").replace("อ.", "").strip()
+        if bare and bare in person["name"]:
+            return person
     return None
 
 

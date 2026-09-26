@@ -49,4 +49,6 @@ def bootstrap(conn: Db) -> dict:
             "sessionGraceSeconds": config.SESSION_GRACE_SECONDS,
         },
         "consentPolicyVersion": config.CONSENT_POLICY_VERSION,
+        # ตารางเรียนในระบบยังเป็นข้อมูลสมมติหรือไม่ — หน้าจอใช้ขึ้นป้ายเตือน
+        "hasSyntheticSchedule": repo.has_synthetic_schedule(conn),
     }

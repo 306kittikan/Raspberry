@@ -19,10 +19,27 @@ CREATE TABLE IF NOT EXISTS department (
   name             TEXT NOT NULL,
   faculty          TEXT NOT NULL,
   abbr             TEXT NOT NULL,
-  office_location  TEXT NOT NULL,
-  office_hours     TEXT NOT NULL,
-  office_phone     TEXT NOT NULL,
-  office_email     TEXT NOT NULL
+  website          TEXT,
+  -- ข้อมูลด้านล่างมาจากเว็บไซต์ของสาขา ช่องที่ยังไม่มีข้อมูลต้องเป็น NULL
+  -- ไม่ใช่ข้อความที่ระบบแต่งขึ้นเอง เพราะตู้ที่บอกที่ตั้งผิดแย่กว่าตู้ที่ไม่ตอบ
+  office_location  TEXT,
+  office_hours     TEXT,
+  office_phone     TEXT,
+  office_email     TEXT
+);
+
+-- ------------------------------------------------------------
+-- ช่องทางติดต่อ (จากเว็บไซต์ของสาขา)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS contacts (
+  id           INTEGER PRIMARY KEY AUTOINCREMENT,
+  source_id    TEXT UNIQUE,
+  type         TEXT NOT NULL,                    -- email | phone | url | address | fax
+  title        TEXT NOT NULL,
+  description  TEXT,
+  value        TEXT NOT NULL,
+  label        TEXT,
+  sort_order   INTEGER NOT NULL DEFAULT 0
 );
 
 -- ------------------------------------------------------------
@@ -60,6 +77,8 @@ CREATE TABLE IF NOT EXISTS students (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
   student_id  TEXT NOT NULL UNIQUE,             -- รหัสนักศึกษา
   name        TEXT NOT NULL,
+  -- 1 = นักศึกษาสมมติสำหรับสาธิต ยังไม่ได้เชื่อมกับระบบทะเบียนจริง
+  is_synthetic INTEGER NOT NULL DEFAULT 0 CHECK (is_synthetic IN (0, 1)),
   year        INTEGER,
   program     TEXT,
   advisor     TEXT,
@@ -67,18 +86,56 @@ CREATE TABLE IF NOT EXISTS students (
 );
 
 CREATE TABLE IF NOT EXISTS courses (
-  id    INTEGER PRIMARY KEY AUTOINCREMENT,
-  code  TEXT NOT NULL UNIQUE,                   -- 'ทว 331'
-  name  TEXT NOT NULL
+  id             INTEGER PRIMARY KEY AUTOINCREMENT,
+  source_id      TEXT UNIQUE,
+  code           TEXT NOT NULL UNIQUE,          -- '10301141-68'
+  name           TEXT NOT NULL,
+  name_en        TEXT,
+  credits        INTEGER,
+  credit_format  TEXT,                          -- '3(2-3-5)'
+  description    TEXT
+);
+
+CREATE TABLE IF NOT EXISTS buildings (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  source_id  TEXT UNIQUE,
+  name       TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS rooms (
-  id          INTEGER PRIMARY KEY AUTOINCREMENT,
-  code        TEXT NOT NULL UNIQUE,             -- 'ศว 2301'
-  building    TEXT,
-  floor       INTEGER,
-  directions  TEXT                              -- วิธีเดินไปห้อง (ข้อมูลจริง ไม่ใช่ข้อความที่ระบบแต่งเอง)
+  id           INTEGER PRIMARY KEY AUTOINCREMENT,
+  source_id    TEXT UNIQUE,
+  code         TEXT NOT NULL UNIQUE,            -- รหัสห้องในระบบของสาขา
+  name         TEXT NOT NULL,                   -- 'ห้องปฏิบัติการคอมพิวเตอร์ 3 (Lab 3)'
+  short_name   TEXT,                            -- 'Lab 3' — ใช้แสดงบนจอขนาดใหญ่
+  room_type    TEXT,                            -- 'ห้องบรรยาย' | 'ห้องปฏิบัติการ'
+  building_id  INTEGER REFERENCES buildings(id) ON DELETE SET NULL,
+  floor        INTEGER,
+  capacity     INTEGER,
+  directions   TEXT                             -- วิธีเดินไปห้อง (ต้องเป็นข้อมูลจริงเท่านั้น)
 );
+
+-- ------------------------------------------------------------
+-- บุคลากร (จากเว็บไซต์ของสาขา)
+-- is_public ตามค่าที่ระบบต้นทางกำหนด — ตู้แสดงเฉพาะคนที่เปิดเผยข้อมูลไว้
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS personnel (
+  id                       INTEGER PRIMARY KEY AUTOINCREMENT,
+  source_id                TEXT UNIQUE,
+  prefix                   TEXT,
+  fullname_th              TEXT NOT NULL,
+  fullname_en              TEXT,
+  academic_position        TEXT,
+  administrative_position  TEXT,
+  personnel_type           TEXT,
+  education                TEXT,
+  email                    TEXT,
+  phone                    TEXT,
+  expertise                TEXT,
+  work_status              TEXT,
+  is_public                INTEGER NOT NULL DEFAULT 0 CHECK (is_public IN (0, 1))
+);
+CREATE INDEX IF NOT EXISTS ix_personnel_public ON personnel (is_public);
 
 -- ------------------------------------------------------------
 -- ตารางเรียน
@@ -93,6 +150,8 @@ CREATE TABLE IF NOT EXISTS sections (
   start_time  TEXT NOT NULL,                    -- 'HH:MM'
   end_time    TEXT NOT NULL,
   teacher     TEXT,
+  -- 1 = ข้อมูลสมมติสำหรับสาธิต ยังไม่ได้รับตารางเรียนจริงจากสาขา
+  is_synthetic INTEGER NOT NULL DEFAULT 0 CHECK (is_synthetic IN (0, 1)),
   CHECK (start_time < end_time),
   UNIQUE (term_id, course_id, day, start_time)
 );
@@ -113,6 +172,7 @@ CREATE TABLE IF NOT EXISTS exams (
   exam_date   TEXT NOT NULL,                    -- ISO date
   start_time  TEXT NOT NULL,
   end_time    TEXT NOT NULL,
+  is_synthetic INTEGER NOT NULL DEFAULT 0 CHECK (is_synthetic IN (0, 1)),
   UNIQUE (term_id, course_id, exam_type)
 );
 
@@ -195,8 +255,10 @@ CREATE TABLE IF NOT EXISTS doc_chunks (
   id           INTEGER PRIMARY KEY AUTOINCREMENT,
   document_id  INTEGER NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
   ordinal      INTEGER NOT NULL,
-  page         TEXT,                            -- 'หน้า 18'
+  page         TEXT,                            -- 'หน้า 18' หรือหัวข้อของชิ้นเอกสาร
   content      TEXT NOT NULL,
+  source_url   TEXT,
+  source_id    TEXT,                            -- id เดิมจากชุดข้อมูลต้นทาง
   UNIQUE (document_id, ordinal)
 );
 

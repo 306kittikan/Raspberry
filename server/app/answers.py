@@ -62,15 +62,40 @@ def _not_found(conn: sqlite3.Connection, base: dict[str, Any], reason: str) -> d
     }
 
 
+def _where(item: dict[str, Any]) -> str:
+    """'ห้อง Lab 3 · ตึก 60 ปี คณะวิทยาศาสตร์ ชั้น 6' — ข้ามส่วนที่ไม่มีข้อมูล"""
+    parts = []
+    if item.get("room"):
+        parts.append(f"ห้อง {item['room']}")
+    place = []
+    if item.get("building"):
+        place.append(item["building"])
+    if item.get("floor") is not None:
+        place.append(f"ชั้น {item['floor']}")
+    if place:
+        parts.append(" ".join(place))
+    return " · ".join(parts) if parts else "ยังไม่ระบุห้องเรียน"
+
+
 def _room_lines(item: dict[str, Any]) -> list[str]:
     """บรรยายตำแหน่งห้องจากข้อมูลที่มีจริงเท่านั้น
 
-    ถ้าฐานข้อมูลไม่มีคำแนะนำการเดินทางของห้องนั้น จะไม่แต่งขึ้นมาเอง
+    ช่องไหนว่างก็ไม่พูดถึง และถ้าฐานข้อมูลไม่มีคำแนะนำการเดินทางของห้องนั้น
+    จะไม่แต่งขึ้นมาเอง เพราะพาคนเดินผิดตึกแย่กว่าไม่บอก
     """
-    lines = [f"อยู่ชั้น {item['floor']} {item['building']}"]
-    lines.append(
-        f"ใช้เรียนวิชา {item['name']} เวลา {item['start']}–{item['end']} น."
-    )
+    lines: list[str] = []
+    place = []
+    if item.get("floor") is not None:
+        place.append(f"อยู่ชั้น {item['floor']}")
+    if item.get("building"):
+        place.append(item["building"])
+    if place:
+        lines.append(" ".join(place))
+
+    if item.get("roomFullName"):
+        lines.append(item["roomFullName"])
+
+    lines.append(f"ใช้เรียนวิชา {item['name']} เวลา {item['start']}–{item['end']} น.")
     if item.get("directions"):
         lines.append(item["directions"])
     return lines
@@ -102,7 +127,7 @@ def _answer_from_db(
             "lines": [
                 f"{item['code']} {item['name']}",
                 f"เวลา {item['start']}–{item['end']} น.",
-                f"ห้อง {item['room']} · {item['building']} ชั้น {item['floor']}",
+                _where(item),
             ],
         }
 
@@ -114,7 +139,7 @@ def _answer_from_db(
         return {
             **base,
             "source": "db",
-            "title": f"ห้อง {item['room']}",
+            "title": f"ห้อง {item['room']}" if item.get("room") else "ยังไม่ระบุห้องเรียน",
             "lines": _room_lines(item),
         }
 
@@ -149,27 +174,58 @@ def _answer_from_db(
     dept = repo.get_department(conn)
 
     if q["id"] == "contact-teacher":
+        # ถ้ายืนยันตัวตนแล้วและมีคาบเรียน ให้ตอบผู้สอนของคาบถัดไปก่อน
+        # เพราะเป็นคนที่นักศึกษาน่าจะกำลังตามหาที่สุด
+        if ctx.student_pk is not None:
+            schedule = repo.get_schedule(conn, ctx.student_pk, ctx.term_id)
+            nxt = repo.find_next_class(schedule, now)
+            teacher = repo.find_teacher(conn, nxt["item"]["teacher"]) if nxt else None
+            if teacher:
+                lines = [f"{teacher['name']}"]
+                if teacher["position"]:
+                    lines.append(teacher["position"])
+                if teacher["email"]:
+                    lines.append(f"อีเมล {teacher['email']}")
+                if teacher["phone"]:
+                    lines.append(f"โทร {teacher['phone']}")
+                return {
+                    **base,
+                    "source": "db",
+                    "title": f"ผู้สอนวิชา {nxt['item']['name']}",
+                    "lines": lines,
+                }
+
+        staff = repo.list_public_personnel(conn)
+        if not staff:
+            return _not_found(conn, base, "ยังไม่มีข้อมูลบุคลากรในระบบ")
         return {
             **base,
             "source": "db",
             "title": "ติดต่ออาจารย์ประจำสาขาวิชาฯ",
             "lines": [
-                f"ห้องพักอาจารย์ {dept['officeLocation']}",
-                f"เวลาราชการ {dept['officeHours']}",
-                f"นัดหมายล่วงหน้าได้ที่ {dept['officePhone']} หรือ {dept['officeEmail']}",
+                *[f"{p['name']} · {p['email']}" for p in staff[:3]],
+                f"ดูรายชื่อทั้งหมดได้ที่สำนักงานสาขาวิชาฯ หรือ {dept['officeEmail']}",
             ],
         }
 
-    if q["id"] == "office-hours":
+    if q["id"] == "office-contact":
+        # เวลาทำการไม่มีในข้อมูลของสาขา จึงไม่ตอบเรื่องเวลา
+        # ตอบเฉพาะที่ตั้งและช่องทางติดต่อซึ่งเป็นข้อมูลจริง
+        lines = []
+        if dept["officeLocation"]:
+            lines.append(dept["officeLocation"])
+        if dept["officeHours"]:
+            lines.append(f"เปิดทำการ {dept['officeHours']}")
+        for c in repo.list_contacts(conn):
+            if c["type"] in {"phone", "email"}:
+                lines.append(f"{c['title']} {c['value']}")
+        if not lines:
+            return _not_found(conn, base, "ยังไม่มีข้อมูลการติดต่อสำนักงานในระบบ")
         return {
             **base,
             "source": "db",
             "title": f"สำนักงาน{dept['name']}",
-            "lines": [
-                dept["officeLocation"],
-                f"เปิดทำการ {dept['officeHours']}",
-                f"โทร {dept['officePhone']}",
-            ],
+            "lines": lines[:4],
         }
 
     return _not_found(conn, base, "ระบบไม่พบข้อมูลสำหรับคำถามนี้")

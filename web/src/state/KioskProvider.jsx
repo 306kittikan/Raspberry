@@ -609,6 +609,7 @@ export function KioskProvider({ children }) {
       announcements: boot?.announcements ?? [],
       quickQuestions: boot?.quickQuestions ?? [],
       dataUpdatedLabel: boot?.term?.dataUpdatedLabel ?? null,
+      hasSyntheticSchedule: boot?.hasSyntheticSchedule ?? false,
       termLabel: boot?.term?.label ?? null,
       // ผู้ใช้ปัจจุบัน
       student,

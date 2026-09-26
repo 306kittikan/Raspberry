@@ -1,0 +1,67 @@
+[
+ {
+  "id": "8315149f-5e69-4241-9656-1d667d024ce7",
+  "code": "P09",
+  "name": "ทำเนียบรุ่น",
+  "year": "2566",
+  "detail": "โปรเจคจบรุ่น29",
+  "editors": [
+   "นายธราเทพ จันทร์ดำ",
+   "นายจักรพรรดิ ์เจริญ",
+   "น.ส.ศิริรัตน์ คชสาร"
+  ],
+  "chairman": {
+   "id": "eb391ee9-7d9e-4661-b7c5-5f6027e5f345",
+   "prefix": "ผศ.ดร. ",
+   "fullnameTh": "พาสน์ ปราโมกข์ชน",
+   "fullnameEn": "Part Pramokchon",
+   "academicPosition": "ผู้ช่วยศาสตราจารย์",
+   "administrativePosition": "ผู้ช่วยศาสตราจารย์",
+   "email": "part@mju.ac.th",
+   "phoneNumber": "053-873890-93 ต่อ 16",
+   "education": "วศ.ด.(วิศวกรรมคอมพิวเตอร์) มหาวิทยาลัยเกษตรศาสตร์",
+   "personnelType": "อาจารย์",
+   "academicType": "ผู้ช่วยศาสตราจารย์",
+   "createdAt": "2026-08-19T06:28:33.719Z",
+   "updatedAt": "2026-08-19T06:28:34.043Z"
+  },
+  "director1": {
+   "id": "26128be3-ec32-485d-89ac-c3722dc666c9",
+   "prefix": "อ. ",
+   "fullnameTh": "อรรถวิท ชังคมานนท์",
+   "fullnameEn": "Attawit Changkamanon",
+   "academicPosition": "อาจารย์",
+   "administrativePosition": "อาจารย์",
+   "email": "attawit@mju.ac.th",
+   "phoneNumber": "053-873890-93 ต่อ 13",
+   "education": "วท.ม.(วิทยาการคอมพิวเตอร์) มหาวิทยาลัยเชียงใหม่",
+   "personnelType": "อาจารย์",
+   "academicType": "อาจารย์",
+   "createdAt": "2026-08-19T06:23:00.428Z",
+   "updatedAt": "2026-08-19T06:23:00.832Z"
+  },
+  "director2": {
+   "id": "9ce1c1e5-69c2-4037-8713-94ce20844d18",
+   "prefix": "ผศ. ",
+   "fullnameTh": "ก่องกาญจน์ ดุลยไชย",
+   "fullnameEn": "Kongkarn Dullayachai",
+   "academicPosition": "ผู้ช่วยศาสตราจารย์",
+   "administrativePosition": "ผู้ช่วยศาสตราจารย์",
+   "email": "kongkarn@mju.ac.th",
+   "phoneNumber": "053-873890-93 ต่อ 14",
+   "education": "วท.ม.(วิทยาการคอมพิวเตอร์) สถาบันบัณฑิตพัฒนบริหารศาสตร์",
+   "personnelType": "อาจารย์",
+   "academicType": "ผู้ช่วยศาสตราจารย์",
+   "createdAt": "2026-08-19T06:18:46.488Z",
+   "updatedAt": "2026-08-19T06:18:46.871Z"
+  },
+  "file": {
+   "id": "c9d4289f-da46-492f-9b55-1a69f6448457",
+   "url": "https://csmju.com/files/projects/2026/08/1787196117670-f03e15c5-4dea-45fd-8a91-77b652b27625.pdf",
+   "createdAt": "2026-08-20T03:21:57.672Z"
+  },
+  "createdAt": "2026-08-20T03:21:57.939Z",
+  "updatedAt": "2026-08-20T03:21:57.939Z",
+  "deletedAt": null
+ }
+]

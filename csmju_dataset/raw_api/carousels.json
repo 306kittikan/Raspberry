@@ -1,0 +1,49 @@
+[
+ {
+  "id": "a748283e-c5bd-41f4-926b-3bc9f00aeef4",
+  "title": "หลักสูตร 70",
+  "description": "หลักสูตรประจำปี 70 สาขาวิชาวิทยาการคอมพิวเตอร์ คณะวิทยาศาสตร์ มหาวิทยาลัยแม่โจ้",
+  "link": "/programs/d7b54fbf-46cd-4982-984e-36ca370d884e",
+  "videoUrl": "",
+  "image": {
+   "id": "087cbdeb-ba63-4cd5-8429-e92178469783",
+   "url": "https://csmju.com/files/carousels/2026/08/1787041977495-225f40ec-9191-4941-b643-d165d8d83fdc.jpg",
+   "createdAt": "2026-08-18T08:32:57.516Z"
+  },
+  "isActive": true,
+  "sortOrder": 0,
+  "createdAt": "2026-08-18T08:32:57.691Z",
+  "updatedAt": "2026-08-19T06:44:05.399Z",
+  "deletedAt": null
+ },
+ {
+  "id": "e90fa148-b6e9-4b91-9113-612210d04af3",
+  "title": "ประชาสัมพันธ์ TCAS70 รอบ1.1",
+  "description": "",
+  "link": "",
+  "videoUrl": "",
+  "image": {
+   "id": "eb0bf1a5-1397-41f7-a573-9c67af9b9446",
+   "url": "https://csmju.com/files/carousels/2026/09/1789378187075-4e628306-453c-40b4-be60-ac7e9836bba4.jpeg",
+   "createdAt": "2026-09-14T09:29:47.102Z"
+  },
+  "isActive": true,
+  "sortOrder": 0,
+  "createdAt": "2026-09-14T09:29:47.274Z",
+  "updatedAt": "2026-09-14T09:29:47.274Z",
+  "deletedAt": null
+ },
+ {
+  "id": "6b332ea5-b9f6-4ed3-b900-e6c591248773",
+  "title": "ComCamp 24",
+  "description": "ComCamp 24",
+  "link": "",
+  "videoUrl": "https://youtu.be/602soQwuja4?si=c5-SacrYEak6TwKb",
+  "image": null,
+  "isActive": false,
+  "sortOrder": 0,
+  "createdAt": "2026-08-18T08:38:30.135Z",
+  "updatedAt": "2026-09-14T09:30:00.178Z",
+  "deletedAt": null
+ }
+]
