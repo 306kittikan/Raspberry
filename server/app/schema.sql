@@ -288,7 +288,7 @@ CREATE TABLE IF NOT EXISTS usage_events (
   id             INTEGER PRIMARY KEY AUTOINCREMENT,
   occurred_at    TEXT NOT NULL,
   question_kind  TEXT,
-  channel        TEXT    CHECK (channel IN ('เสียง', 'แตะ')),
+  channel        TEXT    CHECK (channel IN ('เสียง', 'แตะ', 'พิมพ์')),
   answer_source  TEXT    CHECK (answer_source IN ('ฐานข้อมูล', 'AI', 'ไม่พบ')),
   latency_ms     INTEGER
 );

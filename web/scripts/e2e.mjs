@@ -181,42 +181,42 @@ try {
   check((await body()).includes('สอบกลางภาค'), 'แสดงกำหนดสอบ')
   await shot('6-exam')
 
-  console.log('\n5. ผู้ช่วยตอบคำถาม')
+  console.log('\n5. หน้าต่างแชทของผู้ช่วย')
   await page.getByText('ถามผู้ช่วย').first().click()
-  await page.waitForTimeout(800)
-  check((await body()).includes('คำถามยอดนิยม'), 'แสดงคำถามยอดนิยมจากฐานข้อมูล')
-  await shot('7-assistant')
-
-  await page.getByText('คาบต่อไปเรียนที่ไหน').click()
-  await page.waitForTimeout(2500)
+  await page.waitForTimeout(1000)
   text = await body()
-  check(text.includes('คาบเรียนถัดไปของคุณ') || text.includes('คาบที่กำลังเรียนอยู่'),
-        'ตอบคำถามตารางเรียนได้')
-  check(text.includes('ข้อมูลจากระบบของสาขา'), 'คำตอบมีป้ายบอกที่มา (ฐานข้อมูล)')
-  await shot('8-answer')
+  check(text.includes('ผู้ช่วยตอบคำถาม'), 'เปิดหน้าต่างแชทได้')
+  // placeholder ไม่นับเป็นเนื้อหาข้อความ ต้องอ่านจากแอตทริบิวต์
+  const placeholder = await page.locator('input[type="text"]').getAttribute('placeholder')
+  check((placeholder ?? '').includes('ถามอะไรก็ได้'), 'มีช่องพิมพ์คำถาม', placeholder ?? '')
+  check((await page.getByLabel('ส่งคำถาม').count()) > 0, 'มีปุ่มส่ง')
+  check((await page.getByLabel('พูดคำถาม').count()) > 0, 'มีปุ่มไมโครโฟน')
+  await shot('7-chat')
 
-  await page.getByText('ติดต่ออาจารย์ที่ไหน').click()
-  await page.waitForTimeout(2000)
+  // ---- ถามด้วยการพิมพ์ ----
+  await page.locator('input[type="text"]').fill('ติดต่ออาจารย์ยังไง')
+  await page.getByLabel('ส่งคำถาม').click()
+  await page.waitForTimeout(2600)
   text = await body()
+  check(text.includes('ติดต่ออาจารย์ยังไง'), 'คำถามที่พิมพ์ขึ้นเป็นฟองฝั่งนักศึกษา')
   check(/@mju\.ac\.th/.test(text), 'ตอบด้วยอีเมลจริงของบุคลากรสาขา')
-  await shot('8b-teacher')
+  check(text.includes('ข้อมูลจากระบบของสาขา'), 'คำตอบมีป้ายบอกที่มา (ฐานข้อมูล)')
+  check((await page.locator('input[type="text"]').inputValue()) === '',
+        'ช่องพิมพ์ถูกล้างหลังส่ง')
+  await shot('8-chat-typed')
 
-  // กระดานสนทนาต้องเก็บทุกรอบไว้ ไม่ใช่แทนที่คำตอบเดิม
-  const bubbles = await page.evaluate(() =>
-    document.querySelectorAll('[class*="rounded-br-"]').length
-  )
-  check(bubbles >= 2, 'กระดานสนทนาเก็บคำถามก่อนหน้าไว้ด้วย', `${bubbles} ฟองคำถาม`)
-
+  // ---- ถามจากปุ่มคำถามยอดนิยม ----
+  await page.getByLabel('คำถามยอดนิยม').click()
+  await page.waitForTimeout(700)
+  check((await body()).includes('คำถามยอดนิยม'), 'เปิดแผงคำถามยอดนิยมได้')
   await page.getByText('ทุนวิจัยระดับปริญญาตรีมีเท่าไร').click()
-  await page.waitForTimeout(2000)
+  await page.waitForTimeout(2600)
   text = await body()
   check(text.includes('ไม่พบข้อมูลนี้ในระบบ'), 'คำถามที่ไม่มีเอกสารอ้างอิง → ไม่เดาคำตอบ')
   check(text.includes('cs@mju.ac.th'), 'เสนอช่องทางติดต่อสาขาแทน')
-  // เมื่อยืนยันตัวตนแล้ว คำถามติดต่ออาจารย์จะตอบเป็นผู้สอนของคาบถัดไป
-  // จึงตรวจจากฟองคำถามที่ยังอยู่บนกระดานแทนหัวข้อคำตอบ
-  check(text.includes('ติดต่ออาจารย์ที่ไหน') && text.includes('ติดต่อสำนักงานสาขาอย่างไร'),
+  check(text.includes('ติดต่ออาจารย์ยังไง'),
         'คำถามก่อนหน้ายังอยู่บนกระดาน ไม่ถูกแทนที่')
-  await shot('9-notfound')
+  await shot('9-chat-thread')
 
   console.log('\n5ก. ลงทะเบียนใบหน้า — ถ่ายก่อน กรอกรายละเอียดทีหลัง')
   await page.getByRole('button', { name: /ออกจากระบบ|จบการใช้งาน/ }).click()

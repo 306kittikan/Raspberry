@@ -31,9 +31,14 @@ def connect(path: Path | None = None) -> sqlite3.Connection:
 
 
 def init_db(conn: sqlite3.Connection) -> None:
-    """สร้างตารางทั้งหมด (ปลอดภัยเมื่อเรียกซ้ำ)"""
+    """สร้างตารางทั้งหมด แล้วปรับตารางเดิมให้ตรงกับรุ่นปัจจุบัน (ปลอดภัยเมื่อเรียกซ้ำ)"""
     conn.executescript(SCHEMA_PATH.read_text(encoding="utf-8"))
     conn.commit()
+
+    # schema.sql สร้างตารางใหม่ได้อย่างเดียว แก้ตารางที่มีอยู่แล้วไม่ได้
+    from . import migrations
+
+    migrations.run(conn)
 
 
 @contextmanager

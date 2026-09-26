@@ -7,6 +7,7 @@
 export const CHANNEL = {
   VOICE: 'เสียง',
   TOUCH: 'แตะ',
+  TYPED: 'พิมพ์',
 }
 
 export const SOURCE = {

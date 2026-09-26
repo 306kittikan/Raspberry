@@ -171,6 +171,14 @@ export const IconSettings = (p) => (
   </svg>
 )
 
+/** เครื่องบินกระดาษ — ปุ่มส่งคำถามในหน้าต่างแชท */
+export const IconSend = (p) => (
+  <svg {...base(p)}>
+    <path d="M21.5 2.5 11 13" />
+    <path d="M21.5 2.5 15 21.5l-4-8.5-8.5-4z" />
+  </svg>
+)
+
 export const IconArrowRight = (p) => (
   <svg {...base(p)}>
     <path d="M5 12h14M13 6l6 6-6 6" />

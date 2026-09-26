@@ -110,6 +110,12 @@ export async function ask(questionId, { channel = 'แตะ', online = true } =
   return data.answer
 }
 
+/** ถามด้วยข้อความที่ผู้ใช้พิมพ์เอง — เซิร์ฟเวอร์ตีความแล้วเลือกทางตอบให้ */
+export async function askText(text, { online = true } = {}) {
+  const data = await post('/api/assistant/ask', { text, channel: 'พิมพ์', online })
+  return data.answer
+}
+
 export const unclearAnswer = () => get('/api/assistant/unclear').then((d) => d.answer)
 
 // ------------------------------------------------------------

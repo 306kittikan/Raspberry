@@ -592,6 +592,16 @@ export function KioskProvider({ children }) {
   // ------------------------------------------------------------
   // ถาม–ตอบ
   // ------------------------------------------------------------
+  /** เติมคำตอบให้รอบสนทนาล่าสุดที่ยังรอคำตอบอยู่ */
+  const replaceLastAnswer = useCallback((reply) => {
+    setMessages((prev) => {
+      if (prev.length === 0) return prev
+      const next = [...prev]
+      next[next.length - 1] = { ...next[next.length - 1], answer: reply }
+      return next
+    })
+  }, [])
+
   /** เพิ่มหนึ่งรอบสนทนาลงกระดาน เก็บบนหน้าจอเท่านั้น ล้างทิ้งเมื่อออกจากระบบ */
   const pushTurn = useCallback(({ asked, answer: reply, channel }) => {
     setMessages((prev) =>
@@ -631,6 +641,36 @@ export function KioskProvider({ children }) {
       }
     },
     [markActivity, online, track]
+  )
+
+  /** ถามด้วยข้อความที่พิมพ์เองในหน้าต่างแชท */
+  const askText = useCallback(
+    async (text) => {
+      const question = text.trim()
+      if (!question) return
+      markActivity()
+      setAnswerPending(true)
+      setAnswer(null)
+      // แสดงคำถามบนกระดานทันที ไม่ต้องรอคำตอบ ผู้ใช้จะได้เห็นว่าส่งไปแล้ว
+      pushTurn({ asked: question, answer: null, channel: CHANNEL.TYPED })
+      try {
+        const result = await api.askText(question, { online })
+        setAnswer(result)
+        replaceLastAnswer(result)
+        const source =
+          result.source === 'ai' ? SOURCE.AI : result.source === 'db' ? SOURCE.DB : SOURCE.AI
+        track(result.kind || 'คำถามที่พิมพ์', CHANNEL.TYPED, source)
+      } catch {
+        replaceLastAnswer({
+          source: 'none',
+          title: 'ติดต่อระบบของตู้ไม่ได้',
+          lines: ['กรุณาลองใหม่อีกครั้ง หรือติดต่อสำนักงานสาขาวิชาฯ'],
+        })
+      } finally {
+        setAnswerPending(false)
+      }
+    },
+    [markActivity, online, pushTurn, replaceLastAnswer, track]
   )
 
   // ------------------------------------------------------------
@@ -885,6 +925,7 @@ export function KioskProvider({ children }) {
       cancelEnroll,
       deleteFaceData,
       askQuestion,
+      askText,
       startListening,
       endSession,
       track,
@@ -901,7 +942,7 @@ export function KioskProvider({ children }) {
       markActivity, detectPresence, goto, startScan, confirmCandidate,
       loginWithStudentId, startAnonymous, startEnrollFlow, startEnrollCapture,
       completeEnroll, finishEnroll, cancelEnroll, deleteFaceData, askQuestion,
-      startListening, endSession, track, sim,
+      askText, startListening, endSession, track, sim,
     ]
   )
 

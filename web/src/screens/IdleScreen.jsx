@@ -3,8 +3,7 @@ import { useKiosk } from '../state/KioskProvider'
 import { formatClock, formatThaiDate } from '../lib/time'
 import { Button } from '../components/ui'
 import OfflineBanner from '../components/OfflineBanner'
-import Logo from '../components/Logo'
-import { IconBell, IconFace, IconIncognito } from '../components/Icons'
+import { IconBell, IconFace, IconIncognito, IconLogo } from '../components/Icons'
 
 /**
  * หน้าจอพัก — ยังไม่ยืนยันตัวตน จึงต้องไม่แสดงข้อมูลส่วนบุคคลใด ๆ
@@ -32,7 +31,7 @@ export default function IdleScreen() {
       {/* ---- ส่วนหัว: เวลา วันที่ ชื่อสาขา ---- */}
       <div className="bg-brand-800 px-12 pb-10 pt-12 text-white">
         <div className="flex items-center gap-5">
-          <Logo className="h-[76px] w-[76px]" tone="dark" />
+          <IconLogo className="h-[76px] w-[76px] text-brand-200" />
           <div>
             <p className="text-h3 font-bold leading-tight">{department?.name}</p>
             <p className="text-label text-brand-100">{department?.faculty}</p>

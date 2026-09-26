@@ -1,7 +1,7 @@
 import React from 'react'
 import { useKiosk } from '../state/KioskProvider'
 import { formatClock, formatThaiDate } from '../lib/time'
-import Logo from '../components/Logo'
+import { IconLogo } from '../components/Icons'
 
 /**
  * จอพักลึก — ไม่มีคนเกิน 2 นาที
@@ -16,7 +16,7 @@ export default function SleepScreen() {
       onClick={detectPresence}
       className="flex h-full w-full flex-col items-center justify-center bg-[#04110A] text-center animate-fade-in"
     >
-      <Logo className="h-[180px] w-[180px] opacity-30" tone="dark" />
+      <IconLogo className="h-[180px] w-[180px] text-brand-500/40" />
 
       <p className="mt-16 text-clock font-bold tabular-nums text-white/35">{formatClock(now)}</p>
 
