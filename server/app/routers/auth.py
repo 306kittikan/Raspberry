@@ -47,6 +47,23 @@ def confirm_face(body: ConfirmFaceIn, conn: Db) -> dict:
             status_code=status.HTTP_410_GONE,
             detail="ผลการรู้จำใบหน้าหมดอายุแล้ว กรุณาสแกนใหม่",
         )
+
+    # ตรวจสถานภาพอีกครั้งตรงจุดที่เปิดเซสชันจริง
+    # ตัวรู้จำใบหน้าตรวจให้แล้วชั้นหนึ่ง แต่โทเค็นมีอายุถึง 45 วินาที
+    # และอาจถูกสร้างจากทางอื่น (เช่น เส้นทางจำลอง) การตรวจที่ต้นทางอย่างเดียว
+    # จึงไม่พอ ต้องตรวจที่จุดที่ให้สิทธิ์เข้าถึงข้อมูลส่วนบุคคลด้วยเสมอ
+    student = repo.get_student(conn, cand.student_pk)
+    if student is None:
+        raise HTTPException(
+            status_code=status.HTTP_410_GONE,
+            detail="ไม่พบข้อมูลนักศึกษา กรุณาสแกนใหม่",
+        )
+    if not repo.is_active(student):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=repo.status_message(student),
+        )
+
     sess = session_store.store.start(
         student_pk=cand.student_pk, restricted=False, method="face"
     )
@@ -65,6 +82,12 @@ def login_with_student_id(body: StudentIdIn, conn: Db) -> dict:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="ไม่พบรหัสนักศึกษานี้ในระบบของสาขา",
+        )
+    # ผู้ที่ลาออกหรือพ้นสภาพไม่ควรเห็นตารางเรียนของภาคการศึกษาปัจจุบัน
+    if not repo.is_active(row):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=repo.status_message(row),
         )
     sess = session_store.store.start(
         student_pk=row["id"],

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useKiosk } from '../state/KioskProvider'
 import Keypad from '../components/Keypad'
 import TopBar from '../components/TopBar'
@@ -18,6 +18,7 @@ export default function KeypadScreen() {
     enrollIntent,
     pendingToken,
     completeEnroll,
+    loginError,
   } = useKiosk()
 
   // มีใบหน้าที่ถ่ายไว้รออยู่ = หน้านี้คือขั้นสุดท้ายของการลงทะเบียน
@@ -26,6 +27,11 @@ export default function KeypadScreen() {
   const [value, setValue] = useState('')
   const [error, setError] = useState('')
   const [checking, setChecking] = useState(false)
+
+  // loginError ถูกตั้งค่าระหว่าง await จึงยังไม่ทันเข้ามาในรอบเรนเดอร์นี้
+  // เก็บไว้ใน ref เพื่ออ่านค่าล่าสุดได้ทันทีหลังคำขอจบ
+  const loginErrorRef = useRef(loginError)
+  loginErrorRef.current = loginError
 
   // loginWithStudentId คืน Promise ต้องรอผลจริง
   // ไม่งั้นค่าที่ได้เป็น Promise ซึ่งเป็นจริงเสมอ และข้อความผิดพลาดจะไม่ขึ้นเลย
@@ -37,7 +43,8 @@ export default function KeypadScreen() {
       : await loginWithStudentId(value)
     setChecking(false)
     if (!ok) {
-      setError('ไม่พบรหัสนักศึกษานี้ในระบบ กรุณาตรวจสอบอีกครั้ง')
+      // ใช้ข้อความจากเซิร์ฟเวอร์ เพราะสาเหตุต่างกัน (ไม่มีรหัสนี้ / พ้นสภาพแล้ว)
+      setError(loginErrorRef.current || 'ไม่พบรหัสนักศึกษานี้ในระบบ กรุณาตรวจสอบอีกครั้ง')
       setValue('')
     }
   }

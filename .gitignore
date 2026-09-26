@@ -10,6 +10,11 @@ __pycache__/
 venv/
 *.egg-info/
 
+# รายชื่อนักศึกษาจากระบบทะเบียน — ข้อมูลส่วนบุคคลจริง ห้ามขึ้น git เด็ดขาด
+server/data/roster/
+*.asp
+studentByProgram*
+
 # ข้อมูลและความลับ — ห้ามขึ้น git เด็ดขาด (มีข้อมูลชีวภาพ)
 server/data/*.db
 server/data/*.db-*

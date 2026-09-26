@@ -74,16 +74,27 @@ CREATE TABLE IF NOT EXISTS announcements (
 -- นักศึกษา · รายวิชา · ห้องเรียน
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS students (
-  id          INTEGER PRIMARY KEY AUTOINCREMENT,
-  student_id  TEXT NOT NULL UNIQUE,             -- รหัสนักศึกษา
-  name        TEXT NOT NULL,
+  id           INTEGER PRIMARY KEY AUTOINCREMENT,
+  student_id   TEXT NOT NULL UNIQUE,            -- รหัสนักศึกษา
+  prefix       TEXT,                            -- 'นาย' | 'นางสาว' | 'นาง'
+  name         TEXT NOT NULL,                   -- ชื่อ-สกุล ไม่รวมคำนำหน้า
   -- 1 = นักศึกษาสมมติสำหรับสาธิต ยังไม่ได้เชื่อมกับระบบทะเบียนจริง
   is_synthetic INTEGER NOT NULL DEFAULT 0 CHECK (is_synthetic IN (0, 1)),
-  year        INTEGER,
-  program     TEXT,
-  advisor     TEXT,
-  created_at  TEXT NOT NULL
+  year         INTEGER,
+  entry_year   INTEGER,                         -- ปีการศึกษาที่เข้า (พ.ศ.)
+  program      TEXT,
+  program_code TEXT,                            -- รหัสหลักสูตรของมหาวิทยาลัย
+  advisor      TEXT,
+  -- สถานภาพจากระบบทะเบียน เช่น '10' = กำลังศึกษา, '50' = ลาออก
+  status_code  TEXT,
+  status_label TEXT,
+  -- 0 = ใช้ตู้ไม่ได้ (ลาออก พ้นสภาพ หมดสภาพ) ตู้ต้องไม่แสดงข้อมูลให้คนกลุ่มนี้
+  active       INTEGER NOT NULL DEFAULT 1 CHECK (active IN (0, 1)),
+  created_at   TEXT NOT NULL,
+  updated_at   TEXT
 );
+-- index ของคอลัมน์ active สร้างใน app/migrations.py
+-- เพราะบนฐานข้อมูลเดิม คอลัมน์นี้ยังไม่มีตอน schema.sql ทำงาน
 
 CREATE TABLE IF NOT EXISTS courses (
   id             INTEGER PRIMARY KEY AUTOINCREMENT,

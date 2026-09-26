@@ -71,6 +71,10 @@ export function KioskProvider({ children }) {
 
   // ---- สถานะหลัก ----
   const [screen, setScreen] = useState('idle')
+  // ตัวจัดการเหตุการณ์ถูกผูกไว้ครั้งเดียว จึงอ่านค่า screen จาก state ตรง ๆ ไม่ได้
+  // (จะได้ค่าตอนที่ผูก ไม่ใช่ค่าปัจจุบัน) ต้องอ่านผ่าน ref
+  const screenRef = useRef('idle')
+  screenRef.current = screen
   const [student, setStudent] = useState(null)
   const [schedule, setSchedule] = useState(EMPTY_SCHEDULE)
   const [exams, setExams] = useState([])
@@ -91,6 +95,8 @@ export function KioskProvider({ children }) {
   // ประวัติการสนทนาในรอบนี้ เก็บบนหน้าจอเท่านั้น ไม่ส่งขึ้นเซิร์ฟเวอร์
   const [messages, setMessages] = useState([])
   const [enrollError, setEnrollError] = useState(null)
+  // เหตุผลที่เซิร์ฟเวอร์ปฏิเสธการเข้าใช้งาน เช่น รหัสไม่มีในระบบ หรือพ้นสภาพแล้ว
+  const [loginError, setLoginError] = useState(null)
   const [voiceUnclear, setVoiceUnclear] = useState(false)
   const [forceNoSchedule, setForceNoSchedule] = useState(false)
   const [activeStudentIdx, setActiveStudentIdx] = useState(0)
@@ -231,6 +237,7 @@ export function KioskProvider({ children }) {
       setAnonymous(false)
       setFaceEnrolled(false)
       setFaceEnrolledAtLabel(null)
+      setLoginError(null)
       setEnrollIntent(false)
       setPendingToken(null)
       setMessages([])
@@ -306,7 +313,15 @@ export function KioskProvider({ children }) {
   const goto = useCallback(
     (next) => {
       markActivity()
-      setScreen(next)
+      // ออกจากหน้าสแกนแล้วต้องบอกเซิร์ฟเวอร์ให้เลิกหาใบหน้าด้วย
+      // ไม่งั้นกล้องยังทำงานต่ออีกถึง 10 วินาที กินซีพียูเปล่า
+      // และผลที่ตามมาทีหลังจะไปรบกวนหน้าจอที่ผู้ใช้กำลังใช้อยู่
+      setScreen((current) => {
+        if (current === 'scan' && next !== 'scan') {
+          api.stopScan().catch(() => {})
+        }
+        return next
+      })
     },
     [markActivity]
   )
@@ -360,12 +375,25 @@ export function KioskProvider({ children }) {
 
       if (ev.kind === 'face') {
         setFaceSim(ev.result === 'camera_error' ? 'notfound' : ev.result)
+
+        // ผลการสแกนที่มาถึงหลังผู้ใช้เปลี่ยนหน้าไปแล้ว ต้องไม่สั่งเปลี่ยนหน้าจอ
+        // เช่น นักศึกษาเลิกรอสแกนแล้วไปกรอกรหัส ผลที่ตามมาทีหลัง
+        // จะดึงเขากลับไปหน้าเดิมและล้างตัวเลขที่กรอกไปแล้วทิ้ง
+        // ยกเว้นกล้องเสีย ซึ่งต้องแจ้งให้รู้ไม่ว่าอยู่หน้าไหน
+        if (screenRef.current !== 'scan' && ev.result !== 'camera_error') {
+          return
+        }
         if (ev.result === 'recognized') {
           setCameraOk(true)
           setCandidate({ token: ev.candidateToken, name: ev.name, score: ev.score })
           setScreen('confirm')
         } else if (ev.result === 'unknown') {
           setUnknownReason('unrecognized')
+          setScreen('unknown')
+        } else if (ev.result === 'inactive') {
+          // จำหน้าได้ แต่ไม่ได้เป็นนักศึกษาของสาขาแล้ว
+          // ไม่บอกชื่อออกไป เพราะยังไม่มีใครยืนยันตัวตน
+          setUnknownReason('inactive')
           setScreen('unknown')
         } else if (ev.result === 'notfound') {
           setUnknownReason('timeout')
@@ -441,6 +469,7 @@ export function KioskProvider({ children }) {
   const loginWithStudentId = useCallback(
     async (id) => {
       markActivity()
+      setLoginError(null)
       try {
         const sess = await api.loginWithStudentId(id)
         setStudent(sess.student)
@@ -457,7 +486,9 @@ export function KioskProvider({ children }) {
           track('เข้าสู่ระบบด้วยรหัสนักศึกษา', CHANNEL.TOUCH, SOURCE.DB)
         }
         return true
-      } catch {
+      } catch (err) {
+        // 403 = ไม่ได้อยู่ในสถานะกำลังศึกษา · 404 = ไม่มีรหัสนี้ในระบบ
+        setLoginError(err.detail || 'ไม่พบรหัสนักศึกษานี้ในระบบ กรุณาตรวจสอบอีกครั้ง')
         return false
       }
     },
@@ -864,7 +895,11 @@ export function KioskProvider({ children }) {
       announcements: boot?.announcements ?? [],
       quickQuestions: boot?.quickQuestions ?? [],
       dataUpdatedLabel: boot?.term?.dataUpdatedLabel ?? null,
-      hasSyntheticSchedule: boot?.hasSyntheticSchedule ?? false,
+      // ดูจากตารางของคนที่ล็อกอินอยู่ ถ้ายังไม่ได้ล็อกอินให้ดูค่ารวมของระบบ
+      // (หน้าจอพักไม่มีตารางของใครให้ดู)
+      hasSyntheticSchedule: student
+        ? Boolean(effectiveSchedule.isSynthetic)
+        : (boot?.hasSyntheticSchedule ?? false),
       termLabel: boot?.term?.label ?? null,
       // ผู้ใช้ปัจจุบัน
       student,
@@ -885,6 +920,7 @@ export function KioskProvider({ children }) {
       voiceUnclear,
       consentId,
       enrollError,
+      loginError,
       enrollIntent,
       pendingToken,
       canDeleteFace,
@@ -935,7 +971,7 @@ export function KioskProvider({ children }) {
       now, screen, boot, bootError, student, isAuthenticated, anonymous,
       effectiveSchedule, effectiveExams, hasSchedule, faceEnrolled, faceEnrolledAtLabel,
       online, cameraOk, cameraReady, sttReady, faceSim, voiceUnclear,
-      consentId, enrollError, enrollIntent, pendingToken, canDeleteFace, messages,
+      consentId, enrollError, loginError, enrollIntent, pendingToken, canDeleteFace, messages,
       simStudents, activeStudent,
       activeStudentIdx, unknownReason, candidate, micState, transcript,
       answer, answerPending, enrollProgress, devOpen, events, logoutCountdown,

@@ -276,6 +276,19 @@ try {
   await page.waitForTimeout(1300)
   }
 
+  console.log('\n5ข. ผลสแกนที่มาทีหลังต้องไม่รบกวนหน้าที่กำลังใช้อยู่')
+  // จำลองว่าผลการสแกนมาถึงหลังผู้ใช้เปลี่ยนหน้าไปแล้ว
+  // ถ้าไม่กันไว้ ผู้ใช้ที่กำลังกรอกรหัสจะถูกดึงกลับไปหน้าสแกนและเสียตัวเลขที่กรอกไป
+  const screenBefore = await body()
+  await page.evaluate(() => fetch('/api/sim/face/unknown', { method: 'POST' }))
+  await page.waitForTimeout(1200)
+  const screenAfter = await body()
+  check(
+    screenAfter.includes('ผู้ช่วยตอบคำถาม') || screenAfter === screenBefore,
+    'ผลสแกนที่มาทีหลังไม่ดึงผู้ใช้ออกจากหน้าที่กำลังใช้อยู่',
+    screenAfter.slice(60, 120)
+  )
+
   console.log('\n6. ออกจากระบบแล้วข้อมูลต้องหายจากจอ')
   // ออกจากระบบไปแล้วตอนเริ่มหมวด 5ก และกดยกเลิกจากหน้าถ่ายใบหน้าแล้ว
   // จึงควรอยู่ที่หน้าจอพักโดยไม่มีข้อมูลผู้ใช้ค้างอยู่

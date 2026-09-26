@@ -185,6 +185,10 @@ def enroll_complete(body: CompleteEnrollIn, conn: Db, sess: MaybeSession) -> dic
             status.HTTP_404_NOT_FOUND, "ไม่พบรหัสนักศึกษานี้ในระบบของสาขา"
         )
 
+    # ผู้ที่ไม่ได้เป็นนักศึกษาแล้วไม่ควรฝากข้อมูลชีวภาพไว้กับสาขา
+    if not repo.is_active(student):
+        raise HTTPException(status.HTTP_403_FORBIDDEN, repo.status_message(student))
+
     # รหัสที่มีข้อมูลใบหน้าอยู่แล้วลงทะเบียนซ้ำไม่ได้
     # เพราะการกรอกรหัสไม่ได้ยืนยันตัวตน ถ้าไม่กันไว้ใครก็ลงทะเบียนทับของผู้อื่นได้
     if repo.face_status(conn, student["id"])["enrolled"]:

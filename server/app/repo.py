@@ -136,6 +136,32 @@ def find_student_by_code(conn: sqlite3.Connection, student_id: str) -> sqlite3.R
     ).fetchone()
 
 
+def is_active(student: sqlite3.Row | None) -> bool:
+    """ยังเป็นนักศึกษาของสาขาอยู่หรือไม่
+
+    ผู้ที่ลาออกหรือพ้นสภาพไม่ควรเห็นตารางเรียนของภาคการศึกษาปัจจุบัน
+    และไม่ควรลงทะเบียนใบหน้าใหม่ได้
+    ฐานข้อมูลเก่าที่ยังไม่มีคอลัมน์นี้ถือว่ายังศึกษาอยู่ เพื่อไม่ให้ตู้หยุดทำงาน
+    """
+    if student is None:
+        return False
+    if "active" not in student.keys():
+        return True
+    return bool(student["active"])
+
+
+def status_message(student: sqlite3.Row) -> str:
+    """ข้อความอธิบายสาเหตุที่ใช้ตู้ไม่ได้ ใช้แสดงบนหน้าจอ"""
+    label = None
+    if "status_label" in student.keys():
+        label = student["status_label"]
+    reason = f" ({label})" if label else ""
+    return (
+        f"รหัสนักศึกษานี้ไม่ได้อยู่ในสถานะกำลังศึกษา{reason} "
+        "กรุณาติดต่อสำนักงานสาขาวิชาฯ"
+    )
+
+
 def get_student(conn: sqlite3.Connection, pk: int) -> sqlite3.Row | None:
     return conn.execute("SELECT * FROM students WHERE id = ?", (pk,)).fetchone()
 
@@ -146,8 +172,10 @@ def student_public(row: sqlite3.Row, *, restricted: bool = False) -> dict[str, A
     restricted = True สำหรับโหมดกรอกรหัสนักศึกษา ซึ่งไม่มีการยืนยันตัวตน
     จึงไม่เปิดเผยชื่ออาจารย์ที่ปรึกษา (เป็นข้อมูลที่ใช้เดาตัวบุคคลต่อได้)
     """
-    data = {
+    keys = row.keys()
+    return {
         "id": row["id"],
+        "prefix": row["prefix"] if "prefix" in keys else None,
         "name": row["name"],
         "studentIdMasked": mask_student_id(row["student_id"]),
         "year": row["year"],
@@ -155,7 +183,6 @@ def student_public(row: sqlite3.Row, *, restricted: bool = False) -> dict[str, A
         "advisor": None if restricted else row["advisor"],
         "restricted": restricted,
     }
-    return data
 
 
 # ------------------------------------------------------------
@@ -554,6 +581,50 @@ def upsert_student(
                advisor = excluded.advisor,
                is_synthetic = 0""",
         (student_id, name, year, program, advisor, now),
+    )
+    return "updated" if existing is not None else "added"
+
+
+def upsert_roster_student(
+    conn: sqlite3.Connection,
+    *,
+    student_id: str,
+    prefix: str | None,
+    name: str,
+    year: int | None,
+    entry_year: int | None,
+    program: str | None,
+    program_code: str | None,
+    status_code: str | None,
+    status_label: str | None,
+    active: bool,
+    now: str,
+) -> str:
+    """เพิ่มหรืออัปเดตนักศึกษาจากรายชื่อของระบบทะเบียน
+
+    ไม่แตะคอลัมน์ advisor เพราะรายงานรายชื่อไม่มีข้อมูลอาจารย์ที่ปรึกษา
+    ถ้าเขียนทับด้วยค่าว่าง ข้อมูลที่กรอกไว้จากแหล่งอื่นจะหายไป
+    """
+    existing = find_student_by_code(conn, student_id)
+    conn.execute(
+        """INSERT INTO students
+               (student_id, prefix, name, year, entry_year, program, program_code,
+                status_code, status_label, active, is_synthetic, created_at, updated_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?)
+           ON CONFLICT(student_id) DO UPDATE SET
+               prefix = excluded.prefix,
+               name = excluded.name,
+               year = excluded.year,
+               entry_year = excluded.entry_year,
+               program = excluded.program,
+               program_code = excluded.program_code,
+               status_code = excluded.status_code,
+               status_label = excluded.status_label,
+               active = excluded.active,
+               is_synthetic = 0,
+               updated_at = excluded.updated_at""",
+        (student_id, prefix, name, year, entry_year, program, program_code,
+         status_code, status_label, 1 if active else 0, now, now),
     )
     return "updated" if existing is not None else "added"
 

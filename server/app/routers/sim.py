@@ -47,6 +47,9 @@ async def face_recognized(body: RecognizeIn, conn: Db) -> dict:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "ไม่พบนักศึกษาที่ระบุ")
 
     cand = session_store.store.offer_candidate(row["id"], body.score)
+    # หมายเหตุ: เส้นทางจำลองสร้างผลการรู้จำให้ใครก็ได้ รวมถึงผู้ที่พ้นสภาพ
+    # เพื่อให้ทดสอบได้ว่าด่านที่ /api/session/face-confirm ทำงานจริง
+    # ตัวรู้จำใบหน้าของจริงจะไม่ส่งผลแบบ recognized ให้ผู้ที่พ้นสภาพตั้งแต่ต้นทาง
     payload = {
         "result": "recognized",
         "candidateToken": cand.token,

@@ -34,6 +34,9 @@ def schedule(conn: Db, sess: StudentSession) -> dict:
         "week": {str(day): rows for day, rows in repo.classes_by_week(items).items()},
         "nextClass": repo.find_next_class(items, now),
         "todayLabel": thai.format_full_date(now.date()),
+        # ตารางของคนนี้มีคาบที่เป็นข้อมูลสมมติอยู่หรือไม่
+        # หน้าจอใช้ตัดสินว่าจะขึ้นป้ายเตือนหรือไม่ ต้องดูของคนนี้ ไม่ใช่ของทั้งระบบ
+        "isSynthetic": any(item.get("isSynthetic") for item in items),
     }
 
 

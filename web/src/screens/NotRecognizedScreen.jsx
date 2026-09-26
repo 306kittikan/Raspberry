@@ -13,6 +13,11 @@ import {
 } from '../components/Icons'
 
 const HEADINGS = {
+  inactive: {
+    icon: IconWarning,
+    title: 'รหัสนักศึกษานี้ไม่ได้อยู่ในสถานะกำลังศึกษา',
+    detail: 'กรุณาติดต่อสำนักงานสาขาวิชาฯ เพื่อตรวจสอบสถานะของคุณ',
+  },
   unrecognized: {
     icon: IconWarning,
     title: 'ระบบยังจำใบหน้าของคุณไม่ได้',

@@ -41,6 +41,14 @@ ENROLL_SAMPLES = 8
 ENROLL_GAP_S = 0.35
 # ตัวอย่างต้องสอดคล้องกันอย่างน้อยเท่านี้ ไม่งั้นให้ถ่ายใหม่
 ENROLL_MIN_QUALITY = 0.60
+# เลิกเก็บตัวอย่างเมื่อไม่เห็นใบหน้าติดต่อกันนานเท่านี้
+# ตีความว่าผู้ใช้เดินจากไปแล้ว ซึ่งเป็นกรณีที่พบบ่อยที่สุด
+ENROLL_NO_FACE_S = 12.0
+# เพดานเวลารวม กันกรณีที่มีใบหน้าเข้า ๆ ออก ๆ จนไม่ครบสักที
+# ถ้าไม่มีเพดาน ตู้จะค้างอยู่ในโหมดถ่ายตลอดไป กินซีพียูและบล็อกคนถัดไป
+ENROLL_TIMEOUT_S = 40.0
+# ส่งสถานะ "ยังหาใบหน้าไม่เจอ" ถี่แค่ไหน ไม่ต้องส่งทุกเฟรม
+ENROLL_HINT_EVERY_S = 1.0
 
 
 @dataclass(slots=True)
@@ -55,6 +63,9 @@ class _EnrollJob:
     policy_version: str
     samples: list[np.ndarray] = field(default_factory=list)
     last_sample_at: float = 0.0
+    started_at: float = 0.0
+    last_face_at: float = 0.0
+    last_hint_at: float = 0.0
 
 
 class FaceWorker:
@@ -117,7 +128,13 @@ class FaceWorker:
     def begin_enroll(self, consent_at: datetime, policy_version: str) -> None:
         with self._lock:
             self._mode = "enrolling"
-            self._enroll = _EnrollJob(consent_at=consent_at, policy_version=policy_version)
+            now = time.time()
+            self._enroll = _EnrollJob(
+                consent_at=consent_at,
+                policy_version=policy_version,
+                started_at=now,
+                last_face_at=now,
+            )
 
     def cancel_enroll(self) -> None:
         with self._lock:
@@ -232,10 +249,17 @@ class FaceWorker:
             return
 
         row = conn.execute(
-            "SELECT name FROM students WHERE id = ?", (result.student_pk,)
+            "SELECT name, active FROM students WHERE id = ?", (result.student_pk,)
         ).fetchone()
         if row is None:
             self._emit("face", {"result": "unknown", "reason": "missing_student"})
+            return
+
+        # จำหน้าได้ แต่เจ้าของหน้าไม่ได้เป็นนักศึกษาของสาขาแล้ว
+        # ไม่เปิดเซสชันให้ และไม่บอกชื่อออกไป เพราะยังไม่มีใครยืนยันตัวตน
+        if not row["active"]:
+            log.info("จำใบหน้าได้แต่ผู้ใช้พ้นสภาพแล้ว (student_pk=%s)", result.student_pk)
+            self._emit("face", {"result": "inactive"})
             return
 
         cand = session_store.offer_candidate(result.student_pk, result.score)
@@ -255,16 +279,40 @@ class FaceWorker:
         if job is None:
             return
 
+        now = time.time()
         usable = [f for f in faces if not f.too_small]
-        if len(usable) > 1:
-            self._emit("enroll", {"state": "multi"})
-            return
-        if not usable:
-            self._emit("enroll", {"state": "searching",
+        if usable:
+            job.last_face_at = now
+
+        # เลิกเองเมื่อผู้ใช้เดินจากไป หรือถ่ายไม่ครบสักทีจนเกินเพดานเวลา
+        # ไม่ใช่ค้างอยู่ในโหมดถ่ายจนกว่าจะมีคนมากดยกเลิก
+        gone = now - job.last_face_at > ENROLL_NO_FACE_S
+        too_long = now - job.started_at > ENROLL_TIMEOUT_S
+        if gone or too_long:
+            reason = "no_face" if gone else "timeout"
+            log.info("เลิกเก็บตัวอย่างใบหน้า (%s) ได้ %d/%d ใบ",
+                     reason, len(job.samples), ENROLL_SAMPLES)
+            with self._lock:
+                self._mode = "idle"
+                self._enroll = None
+            self._emit("enroll", {"state": "failed", "reason": reason,
                                   "progress": self._enroll_progress(job)})
             return
 
-        now = time.time()
+        if len(usable) > 1:
+            if now - job.last_hint_at > ENROLL_HINT_EVERY_S:
+                job.last_hint_at = now
+                self._emit("enroll", {"state": "multi"})
+            return
+        if not usable:
+            # ไม่ส่งทุกเฟรม เพราะเฟรมเข้ามาหลายสิบครั้งต่อวินาที
+            if now - job.last_hint_at > ENROLL_HINT_EVERY_S:
+                job.last_hint_at = now
+                self._emit("enroll", {"state": "searching",
+                                      "progress": self._enroll_progress(job)})
+            time.sleep(0.05)
+            return
+
         if now - job.last_sample_at < ENROLL_GAP_S:
             return
 
