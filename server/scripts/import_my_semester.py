@@ -105,6 +105,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="นำเข้าตารางเรียนจริงรายบุคคล")
     parser.add_argument("folder", type=Path, help="โฟลเดอร์ my_semester_*")
     parser.add_argument("--dry-run", action="store_true", help="แสดงผลอย่างเดียว ไม่บันทึก")
+    parser.add_argument(
+        "--student", metavar="รหัส",
+        help="ใช้ตารางนี้กับนักศึกษารหัสอื่น แทนเจ้าของไฟล์ "
+             "(ใช้เมื่อเรียนกลุ่มเดียวกัน)",
+    )
     args = parser.parse_args()
 
     source = args.folder / f"{args.folder.name}.json"
@@ -117,7 +122,9 @@ def main() -> int:
 
     data = json.loads(source.read_text(encoding="utf-8"))
     student = data["student"]
-    code = str(student["student_id"]).strip()
+    owner = str(student["student_id"]).strip()
+    code = (args.student or owner).strip()
+    borrowed = code != owner
 
     conn = db_module.connect()
     db_module.init_db(conn)
@@ -135,7 +142,14 @@ def main() -> int:
 
     print(f"นักศึกษา {row['name']} ({code})")
     print(f"ภาคการศึกษา {term['code']}")
-    print(f"ที่ปรึกษา {student.get('advisor') or '—'}")
+    if borrowed:
+        print()
+        print(f"  ** ตารางนี้เป็นของรหัส {owner} ไม่ใช่ของ {code} **")
+        print("  ใช้ได้ก็ต่อเมื่อสองคนนี้ลงทะเบียนกลุ่มเรียนเดียวกันจริง")
+        print("  ถ้ากลุ่มเรียนต่างกัน ตู้จะบอกห้องและเวลาผิดอย่างมั่นใจ")
+        print("  ซึ่งแย่กว่าการไม่มีข้อมูลเลย เพราะไม่มีอะไรบอกว่ามันผิด")
+    else:
+        print(f"ที่ปรึกษา {student.get('advisor') or '—'}")
     print()
 
     sessions = data.get("my_class_sessions") or []
@@ -237,7 +251,9 @@ def main() -> int:
                  times[1].strip() if len(times) > 1 else "00:00"),
             )
 
-        advisor = student.get("advisor")
+        # อาจารย์ที่ปรึกษาเป็นของเจ้าของไฟล์เท่านั้น
+        # คนละคนกันมีที่ปรึกษาคนละคนได้ แม้จะเรียนวิชาเดียวกัน
+        advisor = None if borrowed else student.get("advisor")
         if advisor:
             conn.execute(
                 "UPDATE students SET advisor = ?, updated_at = ? WHERE id = ?",
@@ -247,8 +263,12 @@ def main() -> int:
     total = conn.execute(
         "SELECT COUNT(*) n FROM enrollments WHERE student_id = ?", (student_pk,)
     ).fetchone()["n"]
-    print(f"\nบันทึกแล้ว — {row['name']} มี {total} คาบเรียนจริงในระบบ")
-    print("ตารางเรียนของนักศึกษาคนนี้ไม่ใช่ข้อมูลสมมติอีกต่อไป")
+    print(f"\nบันทึกแล้ว — {row['name']} มี {total} คาบเรียนในระบบ")
+    if borrowed:
+        print(f"หมายเหตุ ตารางนี้ยืมมาจากรหัส {owner}")
+        print("ถ้าพบว่าห้องหรือเวลาไม่ตรงกับของจริง ให้ลบแล้วนำเข้าไฟล์ของเจ้าตัวแทน")
+    else:
+        print("ตารางเรียนของนักศึกษาคนนี้ไม่ใช่ข้อมูลสมมติอีกต่อไป")
     conn.close()
     return 0
 
