@@ -23,7 +23,7 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from app import config, db as db_module  # noqa: E402
-from app.services import assistant_ai, retrieval  # noqa: E402
+from app.services import assistant_ai, llm, retrieval  # noqa: E402
 
 _results: list[tuple[bool, str]] = []
 
@@ -39,45 +39,41 @@ def check(ok: bool, name: str, expected: str = "", actual: str = "") -> bool:
 
 # ------------------------------------------------------------
 # โมเดลปลอม
+#
+# สวมที่ชั้น llm.complete ซึ่งเป็นรอยต่อระหว่างด่านกันการแต่งคำตอบกับผู้ให้บริการ
+# ทดสอบตรงนี้จึงใช้ได้กับทุกผู้ให้บริการ และไม่ผูกกับรูปแบบของไลบรารีรายใดราย
+# หนึ่ง ถ้าวันหนึ่งเปลี่ยนไปใช้เจ้าอื่น ชุดทดสอบนี้ยังใช้ได้เหมือนเดิม
 # ------------------------------------------------------------
-class FakeUsage:
-    input_tokens = 1200
-    output_tokens = 80
+class Spy:
+    """จดว่าถูกเรียกด้วยอะไรบ้าง แล้วคืนผลที่ตั้งไว้ หรือโยนข้อผิดพลาดที่ตั้งไว้"""
 
-
-class FakeResponse:
-    def __init__(self, parsed: Any, stop_reason: str = "end_turn") -> None:
-        self.parsed_output = parsed
-        self.stop_reason = stop_reason
-        self.usage = FakeUsage()
-
-
-class FakeMessages:
-    """รับคำขอแล้วคืนสิ่งที่ตั้งไว้ล่วงหน้า หรือโยนข้อผิดพลาดที่ตั้งไว้"""
-
-    def __init__(self, outcome: Any) -> None:
+    def __init__(self, outcome) -> None:
         self.outcome = outcome
-        self.last_request: dict[str, Any] | None = None
+        self.called = False
+        self.system: str | None = None
+        self.prompt: str | None = None
+        self.schema = None
 
-    async def parse(self, **kwargs: Any) -> FakeResponse:
-        self.last_request = kwargs
+    async def complete(self, *, system: str, prompt: str, schema) -> Any:
+        self.called = True
+        self.system, self.prompt, self.schema = system, prompt, schema
         if isinstance(self.outcome, Exception):
             raise self.outcome
         return self.outcome
 
 
-class FakeClient:
-    def __init__(self, outcome: Any) -> None:
-        self.messages = FakeMessages(outcome)
+def done(parsed, refused: bool = False) -> llm.Completion:
+    return llm.Completion(parsed=parsed, input_tokens=1200, output_tokens=80,
+                          refused=refused)
 
 
-def with_fake(outcome: Any) -> FakeClient:
+def with_fake(outcome) -> Spy:
     """สวมโมเดลปลอมเข้าไปแทนของจริง"""
-    client = FakeClient(outcome)
-    assistant_ai._get_client = lambda: client   # noqa: SLF001
-    assistant_ai.health.__init__()              # ล้างตัวนับก่อนทุกกรณี
-    config.AI_ENABLED = True                    # ข้ามการตรวจกุญแจ
-    return client
+    spy = Spy(outcome)
+    assistant_ai.llm.complete = spy.complete
+    assistant_ai.health.__init__()   # ล้างตัวนับก่อนทุกกรณี
+    config.AI_ENABLED = True         # ข้ามการตรวจกุญแจ
+    return spy
 
 
 def ask(conn, question: str) -> dict[str, Any]:
@@ -97,7 +93,7 @@ def answer(found: bool = True, chunk_id: int | None = None,
 def main() -> int:
     conn = db_module.connect()
     real_enabled = config.AI_ENABLED
-    real_client = assistant_ai._get_client   # noqa: SLF001
+    real_complete = llm.complete
 
     # คำถามที่ค้นเอกสารเจอแน่ ๆ ใช้เป็นฐานของทุกกรณี
     question = "ติดต่อสาขาได้ทางไหน"
@@ -109,7 +105,7 @@ def main() -> int:
 
     try:
         print("\n1. คำตอบที่ถูกต้อง")
-        fake = with_fake(FakeResponse(answer(chunk_id=good_id, lines=["ติดต่อได้ที่ cs@mju.ac.th"])))
+        spy = with_fake(done(answer(chunk_id=good_id, lines=["ติดต่อได้ที่ cs@mju.ac.th"])))
         result = ask(conn, question)
         check(result["source"] == "ai", "คำตอบที่อ้างอิงถูกต้องผ่านได้", "source=ai", str(result["source"]))
         check(result.get("ref") == retrieval.citation_for_chunk(conn, good_id),
@@ -121,22 +117,21 @@ def main() -> int:
               "นับโทเค็นที่ใช้ไปเพื่อประเมินค่าใช้จ่าย", "1200",
               str(assistant_ai.health.input_tokens))
 
-        print("\n2. พารามิเตอร์ที่ส่งให้โมเดล")
-        sent = fake.messages.last_request or {}
-        check(sent.get("model") == config.ANTHROPIC_MODEL,
-              "ใช้รุ่นโมเดลตามที่ตั้งค่าไว้", config.ANTHROPIC_MODEL, str(sent.get("model")))
-        check(sent.get("max_tokens", 0) >= 4000,
-              "เพดานโทเค็นสูงพอ เพราะโทเค็นที่ใช้คิดนับรวมอยู่ด้วย",
-              ">= 4000", str(sent.get("max_tokens")))
-        check(sent.get("output_format") is assistant_ai.AiAnswer,
-              "บังคับรูปแบบคำตอบด้วยโครงสร้างที่กำหนดไว้",
-              "AiAnswer", str(sent.get("output_format")))
-        context = str(sent.get("messages"))
-        check("chunk_id=" in context,
-              "ส่งหมายเลขชิ้นเอกสารไปให้โมเดลเลือก", "มี chunk_id=", context[:60])
+        print("\n2. สิ่งที่ส่งให้โมเดล")
+        check(spy.schema is assistant_ai.AiAnswer,
+              "บังคับรูปแบบคำตอบด้วยโครงสร้างที่กำหนดไว้ ไม่ใช่ข้อความอิสระ",
+              "AiAnswer", str(spy.schema))
+        check("chunk_id=" in (spy.prompt or ""),
+              "ส่งหมายเลขชิ้นเอกสารไปให้โมเดลเลือก", "มี chunk_id=",
+              (spy.prompt or "")[:60])
+        check("ห้ามใช้ความรู้ทั่วไป" in (spy.system or ""),
+              "กติกาห้ามเติมความรู้ของตัวเองอยู่ในคำสั่งระบบ",
+              "มีข้อห้าม", (spy.system or "")[:60])
+        check(question in (spy.prompt or ""),
+              "ส่งคำถามของนักศึกษาไปตามจริง", question, (spy.prompt or "")[:60])
 
         print("\n3. โมเดลแต่งหมายเลขเอกสารขึ้นเอง")
-        with_fake(FakeResponse(answer(chunk_id=999_999, lines=["คำตอบที่ไม่มีที่มา"])))
+        with_fake(done(answer(chunk_id=999_999, lines=["คำตอบที่ไม่มีที่มา"])))
         result = ask(conn, question)
         check(result["source"] == "none",
               "หมายเลขที่ไม่ได้อยู่ในบริบทถูกปฏิเสธ", "source=none", str(result["source"]))
@@ -149,26 +144,26 @@ def main() -> int:
                 ",".join(str(h["chunkId"]) for h in hits)
             )
         ).fetchone()
-        with_fake(FakeResponse(answer(chunk_id=other["id"], lines=["อ้างเอกสารที่ไม่ได้อ่าน"])))
+        with_fake(done(answer(chunk_id=other["id"], lines=["อ้างเอกสารที่ไม่ได้อ่าน"])))
         result = ask(conn, question)
         check(result["source"] == "none",
               "ชิ้นเอกสารที่ไม่ได้ส่งไปให้อ่านก็ถูกปฏิเสธเช่นกัน",
               "source=none", str(result["source"]))
 
         print("\n5. โมเดลบอกเองว่าไม่พบคำตอบ")
-        with_fake(FakeResponse(answer(found=False, chunk_id=good_id, lines=["เดาไปก่อน"])))
+        with_fake(done(answer(found=False, chunk_id=good_id, lines=["เดาไปก่อน"])))
         result = ask(conn, question)
         check(result["source"] == "none", "ยอมรับคำว่าไม่รู้ ไม่ฝืนแสดงคำตอบ",
               "source=none", str(result["source"]))
 
         print("\n6. โมเดลตอบว่าพบ แต่ไม่มีเนื้อหา")
-        with_fake(FakeResponse(answer(chunk_id=good_id, lines=[])))
+        with_fake(done(answer(chunk_id=good_id, lines=[])))
         result = ask(conn, question)
         check(result["source"] == "none", "คำตอบว่างเปล่าถูกปฏิเสธ ไม่ขึ้นจอเปล่า",
               "source=none", str(result["source"]))
 
         print("\n7. โมเดลปฏิเสธคำถามเอง")
-        with_fake(FakeResponse(answer(chunk_id=good_id), stop_reason="refusal"))
+        with_fake(done(answer(chunk_id=good_id), refused=True))
         result = ask(conn, question)
         check(result["source"] == "none", "คำถามที่โมเดลปฏิเสธไม่ถูกนำไปแสดง",
               "source=none", str(result["source"]))
@@ -176,39 +171,24 @@ def main() -> int:
               "บันทึกสาเหตุไว้ว่าเป็นการปฏิเสธ", "refusal",
               str(assistant_ai.health.last_error))
 
-        print("\n8. เรียก API ไม่สำเร็จ")
-        import anthropic
-        import httpx2
-
-        request = httpx2.Request("POST", "https://api.anthropic.com/v1/messages")
-        cases = [
-            (anthropic.APIConnectionError(request=request), "connection", "เน็ตหลุด"),
-            (
-                anthropic.RateLimitError(
-                    "ถูกจำกัดอัตรา",
-                    response=httpx2.Response(429, request=request),
-                    body=None,
-                ),
-                "rate_limit",
-                "ผู้ใช้หนาแน่น",
-            ),
-            (
-                anthropic.AuthenticationError(
-                    "กุญแจไม่ถูกต้อง",
-                    response=httpx2.Response(401, request=request),
-                    body=None,
-                ),
-                "auth",
-                "กุญแจหมดอายุ",
-            ),
-        ]
-        for exc, code, label in cases:
-            with_fake(exc)
+        print("\n8. เรียกผู้ให้บริการไม่สำเร็จ")
+        # รหัสสาเหตุต้องเหมือนกันไม่ว่าผู้ให้บริการรายใดเป็นคนแจ้ง
+        # เจ้าหน้าที่ที่ดูแลตู้สนใจว่า "กุญแจมีปัญหา" ไม่ได้สนใจว่าใครเป็นคนบอก
+        for code, label in [
+            ("connection", "เน็ตหลุด"),
+            ("rate_limit", "โควตาเต็ม"),
+            ("auth", "กุญแจหมดอายุ"),
+            ("unavailable", "ผู้ให้บริการไม่พร้อม"),
+            ("no_key", "ยังไม่ได้ตั้งค่ากุญแจ"),
+        ]:
+            with_fake(llm.LlmError(code, "ทดสอบ"))
             result = ask(conn, question)
             ok = result["source"] == "none" and assistant_ai.health.last_error == code
             check(ok, f"{label} → ตอบว่าไม่พบข้อมูล พร้อมบันทึกสาเหตุ '{code}'",
                   f"source=none, lastError={code}",
                   f"source={result['source']}, lastError={assistant_ai.health.last_error}")
+            check(result["lines"][0] != "", "มีข้อความอธิบายให้ผู้ใช้เข้าใจ",
+                  "ไม่ว่าง", str(result["lines"][:1]))
 
         print("\n9. ข้อผิดพลาดที่ไม่ได้คาดไว้ต้องไม่ทำให้ตู้ล่ม")
         with_fake(RuntimeError("อะไรสักอย่างที่ไม่เคยเจอ"))
@@ -217,25 +197,25 @@ def main() -> int:
               "source=none", str(result["source"]))
 
         print("\n10. ค้นเอกสารไม่เจอ ต้องไม่เรียกโมเดลเลย")
-        fake = with_fake(FakeResponse(answer(chunk_id=good_id)))
+        spy = with_fake(done(answer(chunk_id=good_id)))
         result = ask(conn, "ราคาทองคำวันนี้เท่าไร")
         check(result["source"] == "none", "คำถามนอกเรื่องตอบว่าไม่พบข้อมูล",
               "source=none", str(result["source"]))
-        check(fake.messages.last_request is None,
+        check(not spy.called,
               "ไม่เสียค่าเรียกโมเดลกับคำถามที่ไม่มีเอกสารรองรับ",
               "ไม่เรียกโมเดล", "เรียกไปแล้ว")
 
         print("\n11. ปิดผู้ช่วย AI ไว้")
-        fake = with_fake(FakeResponse(answer(chunk_id=good_id)))
+        spy = with_fake(done(answer(chunk_id=good_id)))
         config.AI_ENABLED = False
         result = ask(conn, question)
-        check(result["source"] == "none" and fake.messages.last_request is None,
+        check(result["source"] == "none" and not spy.called,
               "เมื่อปิดไว้ ต้องไม่เรียกโมเดลและไม่เดาคำตอบ",
-              "ไม่เรียกโมเดล", str(fake.messages.last_request is not None))
+              "ไม่เรียกโมเดล", str(spy.called))
 
         print("\n12. ทุกคำตอบที่ปฏิเสธต้องมีช่องทางติดต่อ")
         config.AI_ENABLED = True
-        with_fake(FakeResponse(answer(chunk_id=999_999)))
+        with_fake(done(answer(chunk_id=999_999)))
         result = ask(conn, question)
         text = " ".join(result["lines"])
         check("@" in text or "โทร" in text or "สำนักงาน" in text,
@@ -243,7 +223,7 @@ def main() -> int:
               "มีช่องทางติดต่อ", text[:70])
 
     finally:
-        assistant_ai._get_client = real_client   # noqa: SLF001
+        assistant_ai.llm.complete = real_complete
         config.AI_ENABLED = real_enabled
         conn.close()
 

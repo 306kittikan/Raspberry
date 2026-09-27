@@ -68,10 +68,24 @@ STT_OFFLINE_ONLY = _flag("KIOSK_STT_OFFLINE_ONLY", False)
 STT_ENABLED = _flag("KIOSK_STT_ENABLED", True)
 
 # ---- ผู้ช่วย AI ----
+# เลือกผู้ให้บริการ: gemini | anthropic | auto
+# auto = ใช้กุญแจที่ใส่ไว้ ถ้ามีทั้งคู่เลือก gemini ก่อนเพราะมีโควตาให้ใช้ฟรี
+AI_PROVIDER = os.getenv("KIOSK_AI_PROVIDER", "auto").strip().lower()
+
+GEMINI_API_KEY = (os.getenv("GEMINI_API_KEY") or "").strip()
+ANTHROPIC_API_KEY = (
+    os.getenv("ANTHROPIC_API_KEY") or os.getenv("ANTHROPIC_AUTH_TOKEN") or ""
+).strip()
+
+GEMINI_MODEL = os.getenv("KIOSK_GEMINI_MODEL", "gemini-3.1-flash-lite")
 ANTHROPIC_MODEL = os.getenv("KIOSK_AI_MODEL", "claude-opus-5")
+
 AI_ENABLED = _flag("KIOSK_AI_ENABLED", True) and bool(
-    os.getenv("ANTHROPIC_API_KEY") or os.getenv("ANTHROPIC_AUTH_TOKEN")
+    GEMINI_API_KEY if AI_PROVIDER == "gemini"
+    else ANTHROPIC_API_KEY if AI_PROVIDER == "anthropic"
+    else GEMINI_API_KEY or ANTHROPIC_API_KEY
 )
+
 AI_TIMEOUT_SECONDS = float(os.getenv("KIOSK_AI_TIMEOUT", "20"))
 
 # จำนวนครั้งที่ยอมให้ลองใหม่เมื่อเรียกไม่สำเร็จ
@@ -79,13 +93,15 @@ AI_TIMEOUT_SECONDS = float(os.getenv("KIOSK_AI_TIMEOUT", "20"))
 # นักศึกษายืนรออยู่หน้าตู้ การตอบว่า "ไม่พบข้อมูล" เร็ว ๆ ดีกว่าให้ยืนรอนาน
 AI_MAX_RETRIES = int(os.getenv("KIOSK_AI_RETRIES", "1"))
 
-# ระดับความพยายามในการคิด ยิ่งสูงยิ่งคิดละเอียดแต่ช้าและแพงกว่า
+# ระดับความพยายามในการคิด (ฝั่ง anthropic)
 # คำถามของตู้เป็นการสรุปจากเอกสารที่ค้นมาให้แล้ว ไม่ต้องใช้การคิดหลายชั้น
 AI_EFFORT = os.getenv("KIOSK_AI_EFFORT", "low")
 
+# เพดานโทเค็นสำหรับการคิดก่อนตอบ (ฝั่ง gemini) — 0 = ไม่ต้องคิด ตอบเลย
+AI_THINKING_BUDGET = int(os.getenv("KIOSK_AI_THINKING", "0"))
+
 # เพดานโทเค็นของคำตอบหนึ่งครั้ง
-# โทเค็นที่ใช้ "คิด" นับรวมอยู่ในเพดานนี้ด้วย ตั้งต่ำเกินไปคำตอบจะถูกตัดกลางคัน
-# ทั้งที่คำตอบจริงยาวแค่ 2–4 บรรทัด
+# ฝั่ง anthropic นับโทเค็นที่ใช้คิดรวมในเพดานนี้ด้วย ตั้งต่ำเกินไปคำตอบจะถูกตัดกลางคัน
 AI_MAX_TOKENS = int(os.getenv("KIOSK_AI_MAX_TOKENS", "8000"))
 
 # จำนวนชิ้นเอกสารที่ส่งให้โมเดลอ่าน มากไปก็เปลืองและทำให้โมเดลสับสน

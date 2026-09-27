@@ -18,7 +18,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from .. import config, repo, thai
-from . import retrieval
+from . import llm, retrieval
 
 log = logging.getLogger("kiosk.ai")
 
@@ -44,7 +44,8 @@ class _Health:
     def snapshot(self) -> dict[str, Any]:
         return {
             "enabled": config.AI_ENABLED,
-            "model": config.ANTHROPIC_MODEL,
+            "provider": llm.provider(),
+            "model": llm.model_name(),
             "calls": self.calls,
             "failures": self.failures,
             "lastError": self.last_error,
@@ -89,20 +90,6 @@ class AiAnswer(BaseModel):
     )
 
 
-def _get_client():
-    global _client
-    if _client is None:
-        from anthropic import AsyncAnthropic
-
-        # จำกัดการลองใหม่ไว้เอง ไลบรารีตั้งไว้ 2 ครั้งซึ่งเหมาะกับงานเบื้องหลัง
-        # แต่ที่นี่มีคนยืนรออยู่หน้าจอ เวลารวมที่แย่ที่สุดต้องคาดเดาได้
-        _client = AsyncAnthropic(
-            timeout=config.AI_TIMEOUT_SECONDS,
-            max_retries=config.AI_MAX_RETRIES,
-        )
-    return _client
-
-
 def _build_context(chunks: list[dict[str, Any]]) -> str:
     blocks = []
     for c in chunks:
@@ -121,6 +108,18 @@ def _not_found(conn: sqlite3.Connection, base: dict[str, Any], reason: str) -> d
         "title": "ไม่พบข้อมูลนี้ในระบบ",
         "lines": [reason, *repo.contact_fallback(conn)],
     }
+
+
+# ข้อความที่ผู้ใช้เห็น แยกตามสาเหตุ — ผู้ใช้ไม่ต้องรู้ว่าใครเป็นผู้ให้บริการ
+# แต่ต้องรู้ว่าควรลองใหม่ หรือควรไปหาเจ้าหน้าที่
+_REASON = {
+    "rate_limit": "ผู้ช่วยตอบคำถามใช้งานครบโควตาแล้ว กรุณาลองใหม่ภายหลัง",
+    "unavailable": "ผู้ช่วยตอบคำถามมีผู้ใช้งานหนาแน่น กรุณาลองใหม่อีกครั้ง",
+    "auth": "ผู้ช่วยตอบคำถามยังไม่พร้อมใช้งาน กรุณาแจ้งเจ้าหน้าที่",
+    "no_key": "ผู้ช่วยตอบคำถามยังไม่ได้ตั้งค่า กรุณาแจ้งเจ้าหน้าที่",
+    "connection": "เชื่อมต่อผู้ช่วยตอบคำถามไม่ได้ในขณะนี้",
+    "api_error": "ผู้ช่วยตอบคำถามขัดข้องชั่วคราว",
+}
 
 
 def _fail(
@@ -143,15 +142,6 @@ def _fail(
     return _not_found(conn, base, reason)
 
 
-def _record_usage(response: Any) -> None:
-    """สะสมจำนวนโทเค็นที่ใช้ไป เพื่อให้ประเมินค่าใช้จ่ายได้จากตัวเลขจริง"""
-    usage = getattr(response, "usage", None)
-    if usage is None:
-        return
-    health.input_tokens += getattr(usage, "input_tokens", 0) or 0
-    health.output_tokens += getattr(usage, "output_tokens", 0) or 0
-
-
 async def answer(
     conn: sqlite3.Connection, base: dict[str, Any], question: str
 ) -> dict[str, Any]:
@@ -168,50 +158,29 @@ async def answer(
     health.calls += 1
 
     try:
-        import anthropic
-
-        response = await _get_client().messages.parse(
-            model=config.ANTHROPIC_MODEL,
-            # โทเค็นที่ใช้คิดนับรวมในเพดานนี้ด้วย ตั้งต่ำไปคำตอบจะถูกตัดกลางคัน
-            max_tokens=config.AI_MAX_TOKENS,
-            output_config={"effort": config.AI_EFFORT},
+        result = await llm.complete(
             system=SYSTEM_PROMPT,
-            output_format=AiAnswer,
-            messages=[
-                {
-                    "role": "user",
-                    "content": (
-                        f"คำถามของนักศึกษา: {question}\n\n"
-                        f"เอกสารอ้างอิงที่ค้นได้:\n\n{_build_context(chunks)}"
-                    ),
-                }
-            ],
+            schema=AiAnswer,
+            prompt=(
+                f"คำถามของนักศึกษา: {question}\n\n"
+                f"เอกสารอ้างอิงที่ค้นได้:\n\n{_build_context(chunks)}"
+            ),
         )
-
-    except anthropic.RateLimitError:
-        return _fail(conn, base, "rate_limit",
-                     "ผู้ช่วยตอบคำถามมีผู้ใช้งานหนาแน่น กรุณาลองใหม่อีกครั้ง")
-    except anthropic.AuthenticationError:
-        # กุญแจผิดหรือหมดอายุ ต้องเห็นชัดในบันทึก ไม่ใช่กลืนหายไปกับข้อผิดพลาดอื่น
-        return _fail(conn, base, "auth",
-                     "ผู้ช่วยตอบคำถามยังไม่พร้อมใช้งาน กรุณาแจ้งเจ้าหน้าที่")
-    except anthropic.APIConnectionError:
-        return _fail(conn, base, "connection", "เชื่อมต่อผู้ช่วยตอบคำถามไม่ได้ในขณะนี้")
-    except anthropic.APIStatusError as exc:
-        return _fail(conn, base, f"http_{exc.status_code}",
-                     "ผู้ช่วยตอบคำถามขัดข้องชั่วคราว")
+    except llm.LlmError as exc:
+        return _fail(conn, base, exc.code, _REASON.get(exc.code, _REASON["api_error"]))
     except Exception as exc:  # noqa: BLE001 — ตู้ต้องไม่ค้างเพราะผู้ช่วย AI ไม่ว่าเกิดอะไรขึ้น
         log.exception("ผู้ช่วย AI ล้มเหลวโดยไม่คาดคิด")
         return _fail(conn, base, exc.__class__.__name__,
-                     "ผู้ช่วยตอบคำถามขัดข้องชั่วคราว", trace=False)
+                     _REASON["api_error"], trace=False)
 
-    _record_usage(response)
+    health.input_tokens += result.input_tokens
+    health.output_tokens += result.output_tokens
 
     # โมเดลอาจปฏิเสธคำถามเองด้วยเหตุผลด้านความปลอดภัย ต้องตรวจก่อนอ่านคำตอบ
-    if getattr(response, "stop_reason", None) == "refusal":
+    if result.refused:
         return _fail(conn, base, "refusal", "ผู้ช่วยตอบคำถามไม่สามารถตอบคำถามนี้ได้")
 
-    parsed: AiAnswer | None = response.parsed_output
+    parsed: AiAnswer | None = result.parsed
     if parsed is None or not parsed.found or not parsed.lines:
         return _not_found(
             conn, base, "ระบบไม่พบเอกสารอ้างอิงสำหรับคำถามนี้ จึงไม่สามารถตอบได้"
