@@ -165,6 +165,38 @@ def import_places(conn: sqlite3.Connection, ds: Path) -> None:
         )
 
 
+# ค่าที่ชุดข้อมูลต้นทางบันทึกไว้ผิด และมีคนยืนยันของจริงแล้ว
+#
+# ตู้บอกทางไปห้องเรียน การบอกชั้นผิดแปลว่านักศึกษาเดินขึ้นผิดชั้น
+# แล้วเข้าเรียนสาย ซึ่งแย่กว่าไม่บอกชั้นเลย
+#
+# แก้ที่นี่ไม่ใช่ในฐานข้อมูลโดยตรง เพราะการนำเข้าครั้งถัดไป
+# จะเขียนทับค่าจากต้นทางกลับมาทันที แล้วความผิดจะกลับมาเงียบ ๆ
+#
+# รูปแบบ: ชื่อย่อห้อง -> (ฟิลด์, ค่าที่ถูก, ใครยืนยัน)
+ROOM_CORRECTIONS: dict[str, tuple[str, Any, str]] = {
+    # ชุดข้อมูลระบุชั้น 2 แต่นักศึกษาที่เรียนห้องนี้ยืนยันว่าอยู่ชั้น 6
+    "Lect 8": ("floor", 6, "นักศึกษาที่เรียนในห้องนี้ ยืนยัน 27 ก.ย. 2569"),
+}
+
+
+def apply_room_corrections(conn: sqlite3.Connection) -> list[str]:
+    """เขียนทับค่าที่รู้ว่าต้นทางผิด คืนรายการที่แก้ไปเพื่อพิมพ์ให้เห็น"""
+    applied = []
+    for short_name, (field, value, source) in ROOM_CORRECTIONS.items():
+        row = conn.execute(
+            f"SELECT id, {field} AS current FROM rooms WHERE short_name = ?",
+            (short_name,),
+        ).fetchone()
+        if row is None or row["current"] == value:
+            continue
+        conn.execute(
+            f"UPDATE rooms SET {field} = ? WHERE id = ?", (value, row["id"])
+        )
+        applied.append(f"{short_name}: {field} {row['current']} → {value}  ({source})")
+    return applied
+
+
 def import_personnel(conn: sqlite3.Connection, ds: Path) -> int:
     rows = read_csv(ds / "csv" / "personnel.csv")
     for p in rows:
@@ -196,7 +228,14 @@ def import_courses(conn: sqlite3.Connection, ds: Path) -> None:
                    (source_id, code, name, name_en, credits, credit_format, description)
                VALUES (?, ?, ?, ?, ?, ?, ?)
                ON CONFLICT(code) DO UPDATE SET
-                   source_id = excluded.source_id, name = excluded.name,
+                   source_id = excluded.source_id,
+                   -- บางรายวิชาในชุดข้อมูลของสาขายังเป็นตัวยึดตำแหน่ง เช่น 'Course 10301366'
+                   -- ส่วนไฟล์จากระบบทะเบียนมีชื่อจริง ถ้าเขียนทับตรง ๆ ชื่อจริงจะหายไป
+                   -- ทุกครั้งที่นำเข้าใหม่ โดยไม่มีอะไรบอก จึงยอมรับเฉพาะชื่อที่ดีกว่าเดิม
+                   name = CASE
+                            WHEN excluded.name LIKE 'Course %' AND courses.name NOT LIKE 'Course %'
+                            THEN courses.name ELSE excluded.name
+                          END,
                    name_en = excluded.name_en, credits = excluded.credits,
                    credit_format = excluded.credit_format,
                    description = excluded.description""",
@@ -367,6 +406,7 @@ def import_all(conn: sqlite3.Connection, ds: Path) -> dict[str, Any]:
     with db_module.transaction(conn):
         import_department(conn, data)
         import_places(conn, ds)
+        corrections = apply_room_corrections(conn)
         public_staff = import_personnel(conn, ds)
         import_courses(conn, ds)
         news = import_announcements(conn, ds)
@@ -384,6 +424,7 @@ def import_all(conn: sqlite3.Connection, ds: Path) -> dict[str, Any]:
         "announcements": news,
         "documents": docs,
         "doc_chunks": chunks,
+        "corrections": corrections,
         **edu,
     }
 
@@ -408,6 +449,10 @@ def main(argv: list[str] | None = None) -> int:
         if key in stats:
             print(f"  {key:16s} {stats[key]:5d}")
     print(f"  (บุคลากรที่เปิดเผยข้อมูลสาธารณะ {stats['personnel_public']} คน)")
+    if stats.get("corrections"):
+        print("\n  แก้ค่าที่ชุดข้อมูลต้นทางบันทึกผิด")
+        for line in stats["corrections"]:
+            print(f"    {line}")
     return 0
 
 
