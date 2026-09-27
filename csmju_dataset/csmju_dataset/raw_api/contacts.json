@@ -1,0 +1,54 @@
+[
+ {
+  "id": "81674e84-4773-4730-aa95-400d12c9c5fd",
+  "title": "อีเมล",
+  "description": "อีเมลติดต่อสอบถาม",
+  "type": "email",
+  "value": "cs@mju.ac.th",
+  "label": "cs@mju.ac.th",
+  "sortOrder": 1,
+  "isActive": true,
+  "createdAt": "2026-08-18T05:50:45.729Z",
+  "updatedAt": "2026-08-18T05:50:45.729Z",
+  "deletedAt": null
+ },
+ {
+  "id": "0e998ff4-ef08-4d5c-b9a2-96d3c502a8e5",
+  "title": "เบอร์โทรศัพท์",
+  "description": "เบอร์โทรศัพท์สำนักงาน",
+  "type": "phone",
+  "value": "(+66) 053 873890-3",
+  "label": "",
+  "sortOrder": 2,
+  "isActive": true,
+  "createdAt": "2026-08-18T05:50:45.735Z",
+  "updatedAt": "2026-08-18T05:50:45.735Z",
+  "deletedAt": null
+ },
+ {
+  "id": "56abea43-74dd-4095-a739-204172d798b2",
+  "title": "Facebook",
+  "description": "แฟนเพจสาขาวิชาวิทยาการคอมพิวเตอร์",
+  "type": "url",
+  "value": "https://www.facebook.com/computersciencemju",
+  "label": "Computer Science MJU",
+  "sortOrder": 3,
+  "isActive": true,
+  "createdAt": "2026-08-18T05:50:45.741Z",
+  "updatedAt": "2026-08-18T05:50:45.741Z",
+  "deletedAt": null
+ },
+ {
+  "id": "9b3cb5f7-1e15-4a22-9672-9211679f4f43",
+  "title": "Line",
+  "description": "Line Official Account",
+  "type": "url",
+  "value": "https://line.me/R/ti/p/%40053vfccm",
+  "label": "@csmju",
+  "sortOrder": 4,
+  "isActive": true,
+  "createdAt": "2026-08-18T05:50:45.747Z",
+  "updatedAt": "2026-08-18T05:50:45.747Z",
+  "deletedAt": null
+ }
+]

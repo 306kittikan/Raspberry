@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import re
 import sqlite3
 from datetime import datetime, timedelta
 from typing import Any
@@ -472,6 +473,226 @@ def search_personnel_by_topic(
                 "expertise": row["expertise"],
             })
     return matched
+
+
+# คำถามที่ควรเสนอ ตามเหตุการณ์ที่กำลังจะถึงในปฏิทินการศึกษา
+#
+# แต่ละแถวคือ (คำในชื่อเหตุการณ์, คำถามที่ควรเสนอ)
+# จับคู่จากชื่อเหตุการณ์จริงในปฏิทิน ไม่ได้ตั้งวันไว้ตายตัว
+# ปฏิทินเปลี่ยนทุกปี ถ้าฝังวันไว้ในโค้ดก็ต้องตามแก้ทุกปีและจะลืม
+_EVENT_SUGGESTIONS: tuple[tuple[str, str], ...] = (
+    ("สอบปลายภาค", "ตารางสอบปลายภาคสอบวันไหนบ้าง"),
+    ("สอบกลางภาค", "ตารางสอบกลางภาคสอบวันไหนบ้าง"),
+    ("ลงทะเบียนรายวิชา", "ขั้นตอนการลงทะเบียนออนไลน์ทำอย่างไร"),
+    ("เพิ่ม-ถอน", "เพิ่ม–ถอนรายวิชาทำอย่างไร"),
+    ("ถอนรายวิชา", "ขอถอนรายวิชาต้องใช้แบบฟอร์มอะไร"),
+    ("ปิดภาคการศึกษา", "ปฏิทินการศึกษาช่วงนี้มีอะไรบ้าง"),
+    ("เปิดภาคการศึกษา", "ปฏิทินการศึกษาช่วงนี้มีอะไรบ้าง"),
+    ("ประกาศผลการศึกษา", "ประกาศผลการศึกษาวันไหน"),
+    ("สำเร็จการศึกษา", "ขั้นตอนการขอสำเร็จการศึกษาทำอย่างไร"),
+    ("ชำระเงิน", "ชำระค่าธรรมเนียมการศึกษาได้ถึงวันไหน"),
+)
+
+
+def anticipated_questions(
+    conn: sqlite3.Connection, today: str, limit: int = 4
+) -> list[dict[str, Any]]:
+    """คำถามที่นักศึกษาน่าจะถามในช่วงนี้ พร้อมเหตุผลว่าทำไมถึงเสนอ
+
+    ปุ่มคำถามยอดนิยมชุดเดิมตั้งไว้ตายตัว จึงเสนอเรื่องเดิมทั้งปี
+    ทั้งที่สิ่งที่นักศึกษากังวลเปลี่ยนไปตามช่วงของเทอม
+    ก่อนสอบทุกคนถามเรื่องห้องสอบ ต้นเทอมถามเรื่องลงทะเบียน
+
+    ตอนนี้มีปฏิทินการศึกษาจริงในฐานข้อมูลแล้ว จึงดูได้ว่าอะไรกำลังจะถึง
+    และเสนอเรื่องนั้นก่อน พร้อมบอกวันที่ให้เห็นว่าทำไมถึงเสนอ
+    ไม่ใช่เดาจากสถิติการใช้งาน ซึ่งตู้ยังไม่มีข้อมูลมากพอ
+    """
+    rows = conn.execute(
+        """SELECT event, start_date, end_date FROM academic_calendar
+           WHERE start_date IS NOT NULL AND start_date >= ?
+           ORDER BY start_date LIMIT 12""",
+        (today,),
+    ).fetchall()
+
+    today_date = datetime.strptime(today, "%Y-%m-%d").date()
+    out: list[dict[str, Any]] = []
+    seen: set[str] = set()
+
+    for row in rows:
+        for needle, question in _EVENT_SUGGESTIONS:
+            if needle not in row["event"] or question in seen:
+                continue
+            start = datetime.strptime(row["start_date"], "%Y-%m-%d").date()
+            days = (start - today_date).days
+            if days <= 0:
+                when = "วันนี้"
+            elif days == 1:
+                when = "พรุ่งนี้"
+            elif days <= 30:
+                when = f"อีก {days} วัน"
+            else:
+                when = thai.format_date(start)
+            seen.add(question)
+            out.append({
+                "text": question,
+                "because": f"{row['event']} · {when}",
+                "date": row["start_date"],
+            })
+            break
+        if len(out) >= limit:
+            break
+
+    return out
+
+
+def search_exam_schedule(
+    conn: sqlite3.Connection, text: str, limit: int = 6
+) -> list[dict[str, Any]]:
+    """หาตารางสอบจากรหัสวิชาหรือชื่อวิชาที่ถูกเอ่ยถึง
+
+    เป็นประกาศของมหาวิทยาลัย ไม่ผูกกับตัวบุคคล จึงเปิดดูได้โดยไม่ต้องยืนยันตัวตน
+    ต่างจากตารางสอบส่วนตัวที่ต้องรู้ก่อนว่านักศึกษาลงทะเบียนวิชาใดไว้
+    """
+    if not text:
+        return []
+
+    flat = text.replace(" ", "")
+    code = re.search(r"\b(\d{8})\b", flat)
+
+    if code:
+        rows = conn.execute(
+            """SELECT * FROM exam_schedule WHERE course_code = ?
+               ORDER BY exam_date, start_time, seat_from""",
+            (code.group(1),),
+        ).fetchall()
+        if rows:
+            return [dict(r) for r in rows[:limit]]
+
+    # ไม่ได้บอกรหัส ให้เทียบจากชื่อวิชา
+    # เทียบแบบตัดช่องว่างทั้งสองฝั่ง เพราะคนพิมพ์เว้นวรรคไม่เหมือนกัน
+    best: list[dict[str, Any]] = []
+    seen_titles: set[str] = set()
+    for row in conn.execute(
+        "SELECT DISTINCT course_code, course_title FROM exam_schedule"
+    ).fetchall():
+        title = (row["course_title"] or "").replace(" ", "")
+        if len(title) < 6 or title in seen_titles:
+            continue
+        # ชื่อวิชาต้องปรากฏในคำถาม หรือคำถามเป็นส่วนหนึ่งของชื่อวิชา
+        if title in flat or (len(flat) >= 8 and flat in title):
+            seen_titles.add(title)
+            best.append({"course_code": row["course_code"]})
+
+    if not best:
+        return []
+
+    rows = conn.execute(
+        """SELECT * FROM exam_schedule WHERE course_code = ?
+           ORDER BY exam_date, start_time, seat_from""",
+        (best[0]["course_code"],),
+    ).fetchall()
+    return [dict(r) for r in rows[:limit]]
+
+
+def exam_lines(rows: list[dict[str, Any]]) -> list[str]:
+    """แปลงตารางสอบเป็นบรรทัดบนจอ
+
+    ต้องบอกช่วงที่นั่งกำกับห้องเสมอ เพราะหนึ่งวิชาแบ่งหลายห้องตามลำดับที่นั่ง
+    ถ้าบอกแค่ห้องแรก นักศึกษาครึ่งหนึ่งจะเดินไปผิดห้อง
+    """
+    if not rows:
+        return []
+    first = rows[0]
+    date = datetime.strptime(first["exam_date"], "%Y-%m-%d").date()
+    lines = [
+        f"{first['course_code']} {first['course_title'] or ''}".strip(),
+        f"{thai.weekday_name(date)} {thai.format_date(date)} "
+        f"เวลา {first['start_time']}–{first['end_time']} น.",
+    ]
+    for r in rows:
+        seats = ""
+        if r["seat_from"] and r["seat_to"]:
+            seats = f" (ที่นั่ง {r['seat_from']}–{r['seat_to']})"
+        lines.append(f"ห้อง {r['room']}{seats}")
+    return lines
+
+
+def upcoming_calendar(
+    conn: sqlite3.Connection, today: str, limit: int = 5
+) -> list[dict[str, Any]]:
+    """เหตุการณ์ในปฏิทินการศึกษาที่ยังมาไม่ถึง"""
+    rows = conn.execute(
+        """SELECT * FROM academic_calendar
+           WHERE start_date IS NOT NULL AND start_date >= ?
+           ORDER BY start_date LIMIT ?""",
+        (today, limit),
+    ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def calendar_lines(rows: list[dict[str, Any]]) -> list[str]:
+    lines = []
+    for r in rows:
+        date = datetime.strptime(r["start_date"], "%Y-%m-%d").date()
+        label = f"{thai.format_date(date)} · {r['event']}"
+        if r["end_date"] and r["end_date"] != r["start_date"]:
+            end = datetime.strptime(r["end_date"], "%Y-%m-%d").date()
+            label = f"{thai.format_date(date)}–{thai.format_date(end)} · {r['event']}"
+        lines.append(label)
+    return lines
+
+
+# คำที่ปรากฏในชื่อเอกสารแทบทุกฉบับ จึงไม่ช่วยแยกว่าฉบับไหนใช่
+#
+# ถ้าไม่ตัดออกก่อน คำถาม "แบบฟอร์มขอลาออก" จะไปตรงกับทุกฉบับที่มีคำว่าแบบฟอร์ม
+# แล้วคำว่า "ลาออก" ซึ่งเป็นใจความจริงกลับมีน้ำหนักน้อยกว่า
+_FORM_STOPWORDS = (
+    "แบบฟอร์ม", "คำร้อง", "คําร้อง", "เอกสาร", "คู่มือ", "ขั้นตอน", "ใบ",
+    "ขอ", "อยาก", "ต้องใช้", "ทำยังไง", "ทํายังไง", "ยังไง", "อย่างไร",
+    "ที่ไหน", "อะไร", "บ้าง", "หน่อย", "ครับ", "ค่ะ", "การ", "ของ",
+)
+
+
+def _form_keywords(text: str) -> str:
+    """เหลือเฉพาะใจความของคำถาม หลังตัดคำที่ไม่ช่วยแยกเอกสารออก"""
+    flat = text.replace(" ", "")
+    for word in _FORM_STOPWORDS:
+        flat = flat.replace(word, "")
+    return flat
+
+
+def search_forms(conn: sqlite3.Connection, text: str, limit: int = 5) -> list[dict[str, Any]]:
+    """หาแบบฟอร์มหรือเอกสารที่นักศึกษาต้องใช้
+
+    ค้นเฉพาะหมวดที่นักศึกษาเป็นผู้ใช้จริง ในชุดข้อมูลมีเอกสาร 646 ฉบับ
+    แต่ส่วนใหญ่เป็นงานภายในของฝ่ายหลักสูตรและฝ่ายการเงิน
+    ถ้าค้นรวมกันหมด ของที่ใช่จะถูกกลบด้วยเอกสารที่นักศึกษาไม่มีวันได้ใช้
+    """
+    keywords = _form_keywords(text or "")
+    if len(keywords) < 3:
+        return []
+
+    rows = conn.execute(
+        "SELECT title, url, doc_group FROM edu_forms WHERE for_students = 1"
+    ).fetchall()
+
+    scored: list[tuple[int, dict[str, Any]]] = []
+    for r in rows:
+        title = (r["title"] or "").replace(" ", "")
+        if not title:
+            continue
+        # ความยาวของใจความที่ยาวที่สุดในคำถาม ซึ่งปรากฏอยู่ในชื่อเอกสารด้วย
+        hit = max(
+            (n for n in range(3, len(keywords) + 1)
+             for i in range(len(keywords) - n + 1)
+             if keywords[i:i + n] in title),
+            default=0,
+        )
+        if hit >= 4:
+            scored.append((hit, dict(r)))
+
+    scored.sort(key=lambda x: (-x[0], len(x[1]["title"])))
+    return [r for _, r in scored[:limit]]
 
 
 def personnel_lines(person: dict[str, Any]) -> list[str]:

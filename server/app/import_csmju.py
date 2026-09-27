@@ -52,6 +52,25 @@ DOC_LABELS: dict[str, str] = {
     "personnel": "เว็บไซต์สาขาวิชาฯ · ทำเนียบบุคลากร",
     "news": "เว็บไซต์สาขาวิชาฯ · ข่าวและกิจกรรม",
     "project": "เว็บไซต์สาขาวิชาฯ · โครงงานนักศึกษา",
+
+    # ชิ้นที่มาจากสำนักบริหารและพัฒนาวิชาการ ไม่ใช่เว็บไซต์ของสาขา
+    # ป้ายอ้างอิงต้องบอกแหล่งจริง ไม่งั้นนักศึกษาจะตามกลับไปหาต้นทางไม่ถูก
+    "exam_schedule": "สำนักบริหารและพัฒนาวิชาการ · ตารางสอบ",
+    "academic_calendar": "สำนักบริหารและพัฒนาวิชาการ · ปฏิทินการศึกษา",
+    "course_official": "สำนักบริหารและพัฒนาวิชาการ · คำอธิบายรายวิชา",
+    "program_official": "สำนักบริหารและพัฒนาวิชาการ · หลักสูตร",
+    "program_structure_official": "สำนักบริหารและพัฒนาวิชาการ · โครงสร้างหลักสูตร",
+    "study_plan_official": "สำนักบริหารและพัฒนาวิชาการ · แผนการศึกษา",
+    "documents": "สำนักบริหารและพัฒนาวิชาการ · เอกสารและแบบฟอร์ม",
+    "forms": "สำนักบริหารและพัฒนาวิชาการ · เอกสารและแบบฟอร์ม",
+    "statistics": "สำนักบริหารและพัฒนาวิชาการ · สถิตินักศึกษา",
+}
+
+# ชิ้นเอกสารที่มาจากสำนักบริหารฯ ใช้ลิงก์ต้นทางคนละที่กับของสาขา
+EDU_KINDS = {
+    "exam_schedule", "academic_calendar", "course_official", "program_official",
+    "program_structure_official", "study_plan_official", "documents", "forms",
+    "statistics",
 }
 
 
@@ -229,10 +248,12 @@ def import_knowledge(conn: sqlite3.Connection, ds: Path, crawled_at: str | None)
         kind = chunk["type"]
         if kind not in doc_ids:
             label = DOC_LABELS.get(kind, f"เว็บไซต์สาขาวิชาฯ · {kind}")
+            origin = ("https://edu.mju.ac.th" if kind in EDU_KINDS
+                      else "https://gates.csmju.com")
             cur = conn.execute(
                 """INSERT INTO documents (title, citation_label, source_path, effective_date, created_at)
                    VALUES (?, ?, ?, ?, ?)""",
-                (label, label, "https://gates.csmju.com", effective, now),
+                (label, label, origin, effective, now),
             )
             doc_ids[kind] = cur.lastrowid
             counters[kind] = 0
@@ -246,6 +267,93 @@ def import_knowledge(conn: sqlite3.Connection, ds: Path, crawled_at: str | None)
         counters[kind] += 1
 
     return len(doc_ids), len(chunks)
+
+
+# หมวดเอกสารที่นักศึกษาเป็นผู้ใช้จริง
+# ที่เหลือเป็นงานภายในของเจ้าหน้าที่และอาจารย์ ซึ่งถ้าปนเข้ามาจะกลบของที่ใช่
+_STUDENT_SECTIONS = ("แบบฟอร์มสำหรับนักศึกษา",)
+_STUDENT_GROUPS = (
+    "ขั้นตอนการลงทะเบียนออนไลน์",
+    "ปฏิทินการศึกษา",
+    "เอกสารเผยแพร่",
+    "เอกสาร & คู่มือ",
+    "รอบการอนุมัติวันที่สำเร็จการศึกษา",
+    "ข้อบังคับ ระเบียบ ประกาศ (สหกิจศึกษา)",
+)
+
+
+def _for_students(section: str | None, group: str | None) -> int:
+    return int((section or "") in _STUDENT_SECTIONS or (group or "") in _STUDENT_GROUPS)
+
+
+def import_edu_tables(conn: sqlite3.Connection, data: dict[str, Any]) -> dict[str, int]:
+    """นำเข้าข้อมูลจากสำนักบริหารและพัฒนาวิชาการ
+
+    ชุดข้อมูลรุ่นแรกมีแต่ของเว็บไซต์สาขา จึงไม่มีตารางสอบจริงและปฏิทินการศึกษา
+    ซึ่งเป็นสองเรื่องที่นักศึกษาถามบ่อยที่สุดตอนใกล้สอบ
+    ชุดใหม่มีให้แล้ว และเป็นข้อมูลสาธารณะที่ไม่ผูกกับตัวบุคคล
+    จึงตอบได้โดยไม่ต้องยืนยันตัวตน ต่างจากตารางเรียนส่วนตัว
+
+    เก็บเป็นตารางจริงไม่ใช่แค่ชิ้นเอกสารสำหรับ AI เพราะวันสอบและห้องสอบ
+    เป็นข้อเท็จจริงที่ผิดไม่ได้ ต้องอ่านจากฐานข้อมูลตรง ๆ
+    """
+    counts: dict[str, int] = {}
+
+    rows = data.get("edu_exam_schedule_final_1_2569") or []
+    conn.execute("DELETE FROM exam_schedule")
+    for r in rows:
+        times = (r.get("time") or "").split("-")
+        conn.execute(
+            """INSERT INTO exam_schedule
+                   (exam_label, exam_date, start_time, end_time, course_code,
+                    course_title, section, room, seats, seat_from, seat_to, source_url)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""",
+            (r.get("exam"), r.get("date_ce"),
+             times[0].strip() if times else None,
+             times[1].strip() if len(times) > 1 else None,
+             r.get("course_code"), r.get("title_th"), r.get("section"),
+             r.get("room"), r.get("seats"), r.get("seat_seq_from"),
+             r.get("seat_seq_to"), r.get("source_url")),
+        )
+    counts["exam_schedule"] = len(rows)
+
+    rows = data.get("edu_academic_calendar_2569") or []
+    conn.execute("DELETE FROM academic_calendar")
+    for r in rows:
+        conn.execute(
+            """INSERT INTO academic_calendar
+                   (acadyear_be, level, semester, event, start_date, end_date, note, source_url)
+               VALUES (?,?,?,?,?,?,?,?)""",
+            (r.get("acadyear_be"), r.get("level"), r.get("semester"), r.get("event"),
+             r.get("start_date"), r.get("end_date"), r.get("note"), r.get("source_url")),
+        )
+    counts["academic_calendar"] = len(rows)
+
+    rows = data.get("edu_office_contacts") or []
+    conn.execute("DELETE FROM office_contacts")
+    for r in rows:
+        conn.execute(
+            "INSERT INTO office_contacts (department, service, phone) VALUES (?,?,?)",
+            (r.get("department"), r.get("service"), r.get("phone")),
+        )
+    counts["office_contacts"] = len(rows)
+
+    rows = data.get("edu_documents") or []
+    conn.execute("DELETE FROM edu_forms")
+    student_docs = 0
+    for r in rows:
+        mine = _for_students(r.get("section"), r.get("group"))
+        student_docs += mine
+        conn.execute(
+            """INSERT INTO edu_forms (section, doc_group, title, url, file_type, for_students)
+               VALUES (?,?,?,?,?,?)""",
+            (r.get("section"), r.get("group"), r.get("title"),
+             r.get("url"), r.get("file_type"), mine),
+        )
+    counts["edu_forms"] = len(rows)
+    counts["edu_forms_students"] = student_docs
+
+    return counts
 
 
 # ------------------------------------------------------------
@@ -262,6 +370,7 @@ def import_all(conn: sqlite3.Connection, ds: Path) -> dict[str, Any]:
         public_staff = import_personnel(conn, ds)
         import_courses(conn, ds)
         news = import_announcements(conn, ds)
+        edu = import_edu_tables(conn, data)
         docs, chunks = import_knowledge(conn, ds, crawled_at)
 
     return {
@@ -275,6 +384,7 @@ def import_all(conn: sqlite3.Connection, ds: Path) -> dict[str, Any]:
         "announcements": news,
         "documents": docs,
         "doc_chunks": chunks,
+        **edu,
     }
 
 
@@ -293,6 +403,10 @@ def main(argv: list[str] | None = None) -> int:
     for key in ("buildings", "rooms", "personnel", "courses", "contacts",
                 "announcements", "documents", "doc_chunks"):
         print(f"  {key:16s} {stats[key]:5d}")
+    for key in ("exam_schedule", "academic_calendar", "office_contacts",
+                "edu_forms", "edu_forms_students"):
+        if key in stats:
+            print(f"  {key:16s} {stats[key]:5d}")
     print(f"  (บุคลากรที่เปิดเผยข้อมูลสาธารณะ {stats['personnel_public']} คน)")
     return 0
 

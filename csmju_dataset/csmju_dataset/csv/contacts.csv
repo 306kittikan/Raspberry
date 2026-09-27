@@ -1,0 +1,7 @@
+﻿contact_id,type,title,description,value,label,sort_order
+81674e84-4773-4730-aa95-400d12c9c5fd,email,อีเมล,อีเมลติดต่อสอบถาม,cs@mju.ac.th,cs@mju.ac.th,1
+0e998ff4-ef08-4d5c-b9a2-96d3c502a8e5,phone,เบอร์โทรศัพท์,เบอร์โทรศัพท์สำนักงาน,(+66) 053 873890-3,,2
+56abea43-74dd-4095-a739-204172d798b2,url,Facebook,แฟนเพจสาขาวิชาวิทยาการคอมพิวเตอร์,https://www.facebook.com/computersciencemju,Computer Science MJU,3
+9b3cb5f7-1e15-4a22-9672-9211679f4f43,url,Line,Line Official Account,https://line.me/R/ti/p/%40053vfccm,@csmju,4
+footer-address,address,ที่อยู่,ที่อยู่สำนักงานสาขา (จาก footer เว็บไซต์),"ชั้น 6, อาคาร 60 ปี คณะวิทยาศาสตร์ มหาวิทยาลัยแม่โจ้ 63 หมู่ 4 ต.หนองหาร อ.สันทราย จ.เชียงใหม่ 50290",,90
+footer-fax,fax,แฟกซ์,แฟกซ์สำนักงาน (จาก footer เว็บไซต์),053-873898,,91

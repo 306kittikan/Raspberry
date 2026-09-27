@@ -252,6 +252,60 @@ async def resolve(
                 "lines": repo.personnel_lines(person),
             }
 
+    if question_id == "today-datetime":
+        now = thai.now()
+        return {
+            "questionId": "today-datetime",
+            "kind": "วันเวลา",
+            "label": ctx.text,
+            "source": "db",
+            "title": "วันและเวลาขณะนี้",
+            "lines": [
+                f"วัน{thai.weekday_name(now.date())}ที่ {thai.format_date(now.date())}",
+                f"เวลา {now.hour:02d}.{now.minute:02d} น.",
+            ],
+        }
+
+    if question_id == "exam-public":
+        rows = repo.search_exam_schedule(conn, ctx.text)
+        if rows:
+            return {
+                "questionId": "exam-public",
+                "kind": "กำหนดสอบ",
+                "label": ctx.text,
+                "source": "db",
+                "title": rows[0]["exam_label"] or "ตารางสอบ",
+                "lines": repo.exam_lines(rows),
+                "ref": "สำนักบริหารและพัฒนาวิชาการ · ตารางสอบ",
+            }
+
+    if question_id == "academic-calendar":
+        rows = repo.upcoming_calendar(conn, today_iso())
+        if rows:
+            return {
+                "questionId": "academic-calendar",
+                "kind": "ปฏิทินการศึกษา",
+                "label": ctx.text,
+                "source": "db",
+                "title": "ปฏิทินการศึกษาที่กำลังจะถึง",
+                "lines": repo.calendar_lines(rows),
+                "ref": "สำนักบริหารและพัฒนาวิชาการ · ปฏิทินการศึกษา",
+            }
+
+    if question_id == "edu-forms":
+        rows = repo.search_forms(conn, ctx.text)
+        if rows:
+            return {
+                "questionId": "edu-forms",
+                "kind": "เอกสารและแบบฟอร์ม",
+                "label": ctx.text,
+                "source": "db",
+                "title": "เอกสารที่เกี่ยวข้อง",
+                "lines": [r["title"] for r in rows],
+                "links": [{"title": r["title"], "url": r["url"]} for r in rows],
+                "ref": "สำนักบริหารและพัฒนาวิชาการ · เอกสารและแบบฟอร์ม",
+            }
+
     if question_id == "person-topic":
         people = repo.search_personnel_by_topic(conn, ctx.text)
         if people:

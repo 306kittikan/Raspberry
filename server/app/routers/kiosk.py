@@ -58,6 +58,8 @@ def bootstrap(conn: Db) -> dict:
         },
         "announcements": repo.list_announcements(conn, today),
         "quickQuestions": repo.list_quick_questions(conn),
+        # คำถามที่น่าจะถูกถามในช่วงนี้ อิงเหตุการณ์ที่กำลังจะถึงในปฏิทินการศึกษา
+        "anticipated": repo.anticipated_questions(conn, today),
         "timing": {
             "sessionIdleSeconds": config.SESSION_IDLE_SECONDS,
             "sessionGraceSeconds": config.SESSION_GRACE_SECONDS,

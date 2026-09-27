@@ -1,0 +1,26 @@
+﻿source,key,title,url,position,order,is_external
+resource,room_booking_link,ระบบจองห้องสาขา (Room Booking Link),https://maejo.link/csmjuroom,,,
+resource,room_schedule_link,ปฏิทินตารางห้องหลักสูตร (Room Schedule Link),https://erp.mju.ac.th/reserveRoomCalendarPublic.aspx?&DId=6,,,
+resource,line_link,"Do not delete, line page link.",https://line.me/R/ti/p/%40053vfccm,,,
+resource,facebook_link,"Do not delete, facebook page link.",https://www.facebook.com/computersciencemju,,,
+resource,admission_link,Admission link for MJU,https://admission.mju.ac.th,,,
+resource,introduction_video_id,YouTube video ID for introduction video,88JeU0ShY60,,,
+resource,youtube_link,YouTube link for Computer Science MJU channel,https://www.youtube.com/@comscimaejo,,,
+nav_header,,หลักสูตร,/programs,header,1,False
+nav_header,,สมัครเรียน,https://admissions.mju.ac.th,header,2,True
+nav_header,,ข่าวสารและกิจกรรม,/newsroom,header,3,False
+nav_header,,เกี่ยวกับสาขา,#,header,4,False
+nav_header,,ศิษย์เก่า,https://alumni.csmju.com/,header,5,True
+nav_header,,บริการนักศึกษา,/mis,header,6,False
+quick_link,,สมัครเรียน,https://admissions.mju.ac.th,quick_link,1,True
+quick_link,,หลักสูตร,/programs,quick_link,2,False
+quick_link,,ทุนการศึกษา,#,quick_link,3,False
+quick_link,,ปฏิทินกิจกรรม,/newsroom#events-calendar,quick_link,4,False
+footer_or_page,,LINE,https://line.me/,,,True
+footer_or_page,,TikTok,https://www.tiktok.com/@cs_mju,,,True
+footer_or_page,,มหาวิทยาลัยแม่โจ้ (เว็บไซต์หลัก),https://www.mju.ac.th/,,,True
+footer_or_page,,คณะวิทยาศาสตร์ ม.แม่โจ้ (เว็บไซต์หลัก),https://science.mju.ac.th/,,,True
+footer_or_page,,ศูนย์สอบวัดมาตรฐานทางด้านเทคโนโลยีสารสนเทศ,https://www.it-standard.mju.ac.th/,,,True
+footer_or_page,,สำนักงานบริหารและพัฒนาวิชาการ,https://www.education.mju.ac.th/,,,True
+footer_or_page,,ระบบบริการการศึกษา (งานทะเบียน),https://www.reg.mju.ac.th/,,,True
+footer_or_page,,เปิดแผนที่ใน Google Maps,https://maps.app.goo.gl/y2Xn7d3w5zV2bKj59,,,True

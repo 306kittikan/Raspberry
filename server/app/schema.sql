@@ -188,6 +188,78 @@ CREATE TABLE IF NOT EXISTS exams (
 );
 
 -- ------------------------------------------------------------
+-- ตารางสอบจากสำนักบริหารและพัฒนาวิชาการ  (ข้อมูลสาธารณะ ไม่ผูกกับตัวบุคคล)
+--
+-- แยกจากตาราง exams เดิมซึ่งผูกกับรายวิชาที่นักศึกษาลงทะเบียนไว้
+-- ตารางนี้เป็นประกาศของมหาวิทยาลัย ใครก็เปิดดูได้โดยไม่ต้องยืนยันตัวตน
+-- นักศึกษาที่ระบบยังไม่มีข้อมูลการลงทะเบียนจึงยังค้นตารางสอบของตัวเองได้
+--
+-- หนึ่งรายวิชามีได้หลายแถว เพราะแบ่งห้องตามลำดับที่นั่ง
+-- การบอกห้องผิดแปลว่านักศึกษาเดินไปผิดห้องสอบ จึงต้องแสดงช่วงที่นั่งกำกับเสมอ
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS exam_schedule (
+  id             INTEGER PRIMARY KEY AUTOINCREMENT,
+  exam_label     TEXT NOT NULL,              -- 'สอบปลายภาค 1/2569'
+  exam_date      TEXT NOT NULL,              -- ISO date
+  start_time     TEXT,
+  end_time       TEXT,
+  course_code    TEXT NOT NULL,
+  course_title   TEXT,
+  section        INTEGER,
+  room           TEXT,
+  seats          INTEGER,
+  seat_from      INTEGER,
+  seat_to        INTEGER,
+  source_url     TEXT
+);
+CREATE INDEX IF NOT EXISTS ix_exam_schedule_code ON exam_schedule (course_code);
+CREATE INDEX IF NOT EXISTS ix_exam_schedule_date ON exam_schedule (exam_date);
+
+-- ------------------------------------------------------------
+-- ปฏิทินการศึกษา  (ข้อมูลสาธารณะเช่นกัน)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS academic_calendar (
+  id             INTEGER PRIMARY KEY AUTOINCREMENT,
+  acadyear_be    INTEGER,
+  level          TEXT,
+  semester       TEXT,
+  event          TEXT NOT NULL,
+  start_date     TEXT,                       -- ISO date
+  end_date       TEXT,
+  note           TEXT,
+  source_url     TEXT
+);
+CREATE INDEX IF NOT EXISTS ix_calendar_start ON academic_calendar (start_date);
+
+-- ------------------------------------------------------------
+-- เบอร์ติดต่อหน่วยงานของมหาวิทยาลัย
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS office_contacts (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  department  TEXT NOT NULL,
+  service     TEXT,
+  phone       TEXT
+);
+
+-- ------------------------------------------------------------
+-- แบบฟอร์มและเอกสารที่นักศึกษาต้องใช้
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS edu_forms (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  section     TEXT,
+  doc_group   TEXT,
+  title       TEXT NOT NULL,
+  url         TEXT,
+  file_type   TEXT,
+  -- ในชุดข้อมูลมีเอกสาร 646 ฉบับ แต่ส่วนใหญ่เป็นงานภายในของฝ่ายหลักสูตร
+  -- เช่น แบบฟอร์ม มคอ. และเอกสารระบบ CHECO ซึ่งนักศึกษาไม่ได้ใช้เลย
+  -- ถ้าค้นรวมกันหมด คำถามอย่าง "ขอใบรับรองทำยังไง" จะได้เอกสารการเงินของเจ้าหน้าที่
+  -- จึงทำเครื่องหมายไว้ตั้งแต่ตอนนำเข้า ว่าฉบับไหนเป็นของนักศึกษาจริง ๆ
+  for_students INTEGER NOT NULL DEFAULT 0 CHECK (for_students IN (0, 1))
+);
+CREATE INDEX IF NOT EXISTS ix_forms_title ON edu_forms (title);
+
+-- ------------------------------------------------------------
 -- ความยินยอม (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคลฯ มาตรา 26)
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS consents (

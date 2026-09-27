@@ -1,0 +1,209 @@
+[
+ {
+  "id": "37fe2716-5b25-4843-8144-741042b46923",
+  "code": "9",
+  "nameTh": "ห้องบรรยายคอมพิวเตอร์ 8 (Lect 8)",
+  "nameEn": "",
+  "personnel": null,
+  "building": {
+   "id": "fa64c014-2b0a-4527-8394-5e870975b063",
+   "name": "ตึก 60 ปี คณะวิทยาศาสตร์"
+  },
+  "floor": "2",
+  "capacity": 70,
+  "image": {
+   "id": "48e2e0a4-b09a-417f-85cc-1201210f1da2",
+   "url": "https://csmju.com/files/rooms/2026/08/1787122467948-1f60c1f5-2130-4291-ab14-46d3faf22f88.jpg"
+  },
+  "type": {
+   "id": "3711e209-1e68-4de8-8f09-00de403cdf88",
+   "name": "ห้องบรรยาย"
+  },
+  "createdAt": "2026-08-19T06:54:27.668Z",
+  "updatedAt": "2026-08-19T06:54:27.983Z"
+ },
+ {
+  "id": "a46293e9-4660-4170-8fce-bcfc9c4e9258",
+  "code": "8",
+  "nameTh": "ห้องบรรยายคอมพิวเตอร์ 6 (Lect 6)",
+  "nameEn": "",
+  "personnel": null,
+  "building": {
+   "id": "fa64c014-2b0a-4527-8394-5e870975b063",
+   "name": "ตึก 60 ปี คณะวิทยาศาสตร์"
+  },
+  "floor": "2",
+  "capacity": 60,
+  "image": {
+   "id": "bd965ba1-91d9-4820-92e3-981e13fbf396",
+   "url": "https://csmju.com/files/rooms/2026/08/1787122432399-8ee4294a-6f78-491c-b731-98e2dc4d3ce5.jpg"
+  },
+  "type": {
+   "id": "3711e209-1e68-4de8-8f09-00de403cdf88",
+   "name": "ห้องบรรยาย"
+  },
+  "createdAt": "2026-08-19T06:53:52.214Z",
+  "updatedAt": "2026-08-19T06:53:52.405Z"
+ },
+ {
+  "id": "808a0c86-08d4-4125-af7c-2ba985c492bf",
+  "code": "7",
+  "nameTh": "ห้องคอมพิวเตอร์ 3203 จุฬาภรณ์ (Lect 3203)",
+  "nameEn": "",
+  "personnel": null,
+  "building": {
+   "id": "cf9363ef-cd00-458e-b89b-bfedcc0b9acc",
+   "name": "อาคารจุฬาภรณ์ คณะวิทยาศาสตร์"
+  },
+  "floor": "2",
+  "capacity": 120,
+  "image": {
+   "id": "046695dd-01b7-4ff9-8afc-1959470997f0",
+   "url": "https://csmju.com/files/rooms/2026/08/1787122393642-78dfee7b-73a2-48e0-bf50-41f1fb7c94fb.jpg"
+  },
+  "type": {
+   "id": "3711e209-1e68-4de8-8f09-00de403cdf88",
+   "name": "ห้องบรรยาย"
+  },
+  "createdAt": "2026-08-19T06:53:13.365Z",
+  "updatedAt": "2026-08-19T06:53:13.686Z"
+ },
+ {
+  "id": "d53a7015-8fad-4506-becb-b3db24662d62",
+  "code": "6",
+  "nameTh": "ห้องปฏิบัติการคอมพิวเตอร์ 1 (Lab 1)",
+  "nameEn": "",
+  "personnel": null,
+  "building": {
+   "id": "fa64c014-2b0a-4527-8394-5e870975b063",
+   "name": "ตึก 60 ปี คณะวิทยาศาสตร์"
+  },
+  "floor": "6",
+  "capacity": 35,
+  "image": {
+   "id": "9105b3a3-eb0a-44f9-9757-05b4ae837efe",
+   "url": "https://csmju.com/files/rooms/2026/08/1787122286448-71aa7f60-90c9-45f1-9fce-3fcfce6e2dd0.jpg"
+  },
+  "type": {
+   "id": "e406c451-a805-47ae-8c1d-7a94d5ff7b1c",
+   "name": "ห้องปฏิบัติการ"
+  },
+  "createdAt": "2026-08-19T06:51:26.169Z",
+  "updatedAt": "2026-08-19T06:51:26.533Z"
+ },
+ {
+  "id": "820accce-d057-4af4-92aa-5d497823a309",
+  "code": "5",
+  "nameTh": "ห้องปฏิบัติการคอมพิวเตอร์ 2 (Lab 2)",
+  "nameEn": "",
+  "personnel": null,
+  "building": {
+   "id": "fa64c014-2b0a-4527-8394-5e870975b063",
+   "name": "ตึก 60 ปี คณะวิทยาศาสตร์"
+  },
+  "floor": "6",
+  "capacity": 54,
+  "image": {
+   "id": "c43fed3b-8511-4515-9b95-d3cf5ee4930f",
+   "url": "https://csmju.com/files/rooms/2026/08/1787122256232-b98b32b0-6d90-41d3-a068-4c007c8a3fe1.jpg"
+  },
+  "type": {
+   "id": "e406c451-a805-47ae-8c1d-7a94d5ff7b1c",
+   "name": "ห้องปฏิบัติการ"
+  },
+  "createdAt": "2026-08-19T06:50:55.973Z",
+  "updatedAt": "2026-08-19T06:50:56.238Z"
+ },
+ {
+  "id": "dbcd3bbf-0c55-43a5-b9f1-686033ef3b41",
+  "code": "4",
+  "nameTh": "ห้องปฏิบัติการคอมพิวเตอร์ 4 (Lab 4)",
+  "nameEn": "",
+  "personnel": null,
+  "building": {
+   "id": "fa64c014-2b0a-4527-8394-5e870975b063",
+   "name": "ตึก 60 ปี คณะวิทยาศาสตร์"
+  },
+  "floor": "6",
+  "capacity": 60,
+  "image": {
+   "id": "710f6095-fa7c-4da2-bb72-06e0a0862b07",
+   "url": "https://csmju.com/files/rooms/2026/08/1787122221111-7f9bdd0e-508b-47bb-8020-efe5f3603e15.jpg"
+  },
+  "type": {
+   "id": "e406c451-a805-47ae-8c1d-7a94d5ff7b1c",
+   "name": "ห้องปฏิบัติการ"
+  },
+  "createdAt": "2026-08-19T06:50:20.845Z",
+  "updatedAt": "2026-08-19T06:50:21.117Z"
+ },
+ {
+  "id": "4ec33e9b-142a-4c3c-8692-4f73e07cdc69",
+  "code": "3",
+  "nameTh": "ห้องปฏิบัติการคอมพิวเตอร์ 5 (Labcom 5)",
+  "nameEn": "",
+  "personnel": null,
+  "building": {
+   "id": "fa64c014-2b0a-4527-8394-5e870975b063",
+   "name": "ตึก 60 ปี คณะวิทยาศาสตร์"
+  },
+  "floor": "6",
+  "capacity": 50,
+  "image": {
+   "id": "d286bc76-ce7d-496b-a09f-b9d2a5a1a6f7",
+   "url": "https://csmju.com/files/rooms/2026/08/1787122178811-1bf3a27d-a408-48f6-ad0d-1a4c387433a3.png"
+  },
+  "type": {
+   "id": "e406c451-a805-47ae-8c1d-7a94d5ff7b1c",
+   "name": "ห้องปฏิบัติการ"
+  },
+  "createdAt": "2026-08-19T06:49:38.593Z",
+  "updatedAt": "2026-08-19T06:49:38.817Z"
+ },
+ {
+  "id": "dc170f38-635d-4249-af7b-03a3bdace37e",
+  "code": "2",
+  "nameTh": "ปฏิบัติการเครือข่ายคอมพิวเตอร์ (Lab Network)",
+  "nameEn": "",
+  "personnel": null,
+  "building": {
+   "id": "fa64c014-2b0a-4527-8394-5e870975b063",
+   "name": "ตึก 60 ปี คณะวิทยาศาสตร์"
+  },
+  "floor": "6",
+  "capacity": 70,
+  "image": {
+   "id": "c4bea00c-3208-484d-b1b0-3bb64af9ad15",
+   "url": "https://csmju.com/files/rooms/2026/08/1787122044335-751b27c2-b51b-4bd7-a05a-30ad9f95984e.jpg"
+  },
+  "type": {
+   "id": "e406c451-a805-47ae-8c1d-7a94d5ff7b1c",
+   "name": "ห้องปฏิบัติการ"
+  },
+  "createdAt": "2026-08-19T06:47:24.020Z",
+  "updatedAt": "2026-08-19T06:47:27.654Z"
+ },
+ {
+  "id": "21df0f62-8887-49aa-93a9-719873b496ef",
+  "code": "1",
+  "nameTh": "ห้องปฏิบัติการคอมพิวเตอร์ 3 (Lab 3)",
+  "nameEn": "",
+  "personnel": null,
+  "building": {
+   "id": "fa64c014-2b0a-4527-8394-5e870975b063",
+   "name": "ตึก 60 ปี คณะวิทยาศาสตร์"
+  },
+  "floor": "6",
+  "capacity": 60,
+  "image": {
+   "id": "e62e2b4e-48b1-4f21-9daf-c2cd35368403",
+   "url": "https://csmju.com/files/rooms/2026/08/1787122004050-ad5806dc-0e09-47eb-8b20-90100015a1a1.jpg"
+  },
+  "type": {
+   "id": "e406c451-a805-47ae-8c1d-7a94d5ff7b1c",
+   "name": "ห้องปฏิบัติการ"
+  },
+  "createdAt": "2026-08-19T06:46:43.579Z",
+  "updatedAt": "2026-08-19T06:46:44.143Z"
+ }
+]

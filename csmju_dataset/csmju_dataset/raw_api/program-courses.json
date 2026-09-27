@@ -1,0 +1,5031 @@
+[
+ {
+  "id": "db377a6f-3667-4784-8842-537f87bbef3c",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "56fb8ca8-ef2e-4771-8792-a392ba7af7cf",
+   "code": "10301362-68",
+   "titleTh": "หัวข้อพิเศษทางวิทยาการคอมพิวเตอร์ 2",
+   "titleEn": "Special Topics in Computer Science 2",
+   "credits": 3
+  },
+  "group": {
+   "id": "da017de0-1195-4803-b5c4-8e20c40dc836",
+   "name": "กลุ่มวิชาหัวข้อพิเศษ (Special Topics) (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.695Z",
+  "updatedAt": "2026-08-18T06:54:44.695Z"
+ },
+ {
+  "id": "f2879127-fa9a-4a58-971d-9df3c997919b",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "171db115-b376-4861-8bcb-98a3248b30c6",
+   "code": "10301361-68",
+   "titleTh": "หัวข้อพิเศษทางวิทยาการคอมพิวเตอร์ 1",
+   "titleEn": "Special Topics in Computer Science 1",
+   "credits": 3
+  },
+  "group": {
+   "id": "da017de0-1195-4803-b5c4-8e20c40dc836",
+   "name": "กลุ่มวิชาหัวข้อพิเศษ (Special Topics) (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.687Z",
+  "updatedAt": "2026-08-18T06:54:44.687Z"
+ },
+ {
+  "id": "7c893f25-edcc-4ed1-9409-3b213c89e090",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "91ab8851-6386-4f9d-95d7-dc22d7cf3475",
+   "code": "10301357-68",
+   "titleTh": "วิศวกรรมเครือข่ายคอมพิวเตอร์",
+   "titleEn": "Computer Network Engineering",
+   "credits": 3
+  },
+  "group": {
+   "id": "f36d2e13-8641-426f-8f92-cceda5b197e8",
+   "name": "กลุ่มวิชาโครงสร้างพื้นฐานดิจิทัลและเทคโนโลยีล้ำสมัย (Digital Infrastructure & Emerging Technologies)"
+  },
+  "createdAt": "2026-08-18T06:54:44.678Z",
+  "updatedAt": "2026-08-18T06:54:44.678Z"
+ },
+ {
+  "id": "9f1ec82f-aaf1-447e-a4e1-b7e24793085d",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "a0425e83-17d6-41d2-af07-5fdfef14ee78",
+   "code": "10301356-68",
+   "titleTh": "การประมวลผลสัญญาณดิจิทัล",
+   "titleEn": "Digital Signal Processing",
+   "credits": 3
+  },
+  "group": {
+   "id": "f36d2e13-8641-426f-8f92-cceda5b197e8",
+   "name": "กลุ่มวิชาโครงสร้างพื้นฐานดิจิทัลและเทคโนโลยีล้ำสมัย (Digital Infrastructure & Emerging Technologies)"
+  },
+  "createdAt": "2026-08-18T06:54:44.669Z",
+  "updatedAt": "2026-08-18T06:54:44.669Z"
+ },
+ {
+  "id": "2eb7d29d-267f-44e1-9f2b-fb0e357efe9a",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "8f07ddab-b65f-41a5-9774-49bec2b42fe3",
+   "code": "10301355-68",
+   "titleTh": "การประมวลผลเชิงควอนตัม",
+   "titleEn": "Quantum Computing",
+   "credits": 3
+  },
+  "group": {
+   "id": "f36d2e13-8641-426f-8f92-cceda5b197e8",
+   "name": "กลุ่มวิชาโครงสร้างพื้นฐานดิจิทัลและเทคโนโลยีล้ำสมัย (Digital Infrastructure & Emerging Technologies)"
+  },
+  "createdAt": "2026-08-18T06:54:44.661Z",
+  "updatedAt": "2026-08-18T06:54:44.661Z"
+ },
+ {
+  "id": "54126572-4aa7-4cc0-a388-2ce4a4a18e9c",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "a8fd5984-e721-4c86-8225-dfce6c0e64dd",
+   "code": "10301354-68",
+   "titleTh": "ความมั่นคงปลอดภัยไซเบอร์",
+   "titleEn": "Cybersecurity",
+   "credits": 3
+  },
+  "group": {
+   "id": "f36d2e13-8641-426f-8f92-cceda5b197e8",
+   "name": "กลุ่มวิชาโครงสร้างพื้นฐานดิจิทัลและเทคโนโลยีล้ำสมัย (Digital Infrastructure & Emerging Technologies)"
+  },
+  "createdAt": "2026-08-18T06:54:44.653Z",
+  "updatedAt": "2026-08-18T06:54:44.653Z"
+ },
+ {
+  "id": "b3173816-1cb7-427e-8cbc-bd66881d4620",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "d94249f5-c72a-494b-8bdb-e13677210656",
+   "code": "10301353-68",
+   "titleTh": "ตรรกศาสตร์เชิงดิจิทัลและอุปกรณ์อัจฉริยะ",
+   "titleEn": "Digital Logic and Intelligent Devices",
+   "credits": 3
+  },
+  "group": {
+   "id": "f36d2e13-8641-426f-8f92-cceda5b197e8",
+   "name": "กลุ่มวิชาโครงสร้างพื้นฐานดิจิทัลและเทคโนโลยีล้ำสมัย (Digital Infrastructure & Emerging Technologies)"
+  },
+  "createdAt": "2026-08-18T06:54:44.644Z",
+  "updatedAt": "2026-08-18T06:54:44.644Z"
+ },
+ {
+  "id": "e5e7d2d1-fda7-4204-bc90-d7dd9f1770a0",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "5cfad46b-3411-4a20-9b04-7ce00be1e368",
+   "code": "10301352-68",
+   "titleTh": "อินเทอร์เน็ตในทุกสิ่ง",
+   "titleEn": "Internet of Things",
+   "credits": 3
+  },
+  "group": {
+   "id": "f36d2e13-8641-426f-8f92-cceda5b197e8",
+   "name": "กลุ่มวิชาโครงสร้างพื้นฐานดิจิทัลและเทคโนโลยีล้ำสมัย (Digital Infrastructure & Emerging Technologies)"
+  },
+  "createdAt": "2026-08-18T06:54:44.636Z",
+  "updatedAt": "2026-08-18T06:54:44.636Z"
+ },
+ {
+  "id": "ca0dff19-fca5-4438-af3d-f053257ce509",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "5e2ef34c-ca2e-4e7f-8b43-bf7564beaf9a",
+   "code": "10301351-68",
+   "titleTh": "การประมวลผลแบบกลุ่มเมฆ",
+   "titleEn": "Cloud Computing",
+   "credits": 3
+  },
+  "group": {
+   "id": "f36d2e13-8641-426f-8f92-cceda5b197e8",
+   "name": "กลุ่มวิชาโครงสร้างพื้นฐานดิจิทัลและเทคโนโลยีล้ำสมัย (Digital Infrastructure & Emerging Technologies)"
+  },
+  "createdAt": "2026-08-18T06:54:44.627Z",
+  "updatedAt": "2026-08-18T06:54:44.627Z"
+ },
+ {
+  "id": "960c7384-f650-40f1-bc8b-7001d62d7673",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "70003e8a-1c72-4410-b304-43e3c49715d6",
+   "code": "10301349",
+   "titleTh": "ฟินเทคและการวิเคราะห์ข้อมูลขนาดใหญ่",
+   "titleEn": "FinTech and Big Data Analytics",
+   "credits": 3
+  },
+  "group": {
+   "id": "e0d88147-d737-4073-bfdd-2c35438dfecb",
+   "name": "กลุ่มวิชาวิศวกรรมซอฟต์แวร์และนวัตกรรมดิจิทัล (Software Engineering & Digital Innovation)"
+  },
+  "createdAt": "2026-08-18T06:54:44.619Z",
+  "updatedAt": "2026-08-18T06:54:44.619Z"
+ },
+ {
+  "id": "591ad97d-479e-4639-8171-ae1c8da81328",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "b0b27396-9595-44f0-8237-5d244ebbf104",
+   "code": "10301348",
+   "titleTh": "บล็อกเชน และคริปโทเคอร์เรนซี่",
+   "titleEn": "Blockchain and Cryptocurrency",
+   "credits": 3
+  },
+  "group": {
+   "id": "e0d88147-d737-4073-bfdd-2c35438dfecb",
+   "name": "กลุ่มวิชาวิศวกรรมซอฟต์แวร์และนวัตกรรมดิจิทัล (Software Engineering & Digital Innovation)"
+  },
+  "createdAt": "2026-08-18T06:54:44.611Z",
+  "updatedAt": "2026-08-18T06:54:44.611Z"
+ },
+ {
+  "id": "13b52b04-df18-4601-b5d0-18ea0c5eac38",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "aacab904-a074-4509-9896-625a33dd78a8",
+   "code": "10301347-68",
+   "titleTh": "ระบบสารสนเทศเพื่อการจัดการ",
+   "titleEn": "Management Information System",
+   "credits": 3
+  },
+  "group": {
+   "id": "e0d88147-d737-4073-bfdd-2c35438dfecb",
+   "name": "กลุ่มวิชาวิศวกรรมซอฟต์แวร์และนวัตกรรมดิจิทัล (Software Engineering & Digital Innovation)"
+  },
+  "createdAt": "2026-08-18T06:54:44.601Z",
+  "updatedAt": "2026-08-18T06:54:44.601Z"
+ },
+ {
+  "id": "51813dfd-51c8-472f-b349-b539fa705e33",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "a6a62e4e-d4c9-42b9-bb72-77175f3034b2",
+   "code": "10301346-68",
+   "titleTh": "ธุรกิจอัจฉริยะ",
+   "titleEn": "Business Intelligence",
+   "credits": 3
+  },
+  "group": {
+   "id": "e0d88147-d737-4073-bfdd-2c35438dfecb",
+   "name": "กลุ่มวิชาวิศวกรรมซอฟต์แวร์และนวัตกรรมดิจิทัล (Software Engineering & Digital Innovation)"
+  },
+  "createdAt": "2026-08-18T06:54:44.592Z",
+  "updatedAt": "2026-08-18T06:54:44.592Z"
+ },
+ {
+  "id": "5a644d54-f6b5-454a-a1b3-058a9f379dae",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "938c90e2-1adc-40d3-9d0f-be312d997156",
+   "code": "10301345-68",
+   "titleTh": "การพัฒนาซอฟต์แวร์สำหรับการซื้อขายความถี่สูง",
+   "titleEn": "High Frequency Trading Software Development",
+   "credits": 3
+  },
+  "group": {
+   "id": "e0d88147-d737-4073-bfdd-2c35438dfecb",
+   "name": "กลุ่มวิชาวิศวกรรมซอฟต์แวร์และนวัตกรรมดิจิทัล (Software Engineering & Digital Innovation)"
+  },
+  "createdAt": "2026-08-18T06:54:44.584Z",
+  "updatedAt": "2026-08-18T06:54:44.584Z"
+ },
+ {
+  "id": "fdea092a-b027-4e7c-b104-33ffbfb70e25",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "028ec0f8-d436-4338-83ce-7117311e6427",
+   "code": "10301344-68",
+   "titleTh": "การพัฒนาซอฟต์แวร์การซื้อขายอัตโนมัติ",
+   "titleEn": "Automated Trading Software Development",
+   "credits": 3
+  },
+  "group": {
+   "id": "e0d88147-d737-4073-bfdd-2c35438dfecb",
+   "name": "กลุ่มวิชาวิศวกรรมซอฟต์แวร์และนวัตกรรมดิจิทัล (Software Engineering & Digital Innovation)"
+  },
+  "createdAt": "2026-08-18T06:54:44.575Z",
+  "updatedAt": "2026-08-18T06:54:44.575Z"
+ },
+ {
+  "id": "f8c390bf-cdd3-4bc7-b268-7d16bc9825ce",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "a4dced5f-aba4-4c52-b3e9-db09eb30b264",
+   "code": "10301343-68",
+   "titleTh": "การพัฒนามัลติมีเดียและเกม",
+   "titleEn": "Multimedia and Game Development",
+   "credits": 3
+  },
+  "group": {
+   "id": "e0d88147-d737-4073-bfdd-2c35438dfecb",
+   "name": "กลุ่มวิชาวิศวกรรมซอฟต์แวร์และนวัตกรรมดิจิทัล (Software Engineering & Digital Innovation)"
+  },
+  "createdAt": "2026-08-18T06:54:44.566Z",
+  "updatedAt": "2026-08-18T06:54:44.566Z"
+ },
+ {
+  "id": "5b734e39-cddd-4a72-b0f6-6b2c4bdcbd49",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "daed82d0-b3e9-4b2f-b4a6-0c307d824c31",
+   "code": "10301342-68",
+   "titleTh": "การพัฒนาแอปพลิเคชันเชิงสร้างสรรค์ข้ามแพลตฟอร์ม",
+   "titleEn": "Creative Cross-Platform Application Development",
+   "credits": 3
+  },
+  "group": {
+   "id": "e0d88147-d737-4073-bfdd-2c35438dfecb",
+   "name": "กลุ่มวิชาวิศวกรรมซอฟต์แวร์และนวัตกรรมดิจิทัล (Software Engineering & Digital Innovation)"
+  },
+  "createdAt": "2026-08-18T06:54:44.558Z",
+  "updatedAt": "2026-08-18T06:54:44.558Z"
+ },
+ {
+  "id": "8cc57ee0-7abb-4b28-819e-84929d626528",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "bbb439eb-6c5d-47f4-912e-a8bed4a1b293",
+   "code": "10301341-68",
+   "titleTh": "วิศวกรรมซอฟต์แวร์และการเข้าถึง",
+   "titleEn": "Software Engineering and Accessibility",
+   "credits": 3
+  },
+  "group": {
+   "id": "e0d88147-d737-4073-bfdd-2c35438dfecb",
+   "name": "กลุ่มวิชาวิศวกรรมซอฟต์แวร์และนวัตกรรมดิจิทัล (Software Engineering & Digital Innovation)"
+  },
+  "createdAt": "2026-08-18T06:54:44.549Z",
+  "updatedAt": "2026-08-18T06:54:44.549Z"
+ },
+ {
+  "id": "d96e200b-c43d-478b-964b-fd4870197d51",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "6bb3c19c-c398-4c12-9811-559875411ee1",
+   "code": "10301339",
+   "titleTh": "เครื่องมือและการประยุกต์ใช้การเล่าเรื่องข้อมูล",
+   "titleEn": "Tools and Applications for Data Storytelling",
+   "credits": 3
+  },
+  "group": {
+   "id": "772c6971-0bb6-4ec8-857a-be2b32136003",
+   "name": "กลุ่มวิชาปัญญาประดิษฐ์และวิทยาการข้อมูล (Artificial Intelligence & Data Science)"
+  },
+  "createdAt": "2026-08-18T06:54:44.541Z",
+  "updatedAt": "2026-08-18T06:54:44.541Z"
+ },
+ {
+  "id": "4effaf68-f54c-4d48-a6d3-ab0373736336",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "8069c373-a351-4012-a345-a801406145e4",
+   "code": "10301338",
+   "titleTh": "ปัญญาประดิษฐ์เพื่อสุขภาวะที่ยั่งยืน",
+   "titleEn": "Artificial Intelligence for Sustainable Well-being",
+   "credits": 3
+  },
+  "group": {
+   "id": "772c6971-0bb6-4ec8-857a-be2b32136003",
+   "name": "กลุ่มวิชาปัญญาประดิษฐ์และวิทยาการข้อมูล (Artificial Intelligence & Data Science)"
+  },
+  "createdAt": "2026-08-18T06:54:44.531Z",
+  "updatedAt": "2026-08-18T06:54:44.531Z"
+ },
+ {
+  "id": "1d3e3351-dd69-4bec-931c-1f50ece581a7",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "aa432af7-00a5-4e8c-ac7e-205fdb093aa7",
+   "code": "10301337",
+   "titleTh": "ปัญญาประดิษฐ์สร้างสรรค์และการออกแบบคำสั่ง",
+   "titleEn": "Generative Artificial Intelligence and Prompt Engineering",
+   "credits": 3
+  },
+  "group": {
+   "id": "772c6971-0bb6-4ec8-857a-be2b32136003",
+   "name": "กลุ่มวิชาปัญญาประดิษฐ์และวิทยาการข้อมูล (Artificial Intelligence & Data Science)"
+  },
+  "createdAt": "2026-08-18T06:54:44.521Z",
+  "updatedAt": "2026-08-18T06:54:44.521Z"
+ },
+ {
+  "id": "ce059c5a-8db1-4f87-b76c-7a609137b8d4",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "379f3765-284b-45c4-8a1f-bc7785011e70",
+   "code": "10301336-68",
+   "titleTh": "คอมพิวเตอร์วิทัศน์",
+   "titleEn": "Computer Vision",
+   "credits": 3
+  },
+  "group": {
+   "id": "772c6971-0bb6-4ec8-857a-be2b32136003",
+   "name": "กลุ่มวิชาปัญญาประดิษฐ์และวิทยาการข้อมูล (Artificial Intelligence & Data Science)"
+  },
+  "createdAt": "2026-08-18T06:54:44.513Z",
+  "updatedAt": "2026-08-18T06:54:44.513Z"
+ },
+ {
+  "id": "8ed311d9-b03b-4dd7-96b9-16131f0d829d",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "809e8281-d2e3-4d8b-9224-acc4ab49b4f3",
+   "code": "10301335-68",
+   "titleTh": "การเรียนรู้ของเครื่องจักร",
+   "titleEn": "Machine Learning",
+   "credits": 3
+  },
+  "group": {
+   "id": "772c6971-0bb6-4ec8-857a-be2b32136003",
+   "name": "กลุ่มวิชาปัญญาประดิษฐ์และวิทยาการข้อมูล (Artificial Intelligence & Data Science)"
+  },
+  "createdAt": "2026-08-18T06:54:44.503Z",
+  "updatedAt": "2026-08-18T06:54:44.503Z"
+ },
+ {
+  "id": "280a3965-8528-4128-9b3c-dad18329506a",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "c03d9336-e041-49f1-8d11-5e7210b9d72c",
+   "code": "10301334-68",
+   "titleTh": "การแยกแยะและการแบ่งกลุ่มข้อมูล",
+   "titleEn": "Data Classification and Clustering",
+   "credits": 3
+  },
+  "group": {
+   "id": "772c6971-0bb6-4ec8-857a-be2b32136003",
+   "name": "กลุ่มวิชาปัญญาประดิษฐ์และวิทยาการข้อมูล (Artificial Intelligence & Data Science)"
+  },
+  "createdAt": "2026-08-18T06:54:44.495Z",
+  "updatedAt": "2026-08-18T06:54:44.495Z"
+ },
+ {
+  "id": "8a6d80de-23c9-4c00-a542-ab9c1fe83c6f",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "ae6cad6a-f6ed-4fcd-9799-d9a1cdb8665a",
+   "code": "10301333-68",
+   "titleTh": "การประมวลผลภาษาธรรมชาติสมัยใหม่",
+   "titleEn": "Modern Natural Language Processing",
+   "credits": 3
+  },
+  "group": {
+   "id": "772c6971-0bb6-4ec8-857a-be2b32136003",
+   "name": "กลุ่มวิชาปัญญาประดิษฐ์และวิทยาการข้อมูล (Artificial Intelligence & Data Science)"
+  },
+  "createdAt": "2026-08-18T06:54:44.486Z",
+  "updatedAt": "2026-08-18T06:54:44.486Z"
+ },
+ {
+  "id": "8c59358d-3d21-42a0-a8b2-b73c08879bcb",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "0646f786-7714-4b44-9a21-952f15db9596",
+   "code": "10301332-68",
+   "titleTh": "การประมวลผลเชิงภาพ",
+   "titleEn": "Digital Image Processing",
+   "credits": 3
+  },
+  "group": {
+   "id": "772c6971-0bb6-4ec8-857a-be2b32136003",
+   "name": "กลุ่มวิชาปัญญาประดิษฐ์และวิทยาการข้อมูล (Artificial Intelligence & Data Science)"
+  },
+  "createdAt": "2026-08-18T06:54:44.478Z",
+  "updatedAt": "2026-08-18T06:54:44.478Z"
+ },
+ {
+  "id": "a41ef743-8d8d-4d94-895f-2a078bbd9829",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "160a9675-9835-4146-b5fd-a05c96052701",
+   "code": "10301331-68",
+   "titleTh": "พื้นฐานวิทยาการข้อมูล",
+   "titleEn": "Fundamental of Data Science",
+   "credits": 3
+  },
+  "group": {
+   "id": "772c6971-0bb6-4ec8-857a-be2b32136003",
+   "name": "กลุ่มวิชาปัญญาประดิษฐ์และวิทยาการข้อมูล (Artificial Intelligence & Data Science)"
+  },
+  "createdAt": "2026-08-18T06:54:44.469Z",
+  "updatedAt": "2026-08-18T06:54:44.469Z"
+ },
+ {
+  "id": "7c7099f9-fb61-4cf5-9195-f4581b0ab782",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "c57fea4d-5043-45ba-b4cc-a022cc3598d6",
+   "code": "10301499",
+   "titleTh": "การศึกษา หรือ ฝึกงาน หรือ ฝึกอบรมต่างประเทศ",
+   "titleEn": "Overseas Study, Training or Internship",
+   "credits": 6
+  },
+  "group": {
+   "id": "f0dfec0e-af79-4a0c-88fb-5dfb44b18014",
+   "name": "กลุ่มวิชาเฉพาะด้าน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.461Z",
+  "updatedAt": "2026-08-18T06:54:44.461Z"
+ },
+ {
+  "id": "137c3490-8f1c-4124-81b6-ae81144d5bc1",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "268ca592-7cce-4922-98e0-64657855616e",
+   "code": "10301498",
+   "titleTh": "การเรียนรู้อิสระ",
+   "titleEn": "Independent Study",
+   "credits": 6
+  },
+  "group": {
+   "id": "f0dfec0e-af79-4a0c-88fb-5dfb44b18014",
+   "name": "กลุ่มวิชาเฉพาะด้าน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.453Z",
+  "updatedAt": "2026-08-18T06:54:44.453Z"
+ },
+ {
+  "id": "bc2f7503-9f5a-476b-9fe8-adab0bfb3735",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "ec1df78f-1bae-4b3f-8ade-18193863006f",
+   "code": "10301497",
+   "titleTh": "สหกิจศึกษา",
+   "titleEn": "Co-Operative Education",
+   "credits": 6
+  },
+  "group": {
+   "id": "f0dfec0e-af79-4a0c-88fb-5dfb44b18014",
+   "name": "กลุ่มวิชาเฉพาะด้าน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.444Z",
+  "updatedAt": "2026-08-18T06:54:44.444Z"
+ },
+ {
+  "id": "31e2b05f-a55a-40d2-83c3-3725e3b14878",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "a218e1c3-58d3-48e2-ba98-bcabded91625",
+   "code": "10301461",
+   "titleTh": "สัมมนาวิชาการทางวิทยาการคอมพิวเตอร์",
+   "titleEn": "Seminar for Computer Science",
+   "credits": 3
+  },
+  "group": {
+   "id": "f0dfec0e-af79-4a0c-88fb-5dfb44b18014",
+   "name": "กลุ่มวิชาเฉพาะด้าน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.433Z",
+  "updatedAt": "2026-08-18T06:54:44.433Z"
+ },
+ {
+  "id": "ad0ab839-fd8b-4b2e-962b-653cb8427f78",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "56069156-45c0-4d86-a9d1-edfa6dae0e27",
+   "code": "10301330",
+   "titleTh": "วิศวกรรมและธรรมาภิบาลข้อมูล",
+   "titleEn": "Data Engineering and Governance",
+   "credits": 3
+  },
+  "group": {
+   "id": "f0dfec0e-af79-4a0c-88fb-5dfb44b18014",
+   "name": "กลุ่มวิชาเฉพาะด้าน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.425Z",
+  "updatedAt": "2026-08-18T06:54:44.425Z"
+ },
+ {
+  "id": "d785bf51-d658-44a8-b424-b457a546f339",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "f7f80f94-0e79-4ee8-8419-a7354ee84793",
+   "code": "10301311-68",
+   "titleTh": "ทักษะการเขียนโปรแกรมและการแก้ปัญหา",
+   "titleEn": "Programming and Problem-Solving Skills",
+   "credits": 3
+  },
+  "group": {
+   "id": "f0dfec0e-af79-4a0c-88fb-5dfb44b18014",
+   "name": "กลุ่มวิชาเฉพาะด้าน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.416Z",
+  "updatedAt": "2026-08-18T06:54:44.416Z"
+ },
+ {
+  "id": "141af33e-90c2-4889-9f2d-a876709de852",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "240c8b95-932a-4e8f-ab01-9bb23818445c",
+   "code": "10301243",
+   "titleTh": "การพัฒนาและการปฏิบัติการ",
+   "titleEn": "DevOps & CICD",
+   "credits": 3
+  },
+  "group": {
+   "id": "f0dfec0e-af79-4a0c-88fb-5dfb44b18014",
+   "name": "กลุ่มวิชาเฉพาะด้าน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.407Z",
+  "updatedAt": "2026-08-18T06:54:44.407Z"
+ },
+ {
+  "id": "11373605-a69e-4f98-a5d6-e92da8dfb0c1",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "eab08d85-4c29-4e01-9c45-10334bee9b4f",
+   "code": "10301242",
+   "titleTh": "การพัฒนาซอฟต์แวร์บนอุปกรณ์เคลื่อนที่",
+   "titleEn": "Mobile Application Development",
+   "credits": 3
+  },
+  "group": {
+   "id": "f0dfec0e-af79-4a0c-88fb-5dfb44b18014",
+   "name": "กลุ่มวิชาเฉพาะด้าน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.399Z",
+  "updatedAt": "2026-08-18T06:54:44.399Z"
+ },
+ {
+  "id": "b35d22c9-4a79-4754-8bce-cca662ada9fa",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "755650ca-e5ce-48cc-961c-b13aca2f9225",
+   "code": "10301241",
+   "titleTh": "วิศวกรรมระบบฝั่งเซิร์ฟเวอร์",
+   "titleEn": "Server-Side System Engineering",
+   "credits": 3
+  },
+  "group": {
+   "id": "f0dfec0e-af79-4a0c-88fb-5dfb44b18014",
+   "name": "กลุ่มวิชาเฉพาะด้าน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.390Z",
+  "updatedAt": "2026-08-18T06:54:44.390Z"
+ },
+ {
+  "id": "73047ec5-85a3-4f94-944d-16cfcf091e11",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "faff95a9-813d-4c3a-8b71-d48223697834",
+   "code": "10301231-68",
+   "titleTh": "ปัญญาประดิษฐ์",
+   "titleEn": "Artificial Intelligence",
+   "credits": 3
+  },
+  "group": {
+   "id": "f0dfec0e-af79-4a0c-88fb-5dfb44b18014",
+   "name": "กลุ่มวิชาเฉพาะด้าน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.381Z",
+  "updatedAt": "2026-08-18T06:54:44.381Z"
+ },
+ {
+  "id": "f19319ca-1171-462f-b1a9-cf697936b2ca",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "842501f6-8e29-4cc0-8e47-60a8f4b8c6e8",
+   "code": "10301223-68",
+   "titleTh": "การวิเคราะห์และออกแบบเชิงวัตถุ",
+   "titleEn": "Object-Oriented Analysis and Design",
+   "credits": 3
+  },
+  "group": {
+   "id": "f0dfec0e-af79-4a0c-88fb-5dfb44b18014",
+   "name": "กลุ่มวิชาเฉพาะด้าน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.373Z",
+  "updatedAt": "2026-08-18T06:54:44.373Z"
+ },
+ {
+  "id": "e8984c58-5b18-4995-94d0-35ede0df4d80",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "aa612207-c005-487d-a7c6-2c313d859124",
+   "code": "10301222-68",
+   "titleTh": "ระบบฐานข้อมูล",
+   "titleEn": "Database Systems",
+   "credits": 3
+  },
+  "group": {
+   "id": "f0dfec0e-af79-4a0c-88fb-5dfb44b18014",
+   "name": "กลุ่มวิชาเฉพาะด้าน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.364Z",
+  "updatedAt": "2026-08-18T06:54:44.364Z"
+ },
+ {
+  "id": "5a8b5b07-7327-456d-bab6-4b2c9d175934",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "2b86f8eb-a646-41ba-9ce0-f7fcdb8eaacd",
+   "code": "10301221-68",
+   "titleTh": "โครงสร้างข้อมูลและอัลกอริทึม",
+   "titleEn": "Data Structures and Algorithms",
+   "credits": 3
+  },
+  "group": {
+   "id": "f0dfec0e-af79-4a0c-88fb-5dfb44b18014",
+   "name": "กลุ่มวิชาเฉพาะด้าน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.355Z",
+  "updatedAt": "2026-08-18T06:54:44.355Z"
+ },
+ {
+  "id": "493a2099-b9d2-44c7-b564-c39e07ea07da",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "821e691f-c179-4752-8553-55e342c25d74",
+   "code": "10301151",
+   "titleTh": "เครือข่ายคอมพิวเตอร์เบื้องต้น",
+   "titleEn": "Computer Networks",
+   "credits": 3
+  },
+  "group": {
+   "id": "f0dfec0e-af79-4a0c-88fb-5dfb44b18014",
+   "name": "กลุ่มวิชาเฉพาะด้าน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.347Z",
+  "updatedAt": "2026-08-18T06:54:44.347Z"
+ },
+ {
+  "id": "6313ce37-2332-496a-8a63-6efa518c2501",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "010054f1-00f7-4e3d-ae4b-2ee1514b2d20",
+   "code": "10301141-68",
+   "titleTh": "การพัฒนาเว็บแอปพลิเคชัน",
+   "titleEn": "Web Application Development",
+   "credits": 3
+  },
+  "group": {
+   "id": "f0dfec0e-af79-4a0c-88fb-5dfb44b18014",
+   "name": "กลุ่มวิชาเฉพาะด้าน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.339Z",
+  "updatedAt": "2026-08-18T06:54:44.339Z"
+ },
+ {
+  "id": "780ebd21-15c1-4e65-94c8-198038d8d03d",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "357abc19-ecc6-44c0-a45f-631c0ecae467",
+   "code": "10301114-68",
+   "titleTh": "องค์ประกอบและสถาปัตยกรรมคอมพิวเตอร์",
+   "titleEn": "Computer Organization and Architecture",
+   "credits": 3
+  },
+  "group": {
+   "id": "f0dfec0e-af79-4a0c-88fb-5dfb44b18014",
+   "name": "กลุ่มวิชาเฉพาะด้าน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.329Z",
+  "updatedAt": "2026-08-18T06:54:44.329Z"
+ },
+ {
+  "id": "4932fe0d-efd1-4fdb-86c0-cb98473dd766",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "c4169c3a-41d7-4931-bea3-0ecb78d436a6",
+   "code": "10355205",
+   "titleTh": "ความน่าจะเป็นและสถิติ",
+   "titleEn": "Probability and Statistics",
+   "credits": 3
+  },
+  "group": {
+   "id": "aebf1e80-8de3-4fe3-a6e7-b5a13e631655",
+   "name": "กลุ่มวิชาแกน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.321Z",
+  "updatedAt": "2026-08-18T06:54:44.321Z"
+ },
+ {
+  "id": "bed3ca00-ca81-4774-8a0f-b007b82b8ca2",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "0b155c98-1eca-4bc6-922d-5ea96fd45450",
+   "code": "10301211-68",
+   "titleTh": "หลักการเขียนโปรแกรมเชิงวัตถุ",
+   "titleEn": "Principles of Object-Oriented Programming",
+   "credits": 3
+  },
+  "group": {
+   "id": "aebf1e80-8de3-4fe3-a6e7-b5a13e631655",
+   "name": "กลุ่มวิชาแกน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.313Z",
+  "updatedAt": "2026-08-18T06:54:44.313Z"
+ },
+ {
+  "id": "ab9a4c5a-d976-4b80-866b-a99795c35548",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "c993387e-93dc-4c27-8d9a-e685b0f936cd",
+   "code": "10301115",
+   "titleTh": "คณิตศาสตร์สำหรับวิทยาการคอมพิวเตอร์",
+   "titleEn": "Mathematics for Computer Science",
+   "credits": 3
+  },
+  "group": {
+   "id": "aebf1e80-8de3-4fe3-a6e7-b5a13e631655",
+   "name": "กลุ่มวิชาแกน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.304Z",
+  "updatedAt": "2026-08-18T06:54:44.304Z"
+ },
+ {
+  "id": "9e62eebd-dfc0-4121-a45e-659da440384e",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "ce630069-89ef-40b5-959d-e9f7274b92a6",
+   "code": "10301113-68",
+   "titleTh": "คณิตศาสตร์ดีสครีต",
+   "titleEn": "Discrete Mathematics",
+   "credits": 3
+  },
+  "group": {
+   "id": "aebf1e80-8de3-4fe3-a6e7-b5a13e631655",
+   "name": "กลุ่มวิชาแกน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.296Z",
+  "updatedAt": "2026-08-18T06:54:44.296Z"
+ },
+ {
+  "id": "3659692b-b073-4102-94ae-ff3b0025d1ad",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "c98c7bc9-f241-48b3-bc30-3e511da35e72",
+   "code": "10301112-68",
+   "titleTh": "เทคโนโลยีสารสนเทศและการสื่อสาร",
+   "titleEn": "Information and Communication Technology (ICT)",
+   "credits": 3
+  },
+  "group": {
+   "id": "aebf1e80-8de3-4fe3-a6e7-b5a13e631655",
+   "name": "กลุ่มวิชาแกน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.288Z",
+  "updatedAt": "2026-08-18T06:54:44.288Z"
+ },
+ {
+  "id": "e4fbf351-cd3f-40c5-a3f3-c4f5d7ed32a7",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "e0419de1-8793-4e93-9772-5ab5b9b8b073",
+   "code": "10301111-68",
+   "titleTh": "พื้นฐานการเขียนโปรแกรม",
+   "titleEn": "Fundamentals of Programming",
+   "credits": 3
+  },
+  "group": {
+   "id": "aebf1e80-8de3-4fe3-a6e7-b5a13e631655",
+   "name": "กลุ่มวิชาแกน (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:44.279Z",
+  "updatedAt": "2026-08-18T06:54:44.279Z"
+ },
+ {
+  "id": "020b337a-856c-4de2-b36f-704f4f5c22c8",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "3c504c45-6a3c-4f42-8d6e-688118ebfc6b",
+   "code": "10800501",
+   "titleTh": "สื่อสร้างสรรค์เพื่อการเกษตร",
+   "titleEn": "Creative Media for Agriculture",
+   "credits": 3
+  },
+  "group": {
+   "id": "7b8d586f-72ba-4e97-ba41-891f0b2d8863",
+   "name": "สมรรถนะด้านการทำงานและการเรียนรู้ตลอดชีวิต"
+  },
+  "createdAt": "2026-08-18T06:54:44.271Z",
+  "updatedAt": "2026-08-18T06:54:44.271Z"
+ },
+ {
+  "id": "3126eafd-0bf8-4c6a-9df3-4380e8be273b",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "61407869-1142-4f82-bfac-4569fa4ee848",
+   "code": "10700504",
+   "titleTh": "สุขภาวะองค์รวม 360 องศา",
+   "titleEn": "360° Wellness",
+   "credits": 3
+  },
+  "group": {
+   "id": "7b8d586f-72ba-4e97-ba41-891f0b2d8863",
+   "name": "สมรรถนะด้านการทำงานและการเรียนรู้ตลอดชีวิต"
+  },
+  "createdAt": "2026-08-18T06:54:44.262Z",
+  "updatedAt": "2026-08-18T06:54:44.262Z"
+ },
+ {
+  "id": "56294478-92fb-4364-af58-3be250bd9bd0",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "be4b2258-83f1-4b83-8c24-35b90f24cb2e",
+   "code": "10700503",
+   "titleTh": "จิตวิทยาสำหรับผู้เรียนรู้ตลอดชีวิต",
+   "titleEn": "Psychology for Lifelong Learner",
+   "credits": 3
+  },
+  "group": {
+   "id": "7b8d586f-72ba-4e97-ba41-891f0b2d8863",
+   "name": "สมรรถนะด้านการทำงานและการเรียนรู้ตลอดชีวิต"
+  },
+  "createdAt": "2026-08-18T06:54:44.254Z",
+  "updatedAt": "2026-08-18T06:54:44.254Z"
+ },
+ {
+  "id": "761f5e04-526d-4547-915b-9fd78ac2b29a",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "447ff24d-146f-4f10-92c1-7e7734eee59c",
+   "code": "10700502",
+   "titleTh": "ความฉลาดรู้ดิจิทัลเพื่อการพัฒนาตน",
+   "titleEn": "Digital Intelligent for Self-Development",
+   "credits": 3
+  },
+  "group": {
+   "id": "7b8d586f-72ba-4e97-ba41-891f0b2d8863",
+   "name": "สมรรถนะด้านการทำงานและการเรียนรู้ตลอดชีวิต"
+  },
+  "createdAt": "2026-08-18T06:54:44.246Z",
+  "updatedAt": "2026-08-18T06:54:44.246Z"
+ },
+ {
+  "id": "36be9f85-8be4-4aa4-a0e8-295f8a02106d",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "6a53c927-091c-4472-b580-c0c637490b81",
+   "code": "10700501",
+   "titleTh": "การรู้สารสนเทศและการใช้สื่อดิจิทัลเพื่อการเรียนรู้และการดำรงชีวิต",
+   "titleEn": "Information Literacy and Digital Media for Lifelong Learning",
+   "credits": 3
+  },
+  "group": {
+   "id": "7b8d586f-72ba-4e97-ba41-891f0b2d8863",
+   "name": "สมรรถนะด้านการทำงานและการเรียนรู้ตลอดชีวิต"
+  },
+  "createdAt": "2026-08-18T06:54:44.237Z",
+  "updatedAt": "2026-08-18T06:54:44.237Z"
+ },
+ {
+  "id": "bbdeee75-983f-40b0-8249-f5587c79c939",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "9a89bf4c-fc19-475b-be1b-c941de265529",
+   "code": "10400501",
+   "titleTh": "นานาสาระเกี่ยวกับอาหารและยา",
+   "titleEn": "General Aspects of Food and Drug",
+   "credits": 3
+  },
+  "group": {
+   "id": "7b8d586f-72ba-4e97-ba41-891f0b2d8863",
+   "name": "สมรรถนะด้านการทำงานและการเรียนรู้ตลอดชีวิต"
+  },
+  "createdAt": "2026-08-18T06:54:44.229Z",
+  "updatedAt": "2026-08-18T06:54:44.229Z"
+ },
+ {
+  "id": "e8436340-9983-45a7-958b-1d3d7ed6227c",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "ec36655e-7521-47b3-b76a-6601bd292ecd",
+   "code": "10300505",
+   "titleTh": "วิทยาศาสตร์ฉลาดรู้ในยุคดิจิทัลเพื่อพัฒนาที่ยั่งยืน",
+   "titleEn": "Scientific Literacy in the Digital Era for Sustainable Development",
+   "credits": 3
+  },
+  "group": {
+   "id": "7b8d586f-72ba-4e97-ba41-891f0b2d8863",
+   "name": "สมรรถนะด้านการทำงานและการเรียนรู้ตลอดชีวิต"
+  },
+  "createdAt": "2026-08-18T06:54:44.220Z",
+  "updatedAt": "2026-08-18T06:54:44.220Z"
+ },
+ {
+  "id": "4159b389-4842-4d99-a2dd-2f1193017000",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "603a8bd8-a3d2-40df-9933-acb50af9176c",
+   "code": "10300504",
+   "titleTh": "รู้เท่าทันวิทยาศาสตร์และเทคโนโลยี: กุญแจสู่ชีวิตอนาคต",
+   "titleEn": "Science & Technology Literacy: Key to the Future",
+   "credits": 3
+  },
+  "group": {
+   "id": "7b8d586f-72ba-4e97-ba41-891f0b2d8863",
+   "name": "สมรรถนะด้านการทำงานและการเรียนรู้ตลอดชีวิต"
+  },
+  "createdAt": "2026-08-18T06:54:44.212Z",
+  "updatedAt": "2026-08-18T06:54:44.212Z"
+ },
+ {
+  "id": "f1195d74-f8cd-478b-916d-91fc049d42ed",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "73f1d573-1858-4408-9aa8-b2b52c81a36b",
+   "code": "10300503",
+   "titleTh": "โปรแกรมสำเร็จรูปเพื่อการศึกษาเพื่อการเรียนรู้ตลอดชีวิต",
+   "titleEn": "Application Software for Education and Lifelong Learning",
+   "credits": 3
+  },
+  "group": {
+   "id": "7b8d586f-72ba-4e97-ba41-891f0b2d8863",
+   "name": "สมรรถนะด้านการทำงานและการเรียนรู้ตลอดชีวิต"
+  },
+  "createdAt": "2026-08-18T06:54:44.203Z",
+  "updatedAt": "2026-08-18T06:54:44.203Z"
+ },
+ {
+  "id": "22c9aeca-70db-4aff-95fb-2603bd2abb17",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "a8acf341-64f4-4b39-a48a-4947ec645bb8",
+   "code": "10300502",
+   "titleTh": "การสื่อสารข้อมูลเชิงเรื่องราวเพื่อการทำงานยุคใหม่",
+   "titleEn": "Data Storytelling for the Modern Workplace",
+   "credits": 3
+  },
+  "group": {
+   "id": "7b8d586f-72ba-4e97-ba41-891f0b2d8863",
+   "name": "สมรรถนะด้านการทำงานและการเรียนรู้ตลอดชีวิต"
+  },
+  "createdAt": "2026-08-18T06:54:44.195Z",
+  "updatedAt": "2026-08-18T06:54:44.195Z"
+ },
+ {
+  "id": "5ec1afeb-4d83-42d7-bcea-41d1702592b8",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "7a56793a-fe3a-4197-a21c-6d68a38bbb4f",
+   "code": "10100501",
+   "titleTh": "เกษตรเพื่อชีวิต",
+   "titleEn": "Agriculture for Life",
+   "credits": 3
+  },
+  "group": {
+   "id": "7b8d586f-72ba-4e97-ba41-891f0b2d8863",
+   "name": "สมรรถนะด้านการทำงานและการเรียนรู้ตลอดชีวิต"
+  },
+  "createdAt": "2026-08-18T06:54:44.187Z",
+  "updatedAt": "2026-08-18T06:54:44.187Z"
+ },
+ {
+  "id": "c3618896-0f82-4420-82be-6dddb2846a59",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "ceeb61c4-4dbc-404e-aef7-b03967366b79",
+   "code": "10800401",
+   "titleTh": "การออกแบบแนวคิดและการสร้างแบรนด์",
+   "titleEn": "Conceptualization and Brand Development",
+   "credits": 3
+  },
+  "group": {
+   "id": "aaedf470-f568-439f-86ee-db00265658cd",
+   "name": "สมรรถนะด้านการเป็นผู้ประกอบการ"
+  },
+  "createdAt": "2026-08-18T06:54:44.178Z",
+  "updatedAt": "2026-08-18T06:54:44.178Z"
+ },
+ {
+  "id": "9cf01563-7d8d-44a8-95da-65045b599680",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "f00a2a39-862a-4e8b-89e6-b40a974961a4",
+   "code": "10500401",
+   "titleTh": "เศรษฐศาสตร์เพื่อชีวิตประจำวันและการประกอบการ",
+   "titleEn": "Economics in Daily Life and Operations",
+   "credits": 3
+  },
+  "group": {
+   "id": "aaedf470-f568-439f-86ee-db00265658cd",
+   "name": "สมรรถนะด้านการเป็นผู้ประกอบการ"
+  },
+  "createdAt": "2026-08-18T06:54:44.170Z",
+  "updatedAt": "2026-08-18T06:54:44.170Z"
+ },
+ {
+  "id": "64dbcb8b-521e-40d3-85b5-cffa824eea9a",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "ff698da3-f993-4d0d-be1e-7c16be0f0110",
+   "code": "10400402",
+   "titleTh": "ผู้ประกอบการนวัตกรรมทางการเกษตร",
+   "titleEn": "Agripreneur",
+   "credits": 3
+  },
+  "group": {
+   "id": "aaedf470-f568-439f-86ee-db00265658cd",
+   "name": "สมรรถนะด้านการเป็นผู้ประกอบการ"
+  },
+  "createdAt": "2026-08-18T06:54:44.162Z",
+  "updatedAt": "2026-08-18T06:54:44.162Z"
+ },
+ {
+  "id": "d090cb5e-2b8c-4fcd-a684-fd81f0f8d0e2",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "085d9c99-dec6-4b8b-965a-32a5100b4613",
+   "code": "10400401",
+   "titleTh": "การออกแบบชีวิตและนวัตกรรมสำหรับผู้ประกอบการ",
+   "titleEn": "Life and Innovation Design for Entrepreneurs",
+   "credits": 3
+  },
+  "group": {
+   "id": "aaedf470-f568-439f-86ee-db00265658cd",
+   "name": "สมรรถนะด้านการเป็นผู้ประกอบการ"
+  },
+  "createdAt": "2026-08-18T06:54:44.153Z",
+  "updatedAt": "2026-08-18T06:54:44.153Z"
+ },
+ {
+  "id": "4a89b6de-4f9e-4c7e-aeab-cd01f89b5eed",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "e9923962-5e9d-4d33-a0cd-0d330a30d5a6",
+   "code": "10300403",
+   "titleTh": "วิทยาศาสตร์ในครัวเรือนสู่ไอเดียธุรกิจ",
+   "titleEn": "Home-based Science to Business Ideas",
+   "credits": 3
+  },
+  "group": {
+   "id": "aaedf470-f568-439f-86ee-db00265658cd",
+   "name": "สมรรถนะด้านการเป็นผู้ประกอบการ"
+  },
+  "createdAt": "2026-08-18T06:54:44.145Z",
+  "updatedAt": "2026-08-18T06:54:44.145Z"
+ },
+ {
+  "id": "59cea85c-8c87-467c-a1ea-3bd7c67876ff",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "2b139af1-dfe3-44dd-86e7-45d7abcf1546",
+   "code": "10300402",
+   "titleTh": "เทคนิคการคิดเพื่อการสร้างสรรค์นวัตกรรมสำหรับผู้ประกอบการ",
+   "titleEn": "Innovative Thinking Techniques for Entrepreneurs",
+   "credits": 3
+  },
+  "group": {
+   "id": "aaedf470-f568-439f-86ee-db00265658cd",
+   "name": "สมรรถนะด้านการเป็นผู้ประกอบการ"
+  },
+  "createdAt": "2026-08-18T06:54:44.137Z",
+  "updatedAt": "2026-08-18T06:54:44.137Z"
+ },
+ {
+  "id": "f0d14c6b-8bce-49cb-8053-02572ed0c83c",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "ad71ba3f-28d9-4af0-ba3b-d876ad0cdc2e",
+   "code": "10300401",
+   "titleTh": "การวางแผนธุรกิจและปัญญาประดิษฐ์สำหรับผู้ประกอบการยุคดิจิทัล",
+   "titleEn": "Business Planning and Artificial Intelligence for Digital Entrepreneurs",
+   "credits": 3
+  },
+  "group": {
+   "id": "aaedf470-f568-439f-86ee-db00265658cd",
+   "name": "สมรรถนะด้านการเป็นผู้ประกอบการ"
+  },
+  "createdAt": "2026-08-18T06:54:44.129Z",
+  "updatedAt": "2026-08-18T06:54:44.129Z"
+ },
+ {
+  "id": "d290eb05-90e7-4883-b96a-3b63440ad952",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "75ee9222-811c-48f8-a635-23acfcdc45c1",
+   "code": "10200405",
+   "titleTh": "เทคโนโลยีดิจิทัลสำหรับผู้ประกอบการ",
+   "titleEn": "Digital Technology for Entrepreneurs",
+   "credits": 3
+  },
+  "group": {
+   "id": "aaedf470-f568-439f-86ee-db00265658cd",
+   "name": "สมรรถนะด้านการเป็นผู้ประกอบการ"
+  },
+  "createdAt": "2026-08-18T06:54:44.120Z",
+  "updatedAt": "2026-08-18T06:54:44.120Z"
+ },
+ {
+  "id": "c781a40c-c707-47e1-b1e5-16cbf277daf4",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "b7ff2f79-828d-4a9d-807e-1ce55c07d05b",
+   "code": "10200404",
+   "titleTh": "สมาร์ทไฟแนนซ์",
+   "titleEn": "Smart Finance",
+   "credits": 3
+  },
+  "group": {
+   "id": "aaedf470-f568-439f-86ee-db00265658cd",
+   "name": "สมรรถนะด้านการเป็นผู้ประกอบการ"
+  },
+  "createdAt": "2026-08-18T06:54:44.111Z",
+  "updatedAt": "2026-08-18T06:54:44.111Z"
+ },
+ {
+  "id": "99281421-1c8f-450d-bf21-da4c82468605",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "dfb88474-bd90-4851-99b7-ee664e23594e",
+   "code": "10200403",
+   "titleTh": "ภาษีอากรสำหรับผู้ประกอบการ",
+   "titleEn": "Taxation for Entrepreneurship",
+   "credits": 3
+  },
+  "group": {
+   "id": "aaedf470-f568-439f-86ee-db00265658cd",
+   "name": "สมรรถนะด้านการเป็นผู้ประกอบการ"
+  },
+  "createdAt": "2026-08-18T06:54:44.103Z",
+  "updatedAt": "2026-08-18T06:54:44.103Z"
+ },
+ {
+  "id": "c1e4d666-c001-474e-9b58-a8b6122aa6f4",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "123640f6-93a9-43d6-bcbf-5615f0d0cd5d",
+   "code": "10200402",
+   "titleTh": "การเป็นผู้ประกอบการ",
+   "titleEn": "Entrepreneurship",
+   "credits": 3
+  },
+  "group": {
+   "id": "aaedf470-f568-439f-86ee-db00265658cd",
+   "name": "สมรรถนะด้านการเป็นผู้ประกอบการ"
+  },
+  "createdAt": "2026-08-18T06:54:44.095Z",
+  "updatedAt": "2026-08-18T06:54:44.095Z"
+ },
+ {
+  "id": "db112fcf-402f-44be-9e64-a37b8fe7dfef",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "23cd4fb9-9e14-41eb-a372-7c7a78b68c18",
+   "code": "10200401",
+   "titleTh": "การตลาดบนสมาร์ทโฟน",
+   "titleEn": "Marketing on Smartphone",
+   "credits": 3
+  },
+  "group": {
+   "id": "aaedf470-f568-439f-86ee-db00265658cd",
+   "name": "สมรรถนะด้านการเป็นผู้ประกอบการ"
+  },
+  "createdAt": "2026-08-18T06:54:44.086Z",
+  "updatedAt": "2026-08-18T06:54:44.086Z"
+ },
+ {
+  "id": "56746b9c-1cb6-4155-9cdf-db5736a59da3",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "d629db88-c388-4b51-9124-f153cff3eed9",
+   "code": "10100401",
+   "titleTh": "ผู้ประกอบการนวัตกรรมด้านการผลิตพืช",
+   "titleEn": "Entrepreneurship and Innovation in Plant Production",
+   "credits": 3
+  },
+  "group": {
+   "id": "aaedf470-f568-439f-86ee-db00265658cd",
+   "name": "สมรรถนะด้านการเป็นผู้ประกอบการ"
+  },
+  "createdAt": "2026-08-18T06:54:44.077Z",
+  "updatedAt": "2026-08-18T06:54:44.077Z"
+ },
+ {
+  "id": "84b7d1c5-8102-4e96-8fd2-ecf870cecc52",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "8a413209-15e3-4bca-9859-9d18ea2f6be9",
+   "code": "10800302",
+   "titleTh": "เทคโนโลยีดิจิทัลแห่งอนาคต",
+   "titleEn": "Future Digital Technologies",
+   "credits": 3
+  },
+  "group": {
+   "id": "85ce8166-5765-42c0-8695-d9398328bd78",
+   "name": "สมรรถนะด้านการคิดคำนวณ การใช้เหตุผล และการใช้เทคโนโลยี"
+  },
+  "createdAt": "2026-08-18T06:54:44.069Z",
+  "updatedAt": "2026-08-18T06:54:44.069Z"
+ },
+ {
+  "id": "340499e8-37dc-4fc9-9a9c-146cf3d77bfc",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "d278143b-8e8e-4a48-b67c-f6d40a03ac48",
+   "code": "10800301",
+   "titleTh": "จักรวาล AI",
+   "titleEn": "AI Universe",
+   "credits": 3
+  },
+  "group": {
+   "id": "85ce8166-5765-42c0-8695-d9398328bd78",
+   "name": "สมรรถนะด้านการคิดคำนวณ การใช้เหตุผล และการใช้เทคโนโลยี"
+  },
+  "createdAt": "2026-08-18T06:54:44.061Z",
+  "updatedAt": "2026-08-18T06:54:44.061Z"
+ },
+ {
+  "id": "b561a033-a69d-4bf3-99f5-5839c118a0d8",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "9e19e147-1476-4252-8b8c-b2f82445877a",
+   "code": "10400303",
+   "titleTh": "อาหารและเทคโนโลยี",
+   "titleEn": "Food and Technology",
+   "credits": 3
+  },
+  "group": {
+   "id": "85ce8166-5765-42c0-8695-d9398328bd78",
+   "name": "สมรรถนะด้านการคิดคำนวณ การใช้เหตุผล และการใช้เทคโนโลยี"
+  },
+  "createdAt": "2026-08-18T06:54:44.052Z",
+  "updatedAt": "2026-08-18T06:54:44.052Z"
+ },
+ {
+  "id": "df7b1cd0-38a2-4864-a588-1ca058828405",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "e9abd705-58ee-4352-9df0-afc976fd1a23",
+   "code": "10400301",
+   "titleTh": "ทักษะดิจิทัลในศตวรรษที่ 21",
+   "titleEn": "Digital Skills in 21st Century",
+   "credits": 3
+  },
+  "group": {
+   "id": "85ce8166-5765-42c0-8695-d9398328bd78",
+   "name": "สมรรถนะด้านการคิดคำนวณ การใช้เหตุผล และการใช้เทคโนโลยี"
+  },
+  "createdAt": "2026-08-18T06:54:44.044Z",
+  "updatedAt": "2026-08-18T06:54:44.044Z"
+ },
+ {
+  "id": "0bf24b68-3cd5-4aab-b6f9-ba1ed7bc707e",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "065d2231-6aab-4b9a-9a5c-4c83c122dad6",
+   "code": "10300305",
+   "titleTh": "วิทยาศาสตร์และเทคโนโลยีลวง",
+   "titleEn": "Misleading Science and Technology",
+   "credits": 3
+  },
+  "group": {
+   "id": "85ce8166-5765-42c0-8695-d9398328bd78",
+   "name": "สมรรถนะด้านการคิดคำนวณ การใช้เหตุผล และการใช้เทคโนโลยี"
+  },
+  "createdAt": "2026-08-18T06:54:44.036Z",
+  "updatedAt": "2026-08-18T06:54:44.036Z"
+ },
+ {
+  "id": "9d938ab5-8a2e-435a-9a6d-8d44b5f80106",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "2f14e40a-be23-453b-86f6-28c8937e0e09",
+   "code": "10300304",
+   "titleTh": "ถอดรหัสวิทยาศาสตร์เพื่อชีวิตยุคใหม่",
+   "titleEn": "Decoding Science for Modern Life",
+   "credits": 3
+  },
+  "group": {
+   "id": "85ce8166-5765-42c0-8695-d9398328bd78",
+   "name": "สมรรถนะด้านการคิดคำนวณ การใช้เหตุผล และการใช้เทคโนโลยี"
+  },
+  "createdAt": "2026-08-18T06:54:44.027Z",
+  "updatedAt": "2026-08-18T06:54:44.027Z"
+ },
+ {
+  "id": "b3cb4189-87e0-4140-b0a3-28ab849afd0f",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "8d16468c-6234-42d8-97cf-1310aa8ea6f3",
+   "code": "10300303",
+   "titleTh": "ตรรกะดิจิทัลเพื่อการตัดสินใจ",
+   "titleEn": "Digital Logic Approach for Decision Making",
+   "credits": 3
+  },
+  "group": {
+   "id": "85ce8166-5765-42c0-8695-d9398328bd78",
+   "name": "สมรรถนะด้านการคิดคำนวณ การใช้เหตุผล และการใช้เทคโนโลยี"
+  },
+  "createdAt": "2026-08-18T06:54:44.019Z",
+  "updatedAt": "2026-08-18T06:54:44.019Z"
+ },
+ {
+  "id": "f50ae1dc-fef8-49dd-a80d-35449d775d36",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "34ea8bcd-31ad-4dca-b44f-2dffa5de4958",
+   "code": "10300302",
+   "titleTh": "การตัดสินใจอย่างชาญฉลาดในศตวรรษที่ 21",
+   "titleEn": "Intelligent Decision-Making in the 21st Century",
+   "credits": 3
+  },
+  "group": {
+   "id": "85ce8166-5765-42c0-8695-d9398328bd78",
+   "name": "สมรรถนะด้านการคิดคำนวณ การใช้เหตุผล และการใช้เทคโนโลยี"
+  },
+  "createdAt": "2026-08-18T06:54:44.010Z",
+  "updatedAt": "2026-08-18T06:54:44.010Z"
+ },
+ {
+  "id": "4f528716-2493-4b18-bd81-227e00e93bcb",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "29cd5498-0969-4102-a985-8e7b15194d7c",
+   "code": "10300301",
+   "titleTh": "การใช้ชีวิตในสังคมดิจิทัล",
+   "titleEn": "Living in Digital Society",
+   "credits": 3
+  },
+  "group": {
+   "id": "85ce8166-5765-42c0-8695-d9398328bd78",
+   "name": "สมรรถนะด้านการคิดคำนวณ การใช้เหตุผล และการใช้เทคโนโลยี"
+  },
+  "createdAt": "2026-08-18T06:54:44.002Z",
+  "updatedAt": "2026-08-18T06:54:44.002Z"
+ },
+ {
+  "id": "5b3f3313-e32b-401b-9198-de4d63343b40",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "c9cb16e2-094f-4b05-be96-33cca2e50627",
+   "code": "10800201",
+   "titleTh": "พลเมืองดิจิทัลและการรู้เท่าทันดิจิทัล",
+   "titleEn": "Digital Citizenship and Digital Literacy",
+   "credits": 3
+  },
+  "group": {
+   "id": "ddd4bf66-757e-4b27-96cb-e6e0749d9b2d",
+   "name": "สมรรถนะด้านสังคมและความเป็นมนุษย์"
+  },
+  "createdAt": "2026-08-18T06:54:43.992Z",
+  "updatedAt": "2026-08-18T06:54:43.992Z"
+ },
+ {
+  "id": "bd6d4203-e6f7-4e1a-9a2b-18cbcd4560f1",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "5d1ac6bc-a187-48f5-ae90-9b53881bf0b0",
+   "code": "10700216",
+   "titleTh": "อารยธรรมและโลกสมัยใหม่",
+   "titleEn": "Civilizations and the Modern World",
+   "credits": 3
+  },
+  "group": {
+   "id": "ddd4bf66-757e-4b27-96cb-e6e0749d9b2d",
+   "name": "สมรรถนะด้านสังคมและความเป็นมนุษย์"
+  },
+  "createdAt": "2026-08-18T06:54:43.983Z",
+  "updatedAt": "2026-08-18T06:54:43.983Z"
+ },
+ {
+  "id": "dde1381c-e0d9-4e6e-92d3-6342680521dc",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "297844b2-238c-4b7a-89a3-870f2e399072",
+   "code": "10700215",
+   "titleTh": "สังคมและสิ่งแวดล้อมยั่งยืน",
+   "titleEn": "Society, Environment and Sustainability",
+   "credits": 3
+  },
+  "group": {
+   "id": "ddd4bf66-757e-4b27-96cb-e6e0749d9b2d",
+   "name": "สมรรถนะด้านสังคมและความเป็นมนุษย์"
+  },
+  "createdAt": "2026-08-18T06:54:43.975Z",
+  "updatedAt": "2026-08-18T06:54:43.975Z"
+ },
+ {
+  "id": "204d3964-a9cc-48ad-aa16-2719fda98ece",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "e59bb623-8dda-45bb-bdec-75000f82dec0",
+   "code": "10700213",
+   "titleTh": "สังคมร่วมสมัย",
+   "titleEn": "Contemporary World and Society",
+   "credits": 3
+  },
+  "group": {
+   "id": "ddd4bf66-757e-4b27-96cb-e6e0749d9b2d",
+   "name": "สมรรถนะด้านสังคมและความเป็นมนุษย์"
+  },
+  "createdAt": "2026-08-18T06:54:43.965Z",
+  "updatedAt": "2026-08-18T06:54:43.965Z"
+ },
+ {
+  "id": "786893ca-6252-4d6d-8fdc-4cf5ef7f7ffe",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "5e293152-4cb6-4ab1-89ea-c557645ba74e",
+   "code": "10700212",
+   "titleTh": "ศิลปะการใช้ชีวิตในสังคมที่หลากหลาย",
+   "titleEn": "The Arts of Living in a Diverse Society",
+   "credits": 3
+  },
+  "group": {
+   "id": "ddd4bf66-757e-4b27-96cb-e6e0749d9b2d",
+   "name": "สมรรถนะด้านสังคมและความเป็นมนุษย์"
+  },
+  "createdAt": "2026-08-18T06:54:43.956Z",
+  "updatedAt": "2026-08-18T06:54:43.956Z"
+ },
+ {
+  "id": "7f59f1ec-d961-43ad-8817-b86eb0840472",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "09d4ab6b-e2cc-47b3-81aa-956ee2807234",
+   "code": "10700211",
+   "titleTh": "ศิลปะกับความคิดสร้างสรรค์",
+   "titleEn": "Art and Creative Thinking",
+   "credits": 3
+  },
+  "group": {
+   "id": "ddd4bf66-757e-4b27-96cb-e6e0749d9b2d",
+   "name": "สมรรถนะด้านสังคมและความเป็นมนุษย์"
+  },
+  "createdAt": "2026-08-18T06:54:43.947Z",
+  "updatedAt": "2026-08-18T06:54:43.947Z"
+ },
+ {
+  "id": "943089d2-ed5a-49d0-867d-0fd71a4b5852",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "1b5db6e2-c494-4c58-8314-1ac14a416308",
+   "code": "10700209",
+   "titleTh": "มนุษย์กับความงามทางศิลปะ",
+   "titleEn": "Humans and Artistic Beauty",
+   "credits": 3
+  },
+  "group": {
+   "id": "ddd4bf66-757e-4b27-96cb-e6e0749d9b2d",
+   "name": "สมรรถนะด้านสังคมและความเป็นมนุษย์"
+  },
+  "createdAt": "2026-08-18T06:54:43.939Z",
+  "updatedAt": "2026-08-18T06:54:43.939Z"
+ },
+ {
+  "id": "fbc3e581-f7ec-43fd-8fe5-b772790c79b8",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "e49e58af-7c8d-40c7-9e96-589566ca9187",
+   "code": "10700205",
+   "titleTh": "จิตอาสาเพื่อพัฒนาสังคม",
+   "titleEn": "Volunteer Spirit for Social Development",
+   "credits": 3
+  },
+  "group": {
+   "id": "ddd4bf66-757e-4b27-96cb-e6e0749d9b2d",
+   "name": "สมรรถนะด้านสังคมและความเป็นมนุษย์"
+  },
+  "createdAt": "2026-08-18T06:54:43.930Z",
+  "updatedAt": "2026-08-18T06:54:43.930Z"
+ },
+ {
+  "id": "73f90775-d1d3-4179-9d8c-96e440f779ce",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "de6bf7fe-5ddd-4136-8ef6-1062e7bb4dbd",
+   "code": "10700204",
+   "titleTh": "จิตวิทยาเพื่อการทำงานและการดำเนินชีวิตในยุคดิจิทัล",
+   "titleEn": "Psychology for Working and Living in Digital Age",
+   "credits": 3
+  },
+  "group": {
+   "id": "ddd4bf66-757e-4b27-96cb-e6e0749d9b2d",
+   "name": "สมรรถนะด้านสังคมและความเป็นมนุษย์"
+  },
+  "createdAt": "2026-08-18T06:54:43.922Z",
+  "updatedAt": "2026-08-18T06:54:43.922Z"
+ },
+ {
+  "id": "8e1a2a61-caec-484d-b4fb-9029f3c1fd13",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "de0eb7da-ce88-4226-b4f4-ffc03ee05663",
+   "code": "10700203",
+   "titleTh": "จิตวิทยาพฤติกรรมมนุษย์",
+   "titleEn": "The Psychology of Human Behavior",
+   "credits": 3
+  },
+  "group": {
+   "id": "ddd4bf66-757e-4b27-96cb-e6e0749d9b2d",
+   "name": "สมรรถนะด้านสังคมและความเป็นมนุษย์"
+  },
+  "createdAt": "2026-08-18T06:54:43.913Z",
+  "updatedAt": "2026-08-18T06:54:43.913Z"
+ },
+ {
+  "id": "29f8987e-425f-4e47-b207-2e959dd12ac0",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "5763f457-efcf-46d5-ac35-d50ab59975ed",
+   "code": "10700202",
+   "titleTh": "จิตวิทยาการปรับตัวในยุคดิจิทัล",
+   "titleEn": "Psychology of Adjustment in Digital Age",
+   "credits": 3
+  },
+  "group": {
+   "id": "ddd4bf66-757e-4b27-96cb-e6e0749d9b2d",
+   "name": "สมรรถนะด้านสังคมและความเป็นมนุษย์"
+  },
+  "createdAt": "2026-08-18T06:54:43.905Z",
+  "updatedAt": "2026-08-18T06:54:43.905Z"
+ },
+ {
+  "id": "3ac9c222-31e6-43ad-8268-105ba6124876",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "904f1e5d-cc50-4fab-ad24-bf8913874efe",
+   "code": "10300201",
+   "titleTh": "การเงินส่วนบุคคลเพื่อชีวิตยุคใหม่",
+   "titleEn": "Personal Finance for Modern Life",
+   "credits": 3
+  },
+  "group": {
+   "id": "ddd4bf66-757e-4b27-96cb-e6e0749d9b2d",
+   "name": "สมรรถนะด้านสังคมและความเป็นมนุษย์"
+  },
+  "createdAt": "2026-08-18T06:54:43.896Z",
+  "updatedAt": "2026-08-18T06:54:43.896Z"
+ },
+ {
+  "id": "08001858-9e48-4612-aff5-226cb1c089c8",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "360c8cac-f939-4549-ba8b-a70c3ad831ef",
+   "code": "10100202",
+   "titleTh": "วิถีเกษตรกับสุนทรียภาพในชีวิตประจำวัน",
+   "titleEn": "Agri-Aesthetics and Everyday Life",
+   "credits": 3
+  },
+  "group": {
+   "id": "ddd4bf66-757e-4b27-96cb-e6e0749d9b2d",
+   "name": "สมรรถนะด้านสังคมและความเป็นมนุษย์"
+  },
+  "createdAt": "2026-08-18T06:54:43.885Z",
+  "updatedAt": "2026-08-18T06:54:43.885Z"
+ },
+ {
+  "id": "aeb75a99-7cc4-4373-a419-7f13e936e16f",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "b71af719-e021-4503-86c0-c305fef8b41a",
+   "code": "10700108",
+   "titleTh": "สมาร์ตทอล์ก",
+   "titleEn": "Smart Talk",
+   "credits": 3
+  },
+  "group": {
+   "id": "9443720d-6b7d-4618-bb79-df8032270e1a",
+   "name": "รายวิชาภาษาต่างประเทศ (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:43.876Z",
+  "updatedAt": "2026-08-18T06:54:43.876Z"
+ },
+ {
+  "id": "1508e40f-9891-4081-8e29-ecefdce1857d",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "a5f89b6e-7cda-4eb8-bc07-8fe3a272479f",
+   "code": "10700107",
+   "titleTh": "ภาษาอังกฤษเพื่อการเกษตรอัจฉริยะและยั่งยืน",
+   "titleEn": "English for Smart and Sustainable Agriculture",
+   "credits": 3
+  },
+  "group": {
+   "id": "9443720d-6b7d-4618-bb79-df8032270e1a",
+   "name": "รายวิชาภาษาต่างประเทศ (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:43.868Z",
+  "updatedAt": "2026-08-18T06:54:43.868Z"
+ },
+ {
+  "id": "0a3a4690-8860-4123-a0a9-a4f98f46332e",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "5325dadc-1a21-4107-a4b8-5dd4f0d37bf1",
+   "code": "10700106",
+   "titleTh": "ภาษาอังกฤษผ่านวัฒนธรรมป๊อป",
+   "titleEn": "English through Pop Culture",
+   "credits": 3
+  },
+  "group": {
+   "id": "9443720d-6b7d-4618-bb79-df8032270e1a",
+   "name": "รายวิชาภาษาต่างประเทศ (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:43.860Z",
+  "updatedAt": "2026-08-18T06:54:43.860Z"
+ },
+ {
+  "id": "f4523911-2781-4a1f-b5e2-83b6d418ef3a",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "03c4cefc-55e1-45e5-8405-fa23d856145c",
+   "code": "10700105-68",
+   "titleTh": "ภาษาอังกฤษเบื้องต้นสำหรับธุรกิจและสตาร์ทอัพ",
+   "titleEn": "Basic English for Business Startups",
+   "credits": 3
+  },
+  "group": {
+   "id": "9443720d-6b7d-4618-bb79-df8032270e1a",
+   "name": "รายวิชาภาษาต่างประเทศ (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:43.851Z",
+  "updatedAt": "2026-08-18T06:54:43.851Z"
+ },
+ {
+  "id": "4c7bb79f-d81a-4131-a3ab-0d12b573b65b",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "7190bb1d-d2d3-42a0-823a-da83fb912313",
+   "code": "10700104",
+   "titleTh": "ภาษาอังกฤษในชีวิตประจำวัน",
+   "titleEn": "English for Everyday Life",
+   "credits": 3
+  },
+  "group": {
+   "id": "9443720d-6b7d-4618-bb79-df8032270e1a",
+   "name": "รายวิชาภาษาต่างประเทศ (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:43.843Z",
+  "updatedAt": "2026-08-18T06:54:43.843Z"
+ },
+ {
+  "id": "cf91e19b-a1ec-43cd-817c-c6d236de42dc",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "4eb1d554-ae10-4cf7-ae3d-bb58c475507e",
+   "code": "10700102",
+   "titleTh": "ภาษาไทยเพื่อการสื่อสาร",
+   "titleEn": "Thai Language for Communication",
+   "credits": 3
+  },
+  "group": {
+   "id": "5ed47c4c-cac7-4a1b-894e-522fdefb348e",
+   "name": "รายวิชาภาษาไทย (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:43.834Z",
+  "updatedAt": "2026-08-18T06:54:43.834Z"
+ },
+ {
+  "id": "6114bced-baee-4146-b739-b6e469592b6c",
+  "program": {
+   "id": "d7b54fbf-46cd-4982-984e-36ca370d884e",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "5ced78a4-de77-47c4-955e-bd30591530bb",
+   "code": "10700101",
+   "titleTh": "ภาษาไทยเพื่อการนำเสนอ",
+   "titleEn": "Thai Language for Presentation",
+   "credits": 3
+  },
+  "group": {
+   "id": "5ed47c4c-cac7-4a1b-894e-522fdefb348e",
+   "name": "รายวิชาภาษาไทย (2570)"
+  },
+  "createdAt": "2026-08-18T06:54:43.826Z",
+  "updatedAt": "2026-08-18T06:54:43.826Z"
+ },
+ {
+  "id": "e7834b4f-79f1-4ac9-b807-11549aee3fd7",
+  "program": null,
+  "course": {
+   "id": "b4801c55-e9fa-4934-82bc-8293162cf369",
+   "code": "SC497",
+   "titleTh": "สหกิจศึกษา",
+   "titleEn": "Co-operative Education",
+   "credits": 9
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:43.817Z",
+  "updatedAt": "2026-08-18T06:54:43.817Z"
+ },
+ {
+  "id": "625a00b2-e514-42fb-a483-4e712120a251",
+  "program": null,
+  "course": {
+   "id": "7d54694b-b29a-4566-9231-902198454542",
+   "code": "CS492",
+   "titleTh": "สัมมนาวิชาการทางวิทยาการคอมพิวเตอร์",
+   "titleEn": "Seminar in Computer Science",
+   "credits": 1
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:43.809Z",
+  "updatedAt": "2026-08-18T06:54:43.809Z"
+ },
+ {
+  "id": "bdc119f0-8dd4-4556-a2cb-9af8df20e095",
+  "program": null,
+  "course": {
+   "id": "c7c4e2cc-e6b4-4d62-8084-d2bda60007b0",
+   "code": "CS391",
+   "titleTh": "การบริหารโครงการคอมพิวเตอร์",
+   "titleEn": "Computer Project Management",
+   "credits": 1
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:43.800Z",
+  "updatedAt": "2026-08-18T06:54:43.800Z"
+ },
+ {
+  "id": "4dbd20af-22c2-4a6e-85e9-7915639d4536",
+  "program": null,
+  "course": {
+   "id": "faf81826-9ee8-469d-9b53-42f653a2298b",
+   "code": "CS347",
+   "titleTh": "วิศวกรรมซอฟต์แวร์",
+   "titleEn": "Software Engineering",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:43.791Z",
+  "updatedAt": "2026-08-18T06:54:43.791Z"
+ },
+ {
+  "id": "ff79a564-2520-4c13-bce0-45bf807641ba",
+  "program": null,
+  "course": {
+   "id": "5e4d63ae-d904-468e-b641-4df71c3231fd",
+   "code": "CS344",
+   "titleTh": "การพัฒนาระบบซอฟต์แวร์เชิงวัตถุ",
+   "titleEn": "Object Oriented Software Development",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:43.782Z",
+  "updatedAt": "2026-08-18T06:54:43.782Z"
+ },
+ {
+  "id": "b20094dc-a978-4544-8d81-a935b2b23b28",
+  "program": null,
+  "course": {
+   "id": "b2073c6c-6a21-4aff-b199-0f1ce0b92989",
+   "code": "CS343",
+   "titleTh": "การวิเคราะห์และออกแบบเชิงวัตถุ",
+   "titleEn": "Object Oriented Analysis and Design",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:43.774Z",
+  "updatedAt": "2026-08-18T06:54:43.774Z"
+ },
+ {
+  "id": "52ff54d1-b2bc-432c-8ef7-94c5fcaa1b88",
+  "program": null,
+  "course": {
+   "id": "50ef7cc5-31ae-489a-858e-ee6671947d1a",
+   "code": "CS341",
+   "titleTh": "วิทยาการข้อมูล",
+   "titleEn": "Data Science",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:43.766Z",
+  "updatedAt": "2026-08-18T06:54:43.766Z"
+ },
+ {
+  "id": "31534e81-2629-4806-9f40-ea7799453dda",
+  "program": null,
+  "course": {
+   "id": "69a8c839-ac49-4cb1-938f-41ae4b3dbca4",
+   "code": "CS330",
+   "titleTh": "การสื่อสารข้อมูลและเครือข่ายคอมพิวเตอร์",
+   "titleEn": "Data Communication and Computer Network",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:43.757Z",
+  "updatedAt": "2026-08-18T06:54:43.757Z"
+ },
+ {
+  "id": "294cf2a3-2a75-4d3d-a2e6-dda7b68ff2d0",
+  "program": null,
+  "course": {
+   "id": "4098c29d-d6f1-4834-8e1b-c2f27909b864",
+   "code": "CS320",
+   "titleTh": "ระบบปฏิบัติการ",
+   "titleEn": "Operating System",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:43.748Z",
+  "updatedAt": "2026-08-18T06:54:43.748Z"
+ },
+ {
+  "id": "da6d3855-1abe-4b72-9ddb-3ae31bda083a",
+  "program": null,
+  "course": {
+   "id": "b5db74df-396c-4d52-b089-7ef0337fa0e0",
+   "code": "CS313",
+   "titleTh": "การพัฒนาโปรแกรมประยุกต์บนเว็บ",
+   "titleEn": "Web Application Development",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:43.739Z",
+  "updatedAt": "2026-08-18T06:54:43.739Z"
+ },
+ {
+  "id": "2c11050f-80ec-4f3d-85e7-c595af657b7a",
+  "program": null,
+  "course": {
+   "id": "ff469b57-62b6-401f-8ecf-51d276347358",
+   "code": "CS241",
+   "titleTh": "ระบบฐานข้อมูล",
+   "titleEn": "Database Systems",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:43.730Z",
+  "updatedAt": "2026-08-18T06:54:43.730Z"
+ },
+ {
+  "id": "48e91672-cb89-4712-832e-2eabb50fc46a",
+  "program": null,
+  "course": {
+   "id": "88697132-62e7-4296-8274-b0552cf3f15d",
+   "code": "CS232",
+   "titleTh": "สถาปัตยกรรมคอมพิวเตอร์",
+   "titleEn": "Computer Architecture",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:43.722Z",
+  "updatedAt": "2026-08-18T06:54:43.722Z"
+ },
+ {
+  "id": "75d059dd-2db3-4edc-9274-e6ad3777a471",
+  "program": null,
+  "course": {
+   "id": "097c8b50-fabd-4a4f-812a-f75f4b2825ec",
+   "code": "CS231",
+   "titleTh": "ระบบคอมพิวเตอร์และภาษาแอสเซมบลี",
+   "titleEn": "Computer System and Assembly Language",
+   "credits": 1
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:43.713Z",
+  "updatedAt": "2026-08-18T06:54:43.713Z"
+ },
+ {
+  "id": "7eda1712-e4f4-4cf4-8270-dc896aef7b6b",
+  "program": null,
+  "course": {
+   "id": "e0963064-53ea-47b0-b288-cdadeb1a95ca",
+   "code": "CS222",
+   "titleTh": "การเขียนโปรแกรมมัลติมีเดีย",
+   "titleEn": "Multimedia Programming",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:43.705Z",
+  "updatedAt": "2026-08-18T06:54:43.705Z"
+ },
+ {
+  "id": "bf2b544f-ffea-4645-9042-008c9760346c",
+  "program": null,
+  "course": {
+   "id": "6ea31753-b88d-4422-a35b-fb20feffbb2e",
+   "code": "CS221",
+   "titleTh": "โครงสร้างข้อมูล",
+   "titleEn": "Data Structures",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:43.696Z",
+  "updatedAt": "2026-08-18T06:54:43.696Z"
+ },
+ {
+  "id": "ecf0e6ff-9015-4955-9c25-130178f554b0",
+  "program": null,
+  "course": {
+   "id": "f799f1a0-5910-4918-abaa-089d42b75370",
+   "code": "CS213",
+   "titleTh": "การวิเคราะห์และออกแบบอัลกอริทึม",
+   "titleEn": "Algorithm Analysis and Design",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:43.687Z",
+  "updatedAt": "2026-08-18T06:54:43.687Z"
+ },
+ {
+  "id": "f246befe-7dbf-40b5-9f38-9c8dbdb57b9a",
+  "program": null,
+  "course": {
+   "id": "b55faf57-5ffa-4112-8983-64287f83ddaa",
+   "code": "CS117",
+   "titleTh": "หลักการเขียนโปรแกรมเชิงวัตถุ",
+   "titleEn": "Principles of Object-Oriented Programming",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:43.679Z",
+  "updatedAt": "2026-08-18T06:54:43.679Z"
+ },
+ {
+  "id": "60f440f0-4d2e-4deb-bda7-6902d864f59d",
+  "program": null,
+  "course": {
+   "id": "ca8878d9-62a6-407c-8775-8cfdc412a1bf",
+   "code": "PH105",
+   "titleTh": "ฟิสิกส์ทั่วไป 1",
+   "titleEn": "General Physics 1",
+   "credits": 3
+  },
+  "group": {
+   "id": "2f1d888e-64c9-4cdf-854b-413c9a1c9c7a",
+   "name": "กลุ่มวิชาแกน"
+  },
+  "createdAt": "2026-08-18T06:54:43.670Z",
+  "updatedAt": "2026-08-18T06:54:43.670Z"
+ },
+ {
+  "id": "9210818c-c50c-46cd-893c-21dfa3af723b",
+  "program": null,
+  "course": {
+   "id": "c60bb5ef-6bbb-4da0-85af-7b41588f30c4",
+   "code": "ST301",
+   "titleTh": "หลักสถิติ",
+   "titleEn": "Principles of Statistics",
+   "credits": 3
+  },
+  "group": {
+   "id": "2f1d888e-64c9-4cdf-854b-413c9a1c9c7a",
+   "name": "กลุ่มวิชาแกน"
+  },
+  "createdAt": "2026-08-18T06:54:43.661Z",
+  "updatedAt": "2026-08-18T06:54:43.661Z"
+ },
+ {
+  "id": "719986b4-9558-492c-ad79-390e925bd2cc",
+  "program": null,
+  "course": {
+   "id": "7823a28e-6bd3-4323-bf1a-289104c95dd5",
+   "code": "CS392",
+   "titleTh": "การเป็นผู้ประกอบการทางด้านคอมพิวเตอร์และนวัตกรรม",
+   "titleEn": "Innovation and Computer-Based Entrepreneurship",
+   "credits": 3
+  },
+  "group": {
+   "id": "2f1d888e-64c9-4cdf-854b-413c9a1c9c7a",
+   "name": "กลุ่มวิชาแกน"
+  },
+  "createdAt": "2026-08-18T06:54:43.653Z",
+  "updatedAt": "2026-08-18T06:54:43.653Z"
+ },
+ {
+  "id": "f2060152-bd22-48d9-a621-3e90eb8f92f2",
+  "program": null,
+  "course": {
+   "id": "f8adc0e8-5a1c-4c51-afdd-d97a65364a14",
+   "code": "CS252",
+   "titleTh": "คณิตศาสตร์สำหรับวิทยาการคอมพิวเตอร์",
+   "titleEn": "Mathematics for Computer Science",
+   "credits": 3
+  },
+  "group": {
+   "id": "2f1d888e-64c9-4cdf-854b-413c9a1c9c7a",
+   "name": "กลุ่มวิชาแกน"
+  },
+  "createdAt": "2026-08-18T06:54:43.644Z",
+  "updatedAt": "2026-08-18T06:54:43.644Z"
+ },
+ {
+  "id": "1637eef8-70f3-454c-b4f3-063bec077cd3",
+  "program": null,
+  "course": {
+   "id": "c423aa70-a6d8-4ba0-aed4-148df0c36311",
+   "code": "MA101",
+   "titleTh": "แคลคูลัส 1",
+   "titleEn": "Calculus 1",
+   "credits": 3
+  },
+  "group": {
+   "id": "2f1d888e-64c9-4cdf-854b-413c9a1c9c7a",
+   "name": "กลุ่มวิชาแกน"
+  },
+  "createdAt": "2026-08-18T06:54:43.635Z",
+  "updatedAt": "2026-08-18T06:54:43.635Z"
+ },
+ {
+  "id": "221859c0-c3c4-4db2-99ad-2fbc25e36f87",
+  "program": null,
+  "course": {
+   "id": "560ed91e-cf1e-4877-b301-b565167be803",
+   "code": "CS151",
+   "titleTh": "คณิตศาสตร์ดีสครีต",
+   "titleEn": "Discrete Mathematics",
+   "credits": 3
+  },
+  "group": {
+   "id": "2f1d888e-64c9-4cdf-854b-413c9a1c9c7a",
+   "name": "กลุ่มวิชาแกน"
+  },
+  "createdAt": "2026-08-18T06:54:43.626Z",
+  "updatedAt": "2026-08-18T06:54:43.626Z"
+ },
+ {
+  "id": "1f26067e-4e7a-4db6-bd7a-847d7c348047",
+  "program": null,
+  "course": {
+   "id": "347a5745-7bf1-4ebd-9212-46c89822067e",
+   "code": "CS121",
+   "titleTh": "ตรรกศาสตร์เชิงดิจิทัลและอุปกรณ์อัจฉริยะ",
+   "titleEn": "Digital Logic and Smart Device",
+   "credits": 3
+  },
+  "group": {
+   "id": "2f1d888e-64c9-4cdf-854b-413c9a1c9c7a",
+   "name": "กลุ่มวิชาแกน"
+  },
+  "createdAt": "2026-08-18T06:54:43.617Z",
+  "updatedAt": "2026-08-18T06:54:43.617Z"
+ },
+ {
+  "id": "2a2d8d83-ba55-45db-8b24-b93961ed2cbc",
+  "program": null,
+  "course": {
+   "id": "26554e03-6ab4-42d2-9073-ba6b9cf23f1f",
+   "code": "CS112",
+   "titleTh": "วิทยาการคอมพิวเตอร์ 2",
+   "titleEn": "Computer Science 2",
+   "credits": 3
+  },
+  "group": {
+   "id": "2f1d888e-64c9-4cdf-854b-413c9a1c9c7a",
+   "name": "กลุ่มวิชาแกน"
+  },
+  "createdAt": "2026-08-18T06:54:43.609Z",
+  "updatedAt": "2026-08-18T06:54:43.609Z"
+ },
+ {
+  "id": "f51dbdfe-21d8-4941-a605-ae08e4d4adcb",
+  "program": null,
+  "course": {
+   "id": "d7d43f77-2778-4c29-b46b-cc1d4054f853",
+   "code": "CS111",
+   "titleTh": "วิทยาการคอมพิวเตอร์ 1",
+   "titleEn": "Computer Science 1",
+   "credits": 3
+  },
+  "group": {
+   "id": "2f1d888e-64c9-4cdf-854b-413c9a1c9c7a",
+   "name": "กลุ่มวิชาแกน"
+  },
+  "createdAt": "2026-08-18T06:54:43.600Z",
+  "updatedAt": "2026-08-18T06:54:43.600Z"
+ },
+ {
+  "id": "3c88e9c3-35d6-41f2-9ae0-01c5d0f7d8d1",
+  "program": null,
+  "course": {
+   "id": "7f474779-d07b-4cc7-951d-e1b2e4092c36",
+   "code": "AP101",
+   "titleTh": "เกษตรเพื่อชีวิต",
+   "titleEn": "Agriculture for Life",
+   "credits": 3
+  },
+  "group": {
+   "id": "92757ffd-a4dc-4493-a192-1cd73814c137",
+   "name": "กลุ่มวิชาวิทยาศาสตร์และคณิตศาสตร์"
+  },
+  "createdAt": "2026-08-18T06:54:43.591Z",
+  "updatedAt": "2026-08-18T06:54:43.591Z"
+ },
+ {
+  "id": "066b179c-9c82-4938-8255-65204a03c227",
+  "program": null,
+  "course": {
+   "id": "8a53f5f1-18bf-4268-8586-ee4d22acd3e1",
+   "code": "GE242",
+   "titleTh": "ภาษาอังกฤษเชิงวิทยาศาสตร์และเทคโนโลยี 2",
+   "titleEn": "English for Science and Technology 2",
+   "credits": 3
+  },
+  "group": {
+   "id": "40225020-b64e-40ed-89de-fb7e6b10d00d",
+   "name": "รายวิชาภาษาต่างประเทศ"
+  },
+  "createdAt": "2026-08-18T06:54:43.583Z",
+  "updatedAt": "2026-08-18T06:54:43.583Z"
+ },
+ {
+  "id": "c800b77f-5907-4b0c-92d4-3e99ff2776be",
+  "program": null,
+  "course": {
+   "id": "a03ae3fb-c6f5-494d-b24c-13a333917c9b",
+   "code": "GE241",
+   "titleTh": "ภาษาอังกฤษเชิงวิทยาศาสตร์และเทคโนโลยี 1",
+   "titleEn": "English for Science and Technology 1",
+   "credits": 3
+  },
+  "group": {
+   "id": "40225020-b64e-40ed-89de-fb7e6b10d00d",
+   "name": "รายวิชาภาษาต่างประเทศ"
+  },
+  "createdAt": "2026-08-18T06:54:43.574Z",
+  "updatedAt": "2026-08-18T06:54:43.574Z"
+ },
+ {
+  "id": "538943e9-df55-4b4c-883e-ca499f58776e",
+  "program": null,
+  "course": {
+   "id": "938dddfe-58b2-49d4-bc78-d294b84e4bd5",
+   "code": "GE142",
+   "titleTh": "ภาษาอังกฤษพื้นฐาน 2",
+   "titleEn": "Fundamental English 2",
+   "credits": 3
+  },
+  "group": {
+   "id": "40225020-b64e-40ed-89de-fb7e6b10d00d",
+   "name": "รายวิชาภาษาต่างประเทศ"
+  },
+  "createdAt": "2026-08-18T06:54:43.565Z",
+  "updatedAt": "2026-08-18T06:54:43.565Z"
+ },
+ {
+  "id": "e40d816d-15d3-43c2-91ab-403322337e63",
+  "program": null,
+  "course": {
+   "id": "84eeb6b4-49fd-4abd-9207-d70ac5634fad",
+   "code": "GE141",
+   "titleTh": "ภาษาอังกฤษพื้นฐาน 1",
+   "titleEn": "Fundamental English 1",
+   "credits": 3
+  },
+  "group": {
+   "id": "40225020-b64e-40ed-89de-fb7e6b10d00d",
+   "name": "รายวิชาภาษาต่างประเทศ"
+  },
+  "createdAt": "2026-08-18T06:54:43.556Z",
+  "updatedAt": "2026-08-18T06:54:43.556Z"
+ },
+ {
+  "id": "d59c2828-f1b9-48af-b8d3-19e23063101b",
+  "program": null,
+  "course": {
+   "id": "e21a01ba-78d1-4787-a7f8-ae2f59c7b53f",
+   "code": "GE031",
+   "titleTh": "การใช้ภาษาไทย",
+   "titleEn": "Thai Language Usage",
+   "credits": 3
+  },
+  "group": {
+   "id": "a3cf5f1a-ff16-4acf-9ac7-e998e1d82bc3",
+   "name": "รายวิชาภาษาไทย"
+  },
+  "createdAt": "2026-08-18T06:54:43.548Z",
+  "updatedAt": "2026-08-18T06:54:43.548Z"
+ },
+ {
+  "id": "25b96eb9-beb6-4c58-a544-2ebcbc777046",
+  "program": null,
+  "course": {
+   "id": "37964c7c-18f4-410f-b058-69d31e29e7a6",
+   "code": "20314539",
+   "titleTh": "หัวข้อที่สนใจทางนวัตกรรมเทคโนโลยีดิจิทัล 3",
+   "titleEn": "Selected Topics in Digital Technology Innovation 3",
+   "credits": 3
+  },
+  "group": {
+   "id": "80964862-4ba3-4146-959a-77b30f92e038",
+   "name": "กลุ่มวิชาบริหารจัดการนวัตกรรม (Innovation Management)"
+  },
+  "createdAt": "2026-08-18T06:54:43.539Z",
+  "updatedAt": "2026-08-18T06:54:43.539Z"
+ },
+ {
+  "id": "2a0d37e1-9409-40d0-86a3-969e1b0e84c4",
+  "program": null,
+  "course": {
+   "id": "de36b84a-099c-4851-a961-49bbe0a1a8ac",
+   "code": "20314538",
+   "titleTh": "นวัตกรรมทางธุรกิจ",
+   "titleEn": "Innovation in Business",
+   "credits": 3
+  },
+  "group": {
+   "id": "80964862-4ba3-4146-959a-77b30f92e038",
+   "name": "กลุ่มวิชาบริหารจัดการนวัตกรรม (Innovation Management)"
+  },
+  "createdAt": "2026-08-18T06:54:43.530Z",
+  "updatedAt": "2026-08-18T06:54:43.530Z"
+ },
+ {
+  "id": "a6bbee66-97d1-4016-bfeb-b632fc0760a7",
+  "program": null,
+  "course": {
+   "id": "7d2d0df7-b396-410f-b30a-d098da818c01",
+   "code": "20314537",
+   "titleTh": "โมเดลธุรกิจอัจฉริยะ",
+   "titleEn": "Business Intelligence Model",
+   "credits": 3
+  },
+  "group": {
+   "id": "80964862-4ba3-4146-959a-77b30f92e038",
+   "name": "กลุ่มวิชาบริหารจัดการนวัตกรรม (Innovation Management)"
+  },
+  "createdAt": "2026-08-18T06:54:43.521Z",
+  "updatedAt": "2026-08-18T06:54:43.521Z"
+ },
+ {
+  "id": "89e8569c-5c9c-4f4f-a327-d89468dc2c33",
+  "program": null,
+  "course": {
+   "id": "c7a11c05-0348-4720-bce4-580297872ea5",
+   "code": "20314536",
+   "titleTh": "การจัดการนวัตกรรมทางห่วงโซ่อุปทานและโลจิสติกส์",
+   "titleEn": "Innovation Management in Supply Chain and Logistic",
+   "credits": 3
+  },
+  "group": {
+   "id": "80964862-4ba3-4146-959a-77b30f92e038",
+   "name": "กลุ่มวิชาบริหารจัดการนวัตกรรม (Innovation Management)"
+  },
+  "createdAt": "2026-08-18T06:54:43.513Z",
+  "updatedAt": "2026-08-18T06:54:43.513Z"
+ },
+ {
+  "id": "93e5c48e-c925-4d26-ad68-8797d8042f93",
+  "program": null,
+  "course": {
+   "id": "bb068d96-9f4b-43bd-a29f-633e31b552d2",
+   "code": "20314535",
+   "titleTh": "บริหารจัดการโครงการนวัตกรรม",
+   "titleEn": "Innovation Project Management",
+   "credits": 3
+  },
+  "group": {
+   "id": "80964862-4ba3-4146-959a-77b30f92e038",
+   "name": "กลุ่มวิชาบริหารจัดการนวัตกรรม (Innovation Management)"
+  },
+  "createdAt": "2026-08-18T06:54:43.504Z",
+  "updatedAt": "2026-08-18T06:54:43.504Z"
+ },
+ {
+  "id": "6199bbbe-3764-40b1-8a3b-3566f255e786",
+  "program": null,
+  "course": {
+   "id": "f407bb74-0812-4606-ba0d-d788cf0db73a",
+   "code": "20314534",
+   "titleTh": "การจัดการตลาดสินค้าดิจิทัล",
+   "titleEn": "Digital Marketing Management",
+   "credits": 3
+  },
+  "group": {
+   "id": "80964862-4ba3-4146-959a-77b30f92e038",
+   "name": "กลุ่มวิชาบริหารจัดการนวัตกรรม (Innovation Management)"
+  },
+  "createdAt": "2026-08-18T06:54:43.495Z",
+  "updatedAt": "2026-08-18T06:54:43.495Z"
+ },
+ {
+  "id": "79315bb2-fd7a-433c-a911-355e037d6c17",
+  "program": null,
+  "course": {
+   "id": "4169a4af-f942-4619-8aa2-2809aa8004e7",
+   "code": "20314533",
+   "titleTh": "ทักษะการเป็นผู้ประกอบการนวัตกรรมดิจิทัล",
+   "titleEn": "Digital Innopreneur Skill",
+   "credits": 3
+  },
+  "group": {
+   "id": "80964862-4ba3-4146-959a-77b30f92e038",
+   "name": "กลุ่มวิชาบริหารจัดการนวัตกรรม (Innovation Management)"
+  },
+  "createdAt": "2026-08-18T06:54:43.486Z",
+  "updatedAt": "2026-08-18T06:54:43.486Z"
+ },
+ {
+  "id": "f79c5355-5a2f-449a-a492-ef32d49738e7",
+  "program": null,
+  "course": {
+   "id": "903a267e-dc18-4108-a2bc-6669b027f72f",
+   "code": "20314532",
+   "titleTh": "นวัตกรรมสีเขียว",
+   "titleEn": "Green Innovation",
+   "credits": 3
+  },
+  "group": {
+   "id": "80964862-4ba3-4146-959a-77b30f92e038",
+   "name": "กลุ่มวิชาบริหารจัดการนวัตกรรม (Innovation Management)"
+  },
+  "createdAt": "2026-08-18T06:54:43.478Z",
+  "updatedAt": "2026-08-18T06:54:43.478Z"
+ },
+ {
+  "id": "154fa0f5-7569-407c-ad14-e111fc271037",
+  "program": null,
+  "course": {
+   "id": "1c742402-6b62-463e-ba6c-6021bfa24694",
+   "code": "20314531",
+   "titleTh": "การจัดการกระบวนการนวัตกรรม",
+   "titleEn": "Innovation Process Management",
+   "credits": 3
+  },
+  "group": {
+   "id": "80964862-4ba3-4146-959a-77b30f92e038",
+   "name": "กลุ่มวิชาบริหารจัดการนวัตกรรม (Innovation Management)"
+  },
+  "createdAt": "2026-08-18T06:54:43.469Z",
+  "updatedAt": "2026-08-18T06:54:43.469Z"
+ },
+ {
+  "id": "67d74fad-cc86-494a-89c0-20082d4bf9af",
+  "program": null,
+  "course": {
+   "id": "b9998c32-1be2-4a10-a436-e13378a9ecce",
+   "code": "20314529",
+   "titleTh": "หัวข้อที่สนใจทางนวัตกรรมเทคโนโลยีดิจิทัล 2",
+   "titleEn": "Selected Topics in Digital Technology Innovation 2",
+   "credits": 3
+  },
+  "group": {
+   "id": "7c157012-4250-48ef-ae99-014ec4b9cadc",
+   "name": "กลุ่มวิชานวัตกรรมดิจิทัลเพื่อการเรียนรู้ (Digital Innovation for Learning)"
+  },
+  "createdAt": "2026-08-18T06:54:43.460Z",
+  "updatedAt": "2026-08-18T06:54:43.460Z"
+ },
+ {
+  "id": "4bf692f1-cde0-4e60-80e3-e3e7c6474c87",
+  "program": null,
+  "course": {
+   "id": "66b8152d-a095-403b-b1a2-2de1dcc6dda5",
+   "code": "20314528",
+   "titleTh": "อนาคตศึกษาในการเรียนรู้ดิจิทัล",
+   "titleEn": "Future Studies in Digital Learning",
+   "credits": 3
+  },
+  "group": {
+   "id": "7c157012-4250-48ef-ae99-014ec4b9cadc",
+   "name": "กลุ่มวิชานวัตกรรมดิจิทัลเพื่อการเรียนรู้ (Digital Innovation for Learning)"
+  },
+  "createdAt": "2026-08-18T06:54:43.452Z",
+  "updatedAt": "2026-08-18T06:54:43.452Z"
+ },
+ {
+  "id": "242797e9-79dc-4ee5-8c31-fa4f92c4d051",
+  "program": null,
+  "course": {
+   "id": "191f8363-e175-44b3-a357-e45ccf8ed16c",
+   "code": "20314527",
+   "titleTh": "การจำลองระบบและการสร้างตัวแบบข้อมูล",
+   "titleEn": "System Simulation and Data Modeling",
+   "credits": 3
+  },
+  "group": {
+   "id": "7c157012-4250-48ef-ae99-014ec4b9cadc",
+   "name": "กลุ่มวิชานวัตกรรมดิจิทัลเพื่อการเรียนรู้ (Digital Innovation for Learning)"
+  },
+  "createdAt": "2026-08-18T06:54:43.443Z",
+  "updatedAt": "2026-08-18T06:54:43.443Z"
+ },
+ {
+  "id": "4ce7fd1f-8982-4b22-816f-f994830163c3",
+  "program": null,
+  "course": {
+   "id": "496d4e25-64e9-4591-a260-acf1c6b1997c",
+   "code": "20314526",
+   "titleTh": "การจัดการความรู้ในนวัตกรรมเทคโนโลยีดิจิทัล",
+   "titleEn": "Knowledge Management in Digital Technology Innovation",
+   "credits": 3
+  },
+  "group": {
+   "id": "7c157012-4250-48ef-ae99-014ec4b9cadc",
+   "name": "กลุ่มวิชานวัตกรรมดิจิทัลเพื่อการเรียนรู้ (Digital Innovation for Learning)"
+  },
+  "createdAt": "2026-08-18T06:54:43.434Z",
+  "updatedAt": "2026-08-18T06:54:43.434Z"
+ },
+ {
+  "id": "3caa5c48-7d1f-4084-b232-1fb407ba00d0",
+  "program": null,
+  "course": {
+   "id": "492c9102-d1e0-4aa1-92f3-53d905235e8f",
+   "code": "20314525",
+   "titleTh": "นวัตกรรมการเรียนรู้ดิจิทัลในชุมชนออนไลน์",
+   "titleEn": "Digital Learning Innovation in Online Communities",
+   "credits": 3
+  },
+  "group": {
+   "id": "7c157012-4250-48ef-ae99-014ec4b9cadc",
+   "name": "กลุ่มวิชานวัตกรรมดิจิทัลเพื่อการเรียนรู้ (Digital Innovation for Learning)"
+  },
+  "createdAt": "2026-08-18T06:54:43.426Z",
+  "updatedAt": "2026-08-18T06:54:43.426Z"
+ },
+ {
+  "id": "cf60d8d0-f7c0-472e-892b-65542ea87f55",
+  "program": null,
+  "course": {
+   "id": "26031cf3-9ea3-4880-9786-5acaeaadf720",
+   "code": "20314524",
+   "titleTh": "การผลิตสื่อดิจิทัลอัจฉริยะเพื่อการเรียนรู้",
+   "titleEn": "Smart Digital Media Production for Learning",
+   "credits": 3
+  },
+  "group": {
+   "id": "7c157012-4250-48ef-ae99-014ec4b9cadc",
+   "name": "กลุ่มวิชานวัตกรรมดิจิทัลเพื่อการเรียนรู้ (Digital Innovation for Learning)"
+  },
+  "createdAt": "2026-08-18T06:54:43.417Z",
+  "updatedAt": "2026-08-18T06:54:43.417Z"
+ },
+ {
+  "id": "81327b96-d6ea-4db8-86a9-d9c79c6b9c36",
+  "program": null,
+  "course": {
+   "id": "914ef23e-13e3-435a-a6af-e465d08031c6",
+   "code": "20314523",
+   "titleTh": "นวัตกรรมเทคโนโลยีดิจิทัลเพื่อพัฒนากระบวนการเรียนรู้",
+   "titleEn": "Digital Technology Innovation for Development of Learning Process",
+   "credits": 3
+  },
+  "group": {
+   "id": "7c157012-4250-48ef-ae99-014ec4b9cadc",
+   "name": "กลุ่มวิชานวัตกรรมดิจิทัลเพื่อการเรียนรู้ (Digital Innovation for Learning)"
+  },
+  "createdAt": "2026-08-18T06:54:43.409Z",
+  "updatedAt": "2026-08-18T06:54:43.409Z"
+ },
+ {
+  "id": "20809292-618d-4be8-b6c4-6961e51d7ffb",
+  "program": null,
+  "course": {
+   "id": "3cb6ccf9-3fb8-49fc-8582-b823901e038b",
+   "code": "20314522",
+   "titleTh": "นวัตกรรมเทคโนโลยีดิจิทัลเพื่อการศึกษา",
+   "titleEn": "Digital Technology Innovation for Education",
+   "credits": 3
+  },
+  "group": {
+   "id": "7c157012-4250-48ef-ae99-014ec4b9cadc",
+   "name": "กลุ่มวิชานวัตกรรมดิจิทัลเพื่อการเรียนรู้ (Digital Innovation for Learning)"
+  },
+  "createdAt": "2026-08-18T06:54:43.400Z",
+  "updatedAt": "2026-08-18T06:54:43.400Z"
+ },
+ {
+  "id": "3daf18c6-40f6-4a3b-8238-1d351750152c",
+  "program": null,
+  "course": {
+   "id": "ad49e60d-aec0-4578-8293-2800a930ae15",
+   "code": "20314521",
+   "titleTh": "การคิดเชิงนวัตกรรมเพื่อการเรียนรู้ดิจิทัล",
+   "titleEn": "Innovative Thinking for Digital Learning",
+   "credits": 3
+  },
+  "group": {
+   "id": "7c157012-4250-48ef-ae99-014ec4b9cadc",
+   "name": "กลุ่มวิชานวัตกรรมดิจิทัลเพื่อการเรียนรู้ (Digital Innovation for Learning)"
+  },
+  "createdAt": "2026-08-18T06:54:43.391Z",
+  "updatedAt": "2026-08-18T06:54:43.391Z"
+ },
+ {
+  "id": "7756d728-f781-4d1b-a70d-6bc05485a91c",
+  "program": null,
+  "course": {
+   "id": "1886ada5-582c-4ffd-b14b-7121185f4df2",
+   "code": "20314519",
+   "titleTh": "หัวข้อที่สนใจทางนวัตกรรมเทคโนโลยีดิจิทัล 1",
+   "titleEn": "Selected Topics in Digital Technology Innovation 1",
+   "credits": 3
+  },
+  "group": {
+   "id": "dd21c9fe-7676-46ec-b413-605f72caf152",
+   "name": "กลุ่มวิชาพัฒนาระบบสารสนเทศอัจฉริยะ (Smart Information System Development)"
+  },
+  "createdAt": "2026-08-18T06:54:43.383Z",
+  "updatedAt": "2026-08-18T06:54:43.383Z"
+ },
+ {
+  "id": "aff48176-44e3-404f-8e91-9913a9497142",
+  "program": null,
+  "course": {
+   "id": "776b789c-3f38-4ac2-90ae-a76cf0a2c7c5",
+   "code": "20314518",
+   "titleTh": "การประมวลผลบนกลุ่มเมฆขั้นสูง",
+   "titleEn": "Advanced Cloud Computing",
+   "credits": 3
+  },
+  "group": {
+   "id": "dd21c9fe-7676-46ec-b413-605f72caf152",
+   "name": "กลุ่มวิชาพัฒนาระบบสารสนเทศอัจฉริยะ (Smart Information System Development)"
+  },
+  "createdAt": "2026-08-18T06:54:43.374Z",
+  "updatedAt": "2026-08-18T06:54:43.374Z"
+ },
+ {
+  "id": "98943789-e778-473d-9adf-41f5cca3c735",
+  "program": null,
+  "course": {
+   "id": "41b04cb2-09ad-47ff-bf33-71271b27689a",
+   "code": "20314517",
+   "titleTh": "นวัตกรรมภูมิสารสนเทศเกษตร",
+   "titleEn": "Agricultural Geo-informatics Innovation",
+   "credits": 3
+  },
+  "group": {
+   "id": "dd21c9fe-7676-46ec-b413-605f72caf152",
+   "name": "กลุ่มวิชาพัฒนาระบบสารสนเทศอัจฉริยะ (Smart Information System Development)"
+  },
+  "createdAt": "2026-08-18T06:54:43.366Z",
+  "updatedAt": "2026-08-18T06:54:43.366Z"
+ },
+ {
+  "id": "28d88dce-b33c-4176-8f1a-da898d743c64",
+  "program": null,
+  "course": {
+   "id": "daddc1ce-7426-496e-84a4-08e5dcf68174",
+   "code": "20314516",
+   "titleTh": "การประมวลผลเชิงมัลติมีเดีย",
+   "titleEn": "Multimedia Processing",
+   "credits": 3
+  },
+  "group": {
+   "id": "dd21c9fe-7676-46ec-b413-605f72caf152",
+   "name": "กลุ่มวิชาพัฒนาระบบสารสนเทศอัจฉริยะ (Smart Information System Development)"
+  },
+  "createdAt": "2026-08-18T06:54:43.355Z",
+  "updatedAt": "2026-08-18T06:54:43.355Z"
+ },
+ {
+  "id": "177ac200-ba71-44bf-8709-1e7d85769420",
+  "program": null,
+  "course": {
+   "id": "b0b53187-a033-4bcf-b131-1f62f8647236",
+   "code": "20314515",
+   "titleTh": "การค้นคืนสารสนเทศ",
+   "titleEn": "Information Retrieval",
+   "credits": 3
+  },
+  "group": {
+   "id": "dd21c9fe-7676-46ec-b413-605f72caf152",
+   "name": "กลุ่มวิชาพัฒนาระบบสารสนเทศอัจฉริยะ (Smart Information System Development)"
+  },
+  "createdAt": "2026-08-18T06:54:43.346Z",
+  "updatedAt": "2026-08-18T06:54:43.346Z"
+ },
+ {
+  "id": "9dc8b384-ab78-46bf-8e28-2436e090054a",
+  "program": null,
+  "course": {
+   "id": "92e37f12-b0a5-41a3-9633-7c0ea616b686",
+   "code": "20314514",
+   "titleTh": "การพัฒนาแอพพลิเคชันบนอุปกรณ์อัจฉริยะ",
+   "titleEn": "Smart Devices Application Development",
+   "credits": 3
+  },
+  "group": {
+   "id": "dd21c9fe-7676-46ec-b413-605f72caf152",
+   "name": "กลุ่มวิชาพัฒนาระบบสารสนเทศอัจฉริยะ (Smart Information System Development)"
+  },
+  "createdAt": "2026-08-18T06:54:43.337Z",
+  "updatedAt": "2026-08-18T06:54:43.337Z"
+ },
+ {
+  "id": "5f56cfad-9834-489b-97b4-f52717aa9576",
+  "program": null,
+  "course": {
+   "id": "b81a86fb-07fa-40b1-90e5-3bea39d5dd2e",
+   "code": "20314513",
+   "titleTh": "การพัฒนานวัตกรรมเทคโนโลยีดิจิทัล",
+   "titleEn": "Digital Technology Innovation Development",
+   "credits": 3
+  },
+  "group": {
+   "id": "dd21c9fe-7676-46ec-b413-605f72caf152",
+   "name": "กลุ่มวิชาพัฒนาระบบสารสนเทศอัจฉริยะ (Smart Information System Development)"
+  },
+  "createdAt": "2026-08-18T06:54:43.329Z",
+  "updatedAt": "2026-08-18T06:54:43.329Z"
+ },
+ {
+  "id": "b7670831-4bc0-4041-be6a-34819b4feea8",
+  "program": null,
+  "course": {
+   "id": "b7db35ec-7cd7-48e8-aea5-3ba981e64e6d",
+   "code": "20314512",
+   "titleTh": "การเรียนรู้ของเครื่องจักรและปัญญาประดิษฐ์",
+   "titleEn": "Machine Learning and Artificial Intelligence",
+   "credits": 3
+  },
+  "group": {
+   "id": "dd21c9fe-7676-46ec-b413-605f72caf152",
+   "name": "กลุ่มวิชาพัฒนาระบบสารสนเทศอัจฉริยะ (Smart Information System Development)"
+  },
+  "createdAt": "2026-08-18T06:54:43.318Z",
+  "updatedAt": "2026-08-18T06:54:43.318Z"
+ },
+ {
+  "id": "b80ef147-df14-47e5-b68f-39b6f017654a",
+  "program": null,
+  "course": {
+   "id": "93bd8cf9-431c-48fe-9c64-42f73e5f4eae",
+   "code": "20314511",
+   "titleTh": "วิทยาการข้อมูล",
+   "titleEn": "Data Science",
+   "credits": 3
+  },
+  "group": {
+   "id": "dd21c9fe-7676-46ec-b413-605f72caf152",
+   "name": "กลุ่มวิชาพัฒนาระบบสารสนเทศอัจฉริยะ (Smart Information System Development)"
+  },
+  "createdAt": "2026-08-18T06:54:43.305Z",
+  "updatedAt": "2026-08-18T06:54:43.305Z"
+ },
+ {
+  "id": "130d2d70-b0f9-4c3d-9def-6d4076f7e7a7",
+  "program": null,
+  "course": {
+   "id": "0e5e931d-34c7-47cc-9890-01a8709de520",
+   "code": "20314504",
+   "titleTh": "นวัตกรรมการสื่อสารแบบครบวงจร",
+   "titleEn": "Unified Communication Innovation",
+   "credits": 3
+  },
+  "group": {
+   "id": "50d1b0af-9aa6-46c7-859a-8886aaf70275",
+   "name": "วิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:43.293Z",
+  "updatedAt": "2026-08-18T06:54:43.293Z"
+ },
+ {
+  "id": "6769d1f2-1ce7-4f52-862a-567d65536b0e",
+  "program": null,
+  "course": {
+   "id": "4d49101c-328d-4adf-a503-af2cc5856c23",
+   "code": "20314503",
+   "titleTh": "การพัฒนาแอพพลิเคชันและเซอร์วิส",
+   "titleEn": "Application and Services Development",
+   "credits": 3
+  },
+  "group": {
+   "id": "50d1b0af-9aa6-46c7-859a-8886aaf70275",
+   "name": "วิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:43.281Z",
+  "updatedAt": "2026-08-18T06:54:43.281Z"
+ },
+ {
+  "id": "ae7f4e16-8d51-4652-a0e3-8e64e79bbee6",
+  "program": null,
+  "course": {
+   "id": "4c91caff-eaa9-482a-af28-24bd20b6dd0d",
+   "code": "20314502",
+   "titleTh": "แก่นนวัตกรรมเทคโนโลยีดิจิทัล",
+   "titleEn": "Digital Technology Innovation Essential",
+   "credits": 3
+  },
+  "group": {
+   "id": "50d1b0af-9aa6-46c7-859a-8886aaf70275",
+   "name": "วิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:43.270Z",
+  "updatedAt": "2026-08-18T06:54:43.270Z"
+ },
+ {
+  "id": "c25498de-e050-456d-bc1a-453cbb6d1c7f",
+  "program": null,
+  "course": {
+   "id": "96f7d7ba-c8c6-48d2-bc4f-5cc0e597cfce",
+   "code": "20314694",
+   "titleTh": "วิทยานิพนธ์ 4",
+   "titleEn": "Thesis 4",
+   "credits": 12
+  },
+  "group": {
+   "id": "286f0057-f721-4d89-892f-bd86c6e2970e",
+   "name": "วิทยานิพนธ์"
+  },
+  "createdAt": "2026-08-18T06:54:43.259Z",
+  "updatedAt": "2026-08-18T06:54:43.259Z"
+ },
+ {
+  "id": "5b9e973a-e4ed-43e3-965f-7d5a67aaff28",
+  "program": null,
+  "course": {
+   "id": "34550897-0dcf-4998-a7d0-74d777138751",
+   "code": "20314693",
+   "titleTh": "วิทยานิพนธ์ 3",
+   "titleEn": "Thesis 3",
+   "credits": 12
+  },
+  "group": {
+   "id": "286f0057-f721-4d89-892f-bd86c6e2970e",
+   "name": "วิทยานิพนธ์"
+  },
+  "createdAt": "2026-08-18T06:54:43.247Z",
+  "updatedAt": "2026-08-18T06:54:43.247Z"
+ },
+ {
+  "id": "b7647817-40f9-4d0d-88b0-e1496aa9d5d9",
+  "program": null,
+  "course": {
+   "id": "07a5b1ff-308b-44ee-a327-cca69a170fc1",
+   "code": "20314692",
+   "titleTh": "วิทยานิพนธ์ 2",
+   "titleEn": "Thesis 2",
+   "credits": 6
+  },
+  "group": {
+   "id": "286f0057-f721-4d89-892f-bd86c6e2970e",
+   "name": "วิทยานิพนธ์"
+  },
+  "createdAt": "2026-08-18T06:54:43.235Z",
+  "updatedAt": "2026-08-18T06:54:43.235Z"
+ },
+ {
+  "id": "55a27ebe-4701-4194-bafa-ee62d0046c6d",
+  "program": null,
+  "course": {
+   "id": "2ca9e21a-53df-4552-8ed1-6a037f256a86",
+   "code": "20314691",
+   "titleTh": "วิทยานิพนธ์ 1",
+   "titleEn": "Thesis 1",
+   "credits": 6
+  },
+  "group": {
+   "id": "286f0057-f721-4d89-892f-bd86c6e2970e",
+   "name": "วิทยานิพนธ์"
+  },
+  "createdAt": "2026-08-18T06:54:43.223Z",
+  "updatedAt": "2026-08-18T06:54:43.223Z"
+ },
+ {
+  "id": "8e778420-07de-4635-aa30-94a921885b32",
+  "program": null,
+  "course": {
+   "id": "406a10b2-cce1-4095-8c70-d36c3b4b0fc6",
+   "code": "20314594",
+   "titleTh": "สัมมนา 4",
+   "titleEn": "Seminar 4",
+   "credits": 1
+  },
+  "group": {
+   "id": "4421631c-3d57-4c89-b44f-2ad03c447467",
+   "name": "รายวิชาที่ไม่นับหน่วยกิต"
+  },
+  "createdAt": "2026-08-18T06:54:43.211Z",
+  "updatedAt": "2026-08-18T06:54:43.211Z"
+ },
+ {
+  "id": "51769eb6-4e27-4c3b-8175-4e24c29d8c60",
+  "program": null,
+  "course": {
+   "id": "9d967f35-f15f-44ac-8418-1a251a573eef",
+   "code": "20314593",
+   "titleTh": "สัมมนา 3",
+   "titleEn": "Seminar 3",
+   "credits": 1
+  },
+  "group": {
+   "id": "4421631c-3d57-4c89-b44f-2ad03c447467",
+   "name": "รายวิชาที่ไม่นับหน่วยกิต"
+  },
+  "createdAt": "2026-08-18T06:54:43.199Z",
+  "updatedAt": "2026-08-18T06:54:43.199Z"
+ },
+ {
+  "id": "29dbf192-f90c-423f-90f6-e03e28d83f08",
+  "program": null,
+  "course": {
+   "id": "3e4ced41-3453-4ae8-9174-4b5a89c97ccb",
+   "code": "20314592",
+   "titleTh": "สัมมนา 2",
+   "titleEn": "Seminar 2",
+   "credits": 1
+  },
+  "group": {
+   "id": "4421631c-3d57-4c89-b44f-2ad03c447467",
+   "name": "รายวิชาที่ไม่นับหน่วยกิต"
+  },
+  "createdAt": "2026-08-18T06:54:43.188Z",
+  "updatedAt": "2026-08-18T06:54:43.188Z"
+ },
+ {
+  "id": "dcf7855e-904f-4dc1-9893-a453d75b305e",
+  "program": null,
+  "course": {
+   "id": "e9561999-51a4-4190-82af-224aea0f87e5",
+   "code": "20314591",
+   "titleTh": "สัมมนา 1",
+   "titleEn": "Seminar 1",
+   "credits": 1
+  },
+  "group": {
+   "id": "4421631c-3d57-4c89-b44f-2ad03c447467",
+   "name": "รายวิชาที่ไม่นับหน่วยกิต"
+  },
+  "createdAt": "2026-08-18T06:54:43.176Z",
+  "updatedAt": "2026-08-18T06:54:43.176Z"
+ },
+ {
+  "id": "8c4a250e-5685-4180-bad9-1fa762e0cef1",
+  "program": null,
+  "course": {
+   "id": "08cf768c-fae0-4119-baf2-7e812eca9fe4",
+   "code": "20314501",
+   "titleTh": "ระเบียบวิธีวิจัยทางนวัตกรรมเทคโนโลยีดิจิทัล",
+   "titleEn": "Research Methodology in Digital Technology Innovation",
+   "credits": 3
+  },
+  "group": {
+   "id": "4421631c-3d57-4c89-b44f-2ad03c447467",
+   "name": "รายวิชาที่ไม่นับหน่วยกิต"
+  },
+  "createdAt": "2026-08-18T06:54:43.165Z",
+  "updatedAt": "2026-08-18T06:54:43.165Z"
+ },
+ {
+  "id": "c9c18b89-d836-47e8-9231-661741c6c547",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "a1a3180d-6058-4642-a018-161d9226bac4",
+   "code": "10301392",
+   "titleTh": "Course 10301392",
+   "titleEn": "Course 10301392",
+   "credits": 3
+  },
+  "group": {
+   "id": "aaf0e23f-dc11-49d1-9171-608d0e3d37ea",
+   "name": "กลุ่มวิชาหัวข้อพิเศษ (Special Topics)"
+  },
+  "createdAt": "2026-08-18T06:54:43.153Z",
+  "updatedAt": "2026-08-18T06:54:43.153Z"
+ },
+ {
+  "id": "3b94d8e9-f958-4e81-8327-b7757f872961",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "936f3a20-46a3-48e3-9cd8-701ae97701a0",
+   "code": "10301391",
+   "titleTh": "Course 10301391",
+   "titleEn": "Course 10301391",
+   "credits": 3
+  },
+  "group": {
+   "id": "aaf0e23f-dc11-49d1-9171-608d0e3d37ea",
+   "name": "กลุ่มวิชาหัวข้อพิเศษ (Special Topics)"
+  },
+  "createdAt": "2026-08-18T06:54:43.142Z",
+  "updatedAt": "2026-08-18T06:54:43.142Z"
+ },
+ {
+  "id": "9d4be316-2445-493b-9ab5-05f04e76b725",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "bd72fb94-835e-4797-9a71-f8a24e2563ad",
+   "code": "10301385",
+   "titleTh": "Course 10301385",
+   "titleEn": "Course 10301385",
+   "credits": 3
+  },
+  "group": {
+   "id": "d43e88d7-6767-4d81-8f35-d811d8a65539",
+   "name": "กลุ่มวิชาการประยุกต์งานด้านธุรกิจ (Computer Science for Business)"
+  },
+  "createdAt": "2026-08-18T06:54:43.130Z",
+  "updatedAt": "2026-08-18T06:54:43.130Z"
+ },
+ {
+  "id": "3b84c881-3b38-471c-9afc-573b4b9aa5aa",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "72d913c1-f80d-4859-83b5-cba3e20116bb",
+   "code": "10301384",
+   "titleTh": "Course 10301384",
+   "titleEn": "Course 10301384",
+   "credits": 3
+  },
+  "group": {
+   "id": "d43e88d7-6767-4d81-8f35-d811d8a65539",
+   "name": "กลุ่มวิชาการประยุกต์งานด้านธุรกิจ (Computer Science for Business)"
+  },
+  "createdAt": "2026-08-18T06:54:43.118Z",
+  "updatedAt": "2026-08-18T06:54:43.118Z"
+ },
+ {
+  "id": "7f14fce7-007f-412e-9409-e50efb61d7e7",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "686ef30f-3049-4fe1-a527-f42c10d36ec5",
+   "code": "10301383",
+   "titleTh": "Course 10301383",
+   "titleEn": "Course 10301383",
+   "credits": 3
+  },
+  "group": {
+   "id": "d43e88d7-6767-4d81-8f35-d811d8a65539",
+   "name": "กลุ่มวิชาการประยุกต์งานด้านธุรกิจ (Computer Science for Business)"
+  },
+  "createdAt": "2026-08-18T06:54:43.107Z",
+  "updatedAt": "2026-08-18T06:54:43.107Z"
+ },
+ {
+  "id": "9f8167e5-8894-43ee-ab08-00037a15f75d",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "6e4ec36b-c06f-4932-98f4-f8e2354b141f",
+   "code": "10301382",
+   "titleTh": "Course 10301382",
+   "titleEn": "Course 10301382",
+   "credits": 3
+  },
+  "group": {
+   "id": "d43e88d7-6767-4d81-8f35-d811d8a65539",
+   "name": "กลุ่มวิชาการประยุกต์งานด้านธุรกิจ (Computer Science for Business)"
+  },
+  "createdAt": "2026-08-18T06:54:43.095Z",
+  "updatedAt": "2026-08-18T06:54:43.095Z"
+ },
+ {
+  "id": "9097155d-29fa-4337-88bd-8702217d5093",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "af977e2f-c1e0-4d0f-9e79-663ac1238f5d",
+   "code": "10301381",
+   "titleTh": "Course 10301381",
+   "titleEn": "Course 10301381",
+   "credits": 3
+  },
+  "group": {
+   "id": "d43e88d7-6767-4d81-8f35-d811d8a65539",
+   "name": "กลุ่มวิชาการประยุกต์งานด้านธุรกิจ (Computer Science for Business)"
+  },
+  "createdAt": "2026-08-18T06:54:43.084Z",
+  "updatedAt": "2026-08-18T06:54:43.084Z"
+ },
+ {
+  "id": "bcc68a24-1674-4512-9423-1bd360482054",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "fb6fbcae-81eb-4a76-923f-3784d0919310",
+   "code": "10301379",
+   "titleTh": "Course 10301379",
+   "titleEn": "Course 10301379",
+   "credits": 3
+  },
+  "group": {
+   "id": "729fcecc-ceda-460f-9010-205dbb7426a1",
+   "name": "กลุ่มวิชาปัญญาประดิษฐ์ (Artificial Intelligence)"
+  },
+  "createdAt": "2026-08-18T06:54:43.072Z",
+  "updatedAt": "2026-08-18T06:54:43.072Z"
+ },
+ {
+  "id": "f51bbb71-6387-442a-9ff5-4ba39c15935e",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "6b4386a8-1356-4a76-947c-3d5192a7babb",
+   "code": "10301378",
+   "titleTh": "Course 10301378",
+   "titleEn": "Course 10301378",
+   "credits": 3
+  },
+  "group": {
+   "id": "729fcecc-ceda-460f-9010-205dbb7426a1",
+   "name": "กลุ่มวิชาปัญญาประดิษฐ์ (Artificial Intelligence)"
+  },
+  "createdAt": "2026-08-18T06:54:43.060Z",
+  "updatedAt": "2026-08-18T06:54:43.060Z"
+ },
+ {
+  "id": "0ac3e1b2-9c6b-4893-b2a5-6bcfb5f16547",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "78f1c162-298d-4d7a-8992-8fd117c73891",
+   "code": "10301377",
+   "titleTh": "Course 10301377",
+   "titleEn": "Course 10301377",
+   "credits": 3
+  },
+  "group": {
+   "id": "729fcecc-ceda-460f-9010-205dbb7426a1",
+   "name": "กลุ่มวิชาปัญญาประดิษฐ์ (Artificial Intelligence)"
+  },
+  "createdAt": "2026-08-18T06:54:43.048Z",
+  "updatedAt": "2026-08-18T06:54:43.048Z"
+ },
+ {
+  "id": "46128e00-a075-43ff-a8c4-def0138dfce9",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "cf1dc532-3a55-46a9-b326-8aae14bf779f",
+   "code": "10301376",
+   "titleTh": "Course 10301376",
+   "titleEn": "Course 10301376",
+   "credits": 3
+  },
+  "group": {
+   "id": "729fcecc-ceda-460f-9010-205dbb7426a1",
+   "name": "กลุ่มวิชาปัญญาประดิษฐ์ (Artificial Intelligence)"
+  },
+  "createdAt": "2026-08-18T06:54:43.037Z",
+  "updatedAt": "2026-08-18T06:54:43.037Z"
+ },
+ {
+  "id": "5a0a6ee4-311a-44a9-b079-88a7908c85cf",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "2cbd5e31-bfa2-4084-a22c-070c961315c2",
+   "code": "10301375",
+   "titleTh": "Course 10301375",
+   "titleEn": "Course 10301375",
+   "credits": 3
+  },
+  "group": {
+   "id": "729fcecc-ceda-460f-9010-205dbb7426a1",
+   "name": "กลุ่มวิชาปัญญาประดิษฐ์ (Artificial Intelligence)"
+  },
+  "createdAt": "2026-08-18T06:54:43.025Z",
+  "updatedAt": "2026-08-18T06:54:43.025Z"
+ },
+ {
+  "id": "3c4f3c8a-0356-4d4b-8f3d-e700e88608ea",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "798f007f-4021-4240-877d-097720522999",
+   "code": "10301374",
+   "titleTh": "Course 10301374",
+   "titleEn": "Course 10301374",
+   "credits": 3
+  },
+  "group": {
+   "id": "729fcecc-ceda-460f-9010-205dbb7426a1",
+   "name": "กลุ่มวิชาปัญญาประดิษฐ์ (Artificial Intelligence)"
+  },
+  "createdAt": "2026-08-18T06:54:43.013Z",
+  "updatedAt": "2026-08-18T06:54:43.013Z"
+ },
+ {
+  "id": "0b727a27-3faf-4ff8-95c5-6224b6703359",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "e45007fe-4543-468a-b9d0-c2eecde572a4",
+   "code": "10301373",
+   "titleTh": "Course 10301373",
+   "titleEn": "Course 10301373",
+   "credits": 3
+  },
+  "group": {
+   "id": "729fcecc-ceda-460f-9010-205dbb7426a1",
+   "name": "กลุ่มวิชาปัญญาประดิษฐ์ (Artificial Intelligence)"
+  },
+  "createdAt": "2026-08-18T06:54:43.001Z",
+  "updatedAt": "2026-08-18T06:54:43.001Z"
+ },
+ {
+  "id": "42ada323-5ebe-48e3-9ff7-71497e31dcb8",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "61e4f7cc-3896-483b-b226-99073e67a124",
+   "code": "10301372",
+   "titleTh": "Course 10301372",
+   "titleEn": "Course 10301372",
+   "credits": 3
+  },
+  "group": {
+   "id": "729fcecc-ceda-460f-9010-205dbb7426a1",
+   "name": "กลุ่มวิชาปัญญาประดิษฐ์ (Artificial Intelligence)"
+  },
+  "createdAt": "2026-08-18T06:54:42.990Z",
+  "updatedAt": "2026-08-18T06:54:42.990Z"
+ },
+ {
+  "id": "00ea159f-0d56-4880-ab81-1ac63630a5cf",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "c7b353aa-c13c-4ae5-9c56-4cbd7cbc5ae7",
+   "code": "10301371",
+   "titleTh": "Course 10301371",
+   "titleEn": "Course 10301371",
+   "credits": 3
+  },
+  "group": {
+   "id": "729fcecc-ceda-460f-9010-205dbb7426a1",
+   "name": "กลุ่มวิชาปัญญาประดิษฐ์ (Artificial Intelligence)"
+  },
+  "createdAt": "2026-08-18T06:54:42.978Z",
+  "updatedAt": "2026-08-18T06:54:42.978Z"
+ },
+ {
+  "id": "7a64a897-5e66-4cc6-8501-e479e9832be1",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "16c4659e-916b-49f9-9425-49c26cda5cae",
+   "code": "10301367",
+   "titleTh": "Course 10301367",
+   "titleEn": "Course 10301367",
+   "credits": 3
+  },
+  "group": {
+   "id": "7c678788-15be-4b3a-a88a-2849279c2ed1",
+   "name": "กลุ่มวิชาอินเทอร์เน็ตในทุกสิ่ง (Internet of Things)"
+  },
+  "createdAt": "2026-08-18T06:54:42.966Z",
+  "updatedAt": "2026-08-18T06:54:42.966Z"
+ },
+ {
+  "id": "88e50ca8-48ed-49a6-8c51-98dcfbd8fc57",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "42fb1309-0863-48c8-bdde-4b7654334478",
+   "code": "10301366",
+   "titleTh": "Course 10301366",
+   "titleEn": "Course 10301366",
+   "credits": 3
+  },
+  "group": {
+   "id": "7c678788-15be-4b3a-a88a-2849279c2ed1",
+   "name": "กลุ่มวิชาอินเทอร์เน็ตในทุกสิ่ง (Internet of Things)"
+  },
+  "createdAt": "2026-08-18T06:54:42.954Z",
+  "updatedAt": "2026-08-18T06:54:42.954Z"
+ },
+ {
+  "id": "fb7d1452-167a-431a-ae9d-cfef747aa0f3",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "5db0b8db-6741-4a84-9dba-c5ee9372ac8f",
+   "code": "10301365",
+   "titleTh": "Course 10301365",
+   "titleEn": "Course 10301365",
+   "credits": 3
+  },
+  "group": {
+   "id": "7c678788-15be-4b3a-a88a-2849279c2ed1",
+   "name": "กลุ่มวิชาอินเทอร์เน็ตในทุกสิ่ง (Internet of Things)"
+  },
+  "createdAt": "2026-08-18T06:54:42.943Z",
+  "updatedAt": "2026-08-18T06:54:42.943Z"
+ },
+ {
+  "id": "e0e8104a-fd63-44e9-a3de-39100170d324",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "398ccebf-624d-4a16-941f-f47d0576720f",
+   "code": "10301364",
+   "titleTh": "Course 10301364",
+   "titleEn": "Course 10301364",
+   "credits": 3
+  },
+  "group": {
+   "id": "7c678788-15be-4b3a-a88a-2849279c2ed1",
+   "name": "กลุ่มวิชาอินเทอร์เน็ตในทุกสิ่ง (Internet of Things)"
+  },
+  "createdAt": "2026-08-18T06:54:42.930Z",
+  "updatedAt": "2026-08-18T06:54:42.930Z"
+ },
+ {
+  "id": "e12003f7-0055-4a0e-810a-a4dd6482247f",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "df7a85cf-c48c-45b8-bd0e-f54d26c5756c",
+   "code": "10301363",
+   "titleTh": "Course 10301363",
+   "titleEn": "Course 10301363",
+   "credits": 3
+  },
+  "group": {
+   "id": "7c678788-15be-4b3a-a88a-2849279c2ed1",
+   "name": "กลุ่มวิชาอินเทอร์เน็ตในทุกสิ่ง (Internet of Things)"
+  },
+  "createdAt": "2026-08-18T06:54:42.918Z",
+  "updatedAt": "2026-08-18T06:54:42.918Z"
+ },
+ {
+  "id": "42c1d7d7-0424-4eed-a9ac-941b6f35b0f7",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "77f83ffd-6653-4ab3-aadb-5024dc22083a",
+   "code": "10301362",
+   "titleTh": "Course 10301362",
+   "titleEn": "Course 10301362",
+   "credits": 3
+  },
+  "group": {
+   "id": "7c678788-15be-4b3a-a88a-2849279c2ed1",
+   "name": "กลุ่มวิชาอินเทอร์เน็ตในทุกสิ่ง (Internet of Things)"
+  },
+  "createdAt": "2026-08-18T06:54:42.905Z",
+  "updatedAt": "2026-08-18T06:54:42.905Z"
+ },
+ {
+  "id": "d8d5f06b-183f-4e06-87b6-84b4a858e156",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "0a627c22-a927-4ad9-8201-601b16227c18",
+   "code": "10301361",
+   "titleTh": "Course 10301361",
+   "titleEn": "Course 10301361",
+   "credits": 3
+  },
+  "group": {
+   "id": "7c678788-15be-4b3a-a88a-2849279c2ed1",
+   "name": "กลุ่มวิชาอินเทอร์เน็ตในทุกสิ่ง (Internet of Things)"
+  },
+  "createdAt": "2026-08-18T06:54:42.893Z",
+  "updatedAt": "2026-08-18T06:54:42.893Z"
+ },
+ {
+  "id": "c707944d-2529-49c6-bc21-85fa9c9a2f7e",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "45a9f855-77a6-48a9-b689-6aa2ec4449a3",
+   "code": "10301358",
+   "titleTh": "Course 10301358",
+   "titleEn": "Course 10301358",
+   "credits": 3
+  },
+  "group": {
+   "id": "fe1ba98d-9b72-4148-b487-4ba91da327b3",
+   "name": "กลุ่มวิชาวิทยาการข้อมูล (Data Science)"
+  },
+  "createdAt": "2026-08-18T06:54:42.879Z",
+  "updatedAt": "2026-08-18T06:54:42.879Z"
+ },
+ {
+  "id": "d7e080d4-36f1-45c9-b826-ba7473191c7a",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "53939b23-7686-4947-b1ea-8b590b98f3b1",
+   "code": "10301357",
+   "titleTh": "วิศวกรรมเครือข่ายคอมพิวเตอร์",
+   "titleEn": "Computer Network Engineering",
+   "credits": 3
+  },
+  "group": {
+   "id": "fe1ba98d-9b72-4148-b487-4ba91da327b3",
+   "name": "กลุ่มวิชาวิทยาการข้อมูล (Data Science)"
+  },
+  "createdAt": "2026-08-18T06:54:42.867Z",
+  "updatedAt": "2026-08-18T06:54:42.867Z"
+ },
+ {
+  "id": "14a4d049-db54-46af-bc4a-459cfb673381",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "1ae6ddf6-fc46-43b5-ac39-55be500de897",
+   "code": "10301356",
+   "titleTh": "การประมวลผลสัญญาณดิจิทัล",
+   "titleEn": "Digital Signal Processing",
+   "credits": 3
+  },
+  "group": {
+   "id": "fe1ba98d-9b72-4148-b487-4ba91da327b3",
+   "name": "กลุ่มวิชาวิทยาการข้อมูล (Data Science)"
+  },
+  "createdAt": "2026-08-18T06:54:42.854Z",
+  "updatedAt": "2026-08-18T06:54:42.854Z"
+ },
+ {
+  "id": "335587b8-e4f8-41a1-be98-08657111b892",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "0e1e3866-fe75-4a4f-adc2-4df70bd844f7",
+   "code": "10301355",
+   "titleTh": "การประมวลผลเชิงควอนตัม",
+   "titleEn": "Quantum Computing",
+   "credits": 3
+  },
+  "group": {
+   "id": "fe1ba98d-9b72-4148-b487-4ba91da327b3",
+   "name": "กลุ่มวิชาวิทยาการข้อมูล (Data Science)"
+  },
+  "createdAt": "2026-08-18T06:54:42.842Z",
+  "updatedAt": "2026-08-18T06:54:42.842Z"
+ },
+ {
+  "id": "f2562124-c8bd-4a5b-b50c-3c69e8b93e40",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "45378b5e-b9c4-4737-a321-2febe8cac684",
+   "code": "10301354",
+   "titleTh": "ความมั่นคงปลอดภัยไซเบอร์",
+   "titleEn": "Cybersecurity",
+   "credits": 3
+  },
+  "group": {
+   "id": "fe1ba98d-9b72-4148-b487-4ba91da327b3",
+   "name": "กลุ่มวิชาวิทยาการข้อมูล (Data Science)"
+  },
+  "createdAt": "2026-08-18T06:54:42.829Z",
+  "updatedAt": "2026-08-18T06:54:42.829Z"
+ },
+ {
+  "id": "d1fe8e73-062a-494b-94a6-518f987c7053",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "852372ea-643e-470c-ba05-f24b5e713e15",
+   "code": "10301353",
+   "titleTh": "ตรรกศาสตร์เชิงดิจิทัลและอุปกรณ์อัจฉริยะ",
+   "titleEn": "Digital Logic and Intelligent Devices",
+   "credits": 3
+  },
+  "group": {
+   "id": "fe1ba98d-9b72-4148-b487-4ba91da327b3",
+   "name": "กลุ่มวิชาวิทยาการข้อมูล (Data Science)"
+  },
+  "createdAt": "2026-08-18T06:54:42.816Z",
+  "updatedAt": "2026-08-18T06:54:42.816Z"
+ },
+ {
+  "id": "8f40ea3f-96b3-4df9-ac70-e45dd5f61cfc",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "06880c76-da10-4e3c-9120-2403c1733890",
+   "code": "10301352",
+   "titleTh": "อินเทอร์เน็ตในทุกสิ่ง",
+   "titleEn": "Internet of Things",
+   "credits": 3
+  },
+  "group": {
+   "id": "fe1ba98d-9b72-4148-b487-4ba91da327b3",
+   "name": "กลุ่มวิชาวิทยาการข้อมูล (Data Science)"
+  },
+  "createdAt": "2026-08-18T06:54:42.804Z",
+  "updatedAt": "2026-08-18T06:54:42.804Z"
+ },
+ {
+  "id": "19b5acd1-b39f-4998-a858-a2221e4d685b",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "969df052-2643-40df-b1ed-8d7080bcf98a",
+   "code": "10301351",
+   "titleTh": "การประมวลผลแบบกลุ่มเมฆ",
+   "titleEn": "Cloud Computing",
+   "credits": 3
+  },
+  "group": {
+   "id": "fe1ba98d-9b72-4148-b487-4ba91da327b3",
+   "name": "กลุ่มวิชาวิทยาการข้อมูล (Data Science)"
+  },
+  "createdAt": "2026-08-18T06:54:42.772Z",
+  "updatedAt": "2026-08-18T06:54:42.772Z"
+ },
+ {
+  "id": "17c5f034-ce7b-4bff-98e1-87756b8fbc2b",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "679f5481-0f8c-498c-871a-85740983eadd",
+   "code": "10301347",
+   "titleTh": "Course 10301347",
+   "titleEn": "Course 10301347",
+   "credits": 3
+  },
+  "group": {
+   "id": "3cfeea9e-ca94-4ad3-8d77-b9a3eb4a6fc7",
+   "name": "กลุ่มวิชาระบบเครือข่าย (Network System)"
+  },
+  "createdAt": "2026-08-18T06:54:42.761Z",
+  "updatedAt": "2026-08-18T06:54:42.761Z"
+ },
+ {
+  "id": "137d025a-c4b0-4cc7-b016-d5b40f5eb298",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "2bd6395e-7e3b-47e8-b239-316a4f6a7221",
+   "code": "10301346",
+   "titleTh": "Course 10301346",
+   "titleEn": "Course 10301346",
+   "credits": 3
+  },
+  "group": {
+   "id": "3cfeea9e-ca94-4ad3-8d77-b9a3eb4a6fc7",
+   "name": "กลุ่มวิชาระบบเครือข่าย (Network System)"
+  },
+  "createdAt": "2026-08-18T06:54:42.748Z",
+  "updatedAt": "2026-08-18T06:54:42.748Z"
+ },
+ {
+  "id": "ee749eeb-ab94-400e-ab91-832a6e76b84d",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "e6fdb222-600f-4f8d-81c8-5648f4dfd64a",
+   "code": "10301345",
+   "titleTh": "Course 10301345",
+   "titleEn": "Course 10301345",
+   "credits": 3
+  },
+  "group": {
+   "id": "3cfeea9e-ca94-4ad3-8d77-b9a3eb4a6fc7",
+   "name": "กลุ่มวิชาระบบเครือข่าย (Network System)"
+  },
+  "createdAt": "2026-08-18T06:54:42.735Z",
+  "updatedAt": "2026-08-18T06:54:42.735Z"
+ },
+ {
+  "id": "5fe19f3d-176d-4016-9a9d-93c884a7107c",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "a8bb43d8-fbf6-47cb-a3a9-51a96ef4f823",
+   "code": "10301344",
+   "titleTh": "Course 10301344",
+   "titleEn": "Course 10301344",
+   "credits": 3
+  },
+  "group": {
+   "id": "3cfeea9e-ca94-4ad3-8d77-b9a3eb4a6fc7",
+   "name": "กลุ่มวิชาระบบเครือข่าย (Network System)"
+  },
+  "createdAt": "2026-08-18T06:54:42.722Z",
+  "updatedAt": "2026-08-18T06:54:42.722Z"
+ },
+ {
+  "id": "c2e19ddd-1d7d-4e82-a899-04cab3224ba0",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "1041c703-21ca-497e-9d26-51fdbc811829",
+   "code": "10301343",
+   "titleTh": "Course 10301343",
+   "titleEn": "Course 10301343",
+   "credits": 3
+  },
+  "group": {
+   "id": "3cfeea9e-ca94-4ad3-8d77-b9a3eb4a6fc7",
+   "name": "กลุ่มวิชาระบบเครือข่าย (Network System)"
+  },
+  "createdAt": "2026-08-18T06:54:42.709Z",
+  "updatedAt": "2026-08-18T06:54:42.709Z"
+ },
+ {
+  "id": "3f1df0b3-4d67-475a-b7db-c5ffc3c5d834",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "018e6d35-aaee-425c-9199-0785c413801e",
+   "code": "10301342",
+   "titleTh": "Course 10301342",
+   "titleEn": "Course 10301342",
+   "credits": 3
+  },
+  "group": {
+   "id": "3cfeea9e-ca94-4ad3-8d77-b9a3eb4a6fc7",
+   "name": "กลุ่มวิชาระบบเครือข่าย (Network System)"
+  },
+  "createdAt": "2026-08-18T06:54:42.696Z",
+  "updatedAt": "2026-08-18T06:54:42.696Z"
+ },
+ {
+  "id": "a45919da-e26c-4b1e-a166-e9459aae5399",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "91132883-0bab-4325-9613-49d399962940",
+   "code": "10301341",
+   "titleTh": "Course 10301341",
+   "titleEn": "Course 10301341",
+   "credits": 3
+  },
+  "group": {
+   "id": "3cfeea9e-ca94-4ad3-8d77-b9a3eb4a6fc7",
+   "name": "กลุ่มวิชาระบบเครือข่าย (Network System)"
+  },
+  "createdAt": "2026-08-18T06:54:42.683Z",
+  "updatedAt": "2026-08-18T06:54:42.683Z"
+ },
+ {
+  "id": "1726634f-dbba-4ccf-be58-e7fb8d1cd272",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "60c78159-1dd4-4da9-88f9-7792ba44c9ed",
+   "code": "10301336",
+   "titleTh": "Course 10301336",
+   "titleEn": "Course 10301336",
+   "credits": 3
+  },
+  "group": {
+   "id": "9b3ab411-88db-431e-b5cb-a02b3a24a917",
+   "name": "กลุ่มวิชาการพัฒนาระบบแอปพลิเคชัน (Application Development)"
+  },
+  "createdAt": "2026-08-18T06:54:42.670Z",
+  "updatedAt": "2026-08-18T06:54:42.670Z"
+ },
+ {
+  "id": "d04916d6-daa3-465e-95f5-2c7f6227a4b4",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "294d8bf6-bb57-4491-899c-822bffaba605",
+   "code": "10301335",
+   "titleTh": "Course 10301335",
+   "titleEn": "Course 10301335",
+   "credits": 3
+  },
+  "group": {
+   "id": "9b3ab411-88db-431e-b5cb-a02b3a24a917",
+   "name": "กลุ่มวิชาการพัฒนาระบบแอปพลิเคชัน (Application Development)"
+  },
+  "createdAt": "2026-08-18T06:54:42.657Z",
+  "updatedAt": "2026-08-18T06:54:42.657Z"
+ },
+ {
+  "id": "9f9eae69-e32d-425f-be24-d61807e63ac0",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "46174b68-88c0-4b17-8aae-c32dbff0b170",
+   "code": "10301334",
+   "titleTh": "Course 10301334",
+   "titleEn": "Course 10301334",
+   "credits": 3
+  },
+  "group": {
+   "id": "9b3ab411-88db-431e-b5cb-a02b3a24a917",
+   "name": "กลุ่มวิชาการพัฒนาระบบแอปพลิเคชัน (Application Development)"
+  },
+  "createdAt": "2026-08-18T06:54:42.644Z",
+  "updatedAt": "2026-08-18T06:54:42.644Z"
+ },
+ {
+  "id": "3366ff0c-a0f7-4baf-8429-46733be22484",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "aa96d3f5-c5c1-4ef6-af24-0c8f552e4f40",
+   "code": "10301333",
+   "titleTh": "Course 10301333",
+   "titleEn": "Course 10301333",
+   "credits": 3
+  },
+  "group": {
+   "id": "9b3ab411-88db-431e-b5cb-a02b3a24a917",
+   "name": "กลุ่มวิชาการพัฒนาระบบแอปพลิเคชัน (Application Development)"
+  },
+  "createdAt": "2026-08-18T06:54:42.632Z",
+  "updatedAt": "2026-08-18T06:54:42.632Z"
+ },
+ {
+  "id": "4337a3eb-e4c3-48b9-a37c-77092f2aaf45",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "9ffda06f-7036-433b-bb89-78f95065cd29",
+   "code": "10301332",
+   "titleTh": "Course 10301332",
+   "titleEn": "Course 10301332",
+   "credits": 3
+  },
+  "group": {
+   "id": "9b3ab411-88db-431e-b5cb-a02b3a24a917",
+   "name": "กลุ่มวิชาการพัฒนาระบบแอปพลิเคชัน (Application Development)"
+  },
+  "createdAt": "2026-08-18T06:54:42.620Z",
+  "updatedAt": "2026-08-18T06:54:42.620Z"
+ },
+ {
+  "id": "9f22fb74-e52e-4c15-b4ed-ab8618c8305c",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "9eff65e8-8404-4ec8-a1a6-1fcc1ab74d6e",
+   "code": "10301331",
+   "titleTh": "Course 10301331",
+   "titleEn": "Course 10301331",
+   "credits": 3
+  },
+  "group": {
+   "id": "9b3ab411-88db-431e-b5cb-a02b3a24a917",
+   "name": "กลุ่มวิชาการพัฒนาระบบแอปพลิเคชัน (Application Development)"
+  },
+  "createdAt": "2026-08-18T06:54:42.607Z",
+  "updatedAt": "2026-08-18T06:54:42.607Z"
+ },
+ {
+  "id": "49ba6671-fb75-4be7-8089-6bcc4db6e247",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "6c29d6f6-326f-4f07-a705-fa9d3c018ffa",
+   "code": "10301314",
+   "titleTh": "Course 10301314",
+   "titleEn": "Course 10301314",
+   "credits": 3
+  },
+  "group": {
+   "id": "6c4088e4-23b0-4840-8c7f-ff8067b945a7",
+   "name": "กลุ่มวิชาความรู้พื้นฐานทางวิทยาการคอมพิวเตอร์(Fundamental Computer Science)"
+  },
+  "createdAt": "2026-08-18T06:54:42.591Z",
+  "updatedAt": "2026-08-18T06:54:42.591Z"
+ },
+ {
+  "id": "8997b2de-8849-4803-8852-4e6186bf7571",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "154af2f8-f015-40ff-b0bd-3480ba87ce00",
+   "code": "10301313",
+   "titleTh": "Course 10301313",
+   "titleEn": "Course 10301313",
+   "credits": 3
+  },
+  "group": {
+   "id": "6c4088e4-23b0-4840-8c7f-ff8067b945a7",
+   "name": "กลุ่มวิชาความรู้พื้นฐานทางวิทยาการคอมพิวเตอร์(Fundamental Computer Science)"
+  },
+  "createdAt": "2026-08-18T06:54:42.579Z",
+  "updatedAt": "2026-08-18T06:54:42.579Z"
+ },
+ {
+  "id": "7b05094c-c4d7-4be7-a026-2370d7e886ac",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "8b3c93a3-faf7-4d27-91fd-a794db1d0c23",
+   "code": "10301312",
+   "titleTh": "Course 10301312",
+   "titleEn": "Course 10301312",
+   "credits": 3
+  },
+  "group": {
+   "id": "6c4088e4-23b0-4840-8c7f-ff8067b945a7",
+   "name": "กลุ่มวิชาความรู้พื้นฐานทางวิทยาการคอมพิวเตอร์(Fundamental Computer Science)"
+  },
+  "createdAt": "2026-08-18T06:54:42.566Z",
+  "updatedAt": "2026-08-18T06:54:42.566Z"
+ },
+ {
+  "id": "7ab21698-5447-43f7-affe-ecb2f75364ce",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "5a6b80c8-5754-4539-a265-088cd1abbe70",
+   "code": "10301311",
+   "titleTh": "Course 10301311",
+   "titleEn": "Course 10301311",
+   "credits": 3
+  },
+  "group": {
+   "id": "6c4088e4-23b0-4840-8c7f-ff8067b945a7",
+   "name": "กลุ่มวิชาความรู้พื้นฐานทางวิทยาการคอมพิวเตอร์(Fundamental Computer Science)"
+  },
+  "createdAt": "2026-08-18T06:54:42.552Z",
+  "updatedAt": "2026-08-18T06:54:42.552Z"
+ },
+ {
+  "id": "f38220d6-a9bd-46e8-9426-a6c14c47accd",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "d8d59106-a196-494a-bfc1-4e6ed558b121",
+   "code": "10300499",
+   "titleTh": "การศึกษา หรือ ฝึกงาน หรือฝึกอบรมต่างประเทศ",
+   "titleEn": "Study or Internship or Training Abroad",
+   "credits": 0
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:42.540Z",
+  "updatedAt": "2026-08-18T06:54:42.540Z"
+ },
+ {
+  "id": "85b015f2-c048-4d5a-9d4d-2fddb64deb36",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "27f09671-2e03-4adc-8071-d416e78923b2",
+   "code": "10300498",
+   "titleTh": "การเรียนรู้อิสระ",
+   "titleEn": "Independent Study",
+   "credits": 0
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:42.527Z",
+  "updatedAt": "2026-08-18T06:54:42.527Z"
+ },
+ {
+  "id": "fbd20a37-cc28-4cbd-b03c-a139f1dc086d",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "3fd36aa3-1b21-4758-a370-da72cc43825e",
+   "code": "10300497",
+   "titleTh": "สหกิจศึกษา",
+   "titleEn": "Cooperative Education",
+   "credits": 0
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:42.514Z",
+  "updatedAt": "2026-08-18T06:54:42.514Z"
+ },
+ {
+  "id": "dc8ccc9d-198e-4038-94b3-fd2d7ca231c8",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "c16db456-27ff-42bd-ab82-ee90c14e5ef0",
+   "code": "10301491",
+   "titleTh": "สัมมนาวิชาการทางวิทยาการคอมพิวเตอร์",
+   "titleEn": "Seminar in Computer Science",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:42.502Z",
+  "updatedAt": "2026-08-18T06:54:42.502Z"
+ },
+ {
+  "id": "dd2e77db-cb19-46f3-aa7d-1fbb3620b8e9",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "50029a76-5db6-4542-a308-32312f2b6b97",
+   "code": "10301233",
+   "titleTh": "Course 10301233",
+   "titleEn": "Course 10301233",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:42.489Z",
+  "updatedAt": "2026-08-18T06:54:42.489Z"
+ },
+ {
+  "id": "af1ad83b-d98a-4f69-a9cf-2bbd21e16ff7",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "7b6321c2-6516-4ed2-8650-f0cb9b8c2355",
+   "code": "10301232",
+   "titleTh": "Course 10301232",
+   "titleEn": "Course 10301232",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:42.476Z",
+  "updatedAt": "2026-08-18T06:54:42.476Z"
+ },
+ {
+  "id": "3c2efe47-4b67-4fce-8dd9-2690f6e89351",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "a568e0ee-5b15-4703-9e82-d6a0bb7ab37e",
+   "code": "10301231",
+   "titleTh": "Course 10301231",
+   "titleEn": "Course 10301231",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:42.463Z",
+  "updatedAt": "2026-08-18T06:54:42.463Z"
+ },
+ {
+  "id": "4e8ebdf0-a009-49b8-b7e8-18bdf783deb9",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "8893a731-0195-4f0a-84b5-6e47082031bc",
+   "code": "10301225",
+   "titleTh": "Course 10301225",
+   "titleEn": "Course 10301225",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:42.450Z",
+  "updatedAt": "2026-08-18T06:54:42.450Z"
+ },
+ {
+  "id": "7e9ea7d8-2e03-4533-9559-46cb3316a73f",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "1e5ffdcd-418e-4625-bbf6-cf7d9e250b53",
+   "code": "10301224",
+   "titleTh": "Course 10301224",
+   "titleEn": "Course 10301224",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:42.438Z",
+  "updatedAt": "2026-08-18T06:54:42.438Z"
+ },
+ {
+  "id": "7d496247-5d35-4c18-b292-1d54b62da8eb",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "2d2083de-823d-4a01-a676-207834ba262d",
+   "code": "10301223",
+   "titleTh": "Course 10301223",
+   "titleEn": "Course 10301223",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:42.425Z",
+  "updatedAt": "2026-08-18T06:54:42.425Z"
+ },
+ {
+  "id": "49d3a5ff-85d0-4005-b7de-d0993527f188",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "c18c64ed-a7f6-416b-9a98-21e563da9502",
+   "code": "10301222",
+   "titleTh": "Course 10301222",
+   "titleEn": "Course 10301222",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:42.413Z",
+  "updatedAt": "2026-08-18T06:54:42.413Z"
+ },
+ {
+  "id": "88b37d63-a0f2-4753-9b42-c7a54d7d9656",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "f5e55201-a92a-48b9-adcc-da8774b518b6",
+   "code": "10301221",
+   "titleTh": "Course 10301221",
+   "titleEn": "Course 10301221",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:42.400Z",
+  "updatedAt": "2026-08-18T06:54:42.400Z"
+ },
+ {
+  "id": "a410fd14-2e2e-4302-a975-e03444cd64cc",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "1ec67f19-82d3-4b5f-a3fc-76284b7c5074",
+   "code": "10301212",
+   "titleTh": "Course 10301212",
+   "titleEn": "Course 10301212",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:42.387Z",
+  "updatedAt": "2026-08-18T06:54:42.387Z"
+ },
+ {
+  "id": "2c0e926d-e84e-4830-be16-b5893fa61e01",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "4259d9b9-9c7c-4507-ab7f-f346e367d0de",
+   "code": "10301141",
+   "titleTh": "Course 10301141",
+   "titleEn": "Course 10301141",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:42.373Z",
+  "updatedAt": "2026-08-18T06:54:42.373Z"
+ },
+ {
+  "id": "8019299b-b45d-42c3-a413-a68342c29f2c",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "dfc37723-6aa9-41dc-b4c0-26f85970067f",
+   "code": "10301114",
+   "titleTh": "Course 10301114",
+   "titleEn": "Course 10301114",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:42.361Z",
+  "updatedAt": "2026-08-18T06:54:42.361Z"
+ },
+ {
+  "id": "c8c4529b-918e-40b8-becc-d69a9b66fdf9",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "1d0cd686-741a-435c-a8ae-66a8ac2f09a6",
+   "code": "10301112",
+   "titleTh": "Course 10301112",
+   "titleEn": "Course 10301112",
+   "credits": 3
+  },
+  "group": {
+   "id": "92b08fda-ccd2-4100-9438-3a55b4607c96",
+   "name": "กลุ่มวิชาเอกบังคับ"
+  },
+  "createdAt": "2026-08-18T06:54:42.348Z",
+  "updatedAt": "2026-08-18T06:54:42.348Z"
+ },
+ {
+  "id": "79542744-ef7f-4c89-95d7-c256ecf4fc25",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "d9184a74-a718-47b7-8cfd-72793e0cd052",
+   "code": "10700320",
+   "titleTh": "ภาษาอังกฤษเพื่อการศึกษาต่อและการประกอบอาชีพ",
+   "titleEn": "English for Further Study and Careers",
+   "credits": 3
+  },
+  "group": {
+   "id": "2f1d888e-64c9-4cdf-854b-413c9a1c9c7a",
+   "name": "กลุ่มวิชาแกน"
+  },
+  "createdAt": "2026-08-18T06:54:42.336Z",
+  "updatedAt": "2026-08-18T06:54:42.336Z"
+ },
+ {
+  "id": "2f07d412-2c2a-4327-8c11-051fbdb6e8db",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "3e79bab4-21f7-42f6-a759-a2b826a9fd9e",
+   "code": "10301211",
+   "titleTh": "Course 10301211",
+   "titleEn": "Course 10301211",
+   "credits": 3
+  },
+  "group": {
+   "id": "2f1d888e-64c9-4cdf-854b-413c9a1c9c7a",
+   "name": "กลุ่มวิชาแกน"
+  },
+  "createdAt": "2026-08-18T06:54:42.323Z",
+  "updatedAt": "2026-08-18T06:54:42.323Z"
+ },
+ {
+  "id": "9604ecb6-0b6f-4505-9b08-543b7e9ac91a",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "87e4b06a-33c9-4db9-82b1-73d0eaa29ee0",
+   "code": "10305108",
+   "titleTh": "Course 10305108",
+   "titleEn": "Course 10305108",
+   "credits": 3
+  },
+  "group": {
+   "id": "2f1d888e-64c9-4cdf-854b-413c9a1c9c7a",
+   "name": "กลุ่มวิชาแกน"
+  },
+  "createdAt": "2026-08-18T06:54:42.310Z",
+  "updatedAt": "2026-08-18T06:54:42.310Z"
+ },
+ {
+  "id": "228242b7-768f-4f8a-b4d2-4c20b440138c",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "103f1591-0044-465d-93af-0fabd8c2e029",
+   "code": "10304205",
+   "titleTh": "ความน่าจะเป็นและสถิติ",
+   "titleEn": "Probability and Statistics",
+   "credits": 3
+  },
+  "group": {
+   "id": "2f1d888e-64c9-4cdf-854b-413c9a1c9c7a",
+   "name": "กลุ่มวิชาแกน"
+  },
+  "createdAt": "2026-08-18T06:54:42.298Z",
+  "updatedAt": "2026-08-18T06:54:42.298Z"
+ },
+ {
+  "id": "a50afc91-2679-482e-957a-346b2598cd58",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "7e556c07-dfc4-4f15-9667-6f1b0c3c57db",
+   "code": "10301113",
+   "titleTh": "คณิตศาสตร์ดีสครีต",
+   "titleEn": "Discrete Mathematics",
+   "credits": 3
+  },
+  "group": {
+   "id": "2f1d888e-64c9-4cdf-854b-413c9a1c9c7a",
+   "name": "กลุ่มวิชาแกน"
+  },
+  "createdAt": "2026-08-18T06:54:42.285Z",
+  "updatedAt": "2026-08-18T06:54:42.285Z"
+ },
+ {
+  "id": "18743095-281c-4ec8-aa7d-6c35d93a8cf0",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "ffe8661c-111b-4d93-9360-6350f8d47769",
+   "code": "10301111",
+   "titleTh": "Course 10301111",
+   "titleEn": "Course 10301111",
+   "credits": 3
+  },
+  "group": {
+   "id": "2f1d888e-64c9-4cdf-854b-413c9a1c9c7a",
+   "name": "กลุ่มวิชาแกน"
+  },
+  "createdAt": "2026-08-18T06:54:42.272Z",
+  "updatedAt": "2026-08-18T06:54:42.272Z"
+ },
+ {
+  "id": "df4118bb-454b-4e87-adfe-a80793e2e09e",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "f4abaa34-1c6e-4aa0-98d9-56616882da8a",
+   "code": "10200504",
+   "titleTh": "การเป็นผู้ประกอบการ",
+   "titleEn": "Entrepreneurship",
+   "credits": 3
+  },
+  "group": {
+   "id": "9b48a9c3-63ec-48fb-969e-6d2dc8d96b35",
+   "name": "กลุ่มการเป็นผู้ประกอบการ (ELO 5)"
+  },
+  "createdAt": "2026-08-18T06:54:42.259Z",
+  "updatedAt": "2026-08-18T06:54:42.259Z"
+ },
+ {
+  "id": "dc8d9c1a-07e6-4500-9ebf-f073276af2a1",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "641c86b1-ff08-4308-b5c7-7b10a6aee3fb",
+   "code": "10300411",
+   "titleTh": "วิทยาศาสตร์เพื่อชีวิต",
+   "titleEn": "Science for Life",
+   "credits": 3
+  },
+  "group": {
+   "id": "69036cb6-d8ad-4059-aca1-b4c448b8f1de",
+   "name": "กลุ่มการคิดคำนวณ การใช้เหตุผลและเทคโนโลยี(ELO 4)"
+  },
+  "createdAt": "2026-08-18T06:54:42.246Z",
+  "updatedAt": "2026-08-18T06:54:42.246Z"
+ },
+ {
+  "id": "e254705a-89f1-4efc-873b-706c6e9dce20",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "7c1a82df-6b74-4f0a-a3c1-2c7f76945d3f",
+   "code": "10300410",
+   "titleTh": "ความฉลาดรู้ด้านวิทยาศาสตร์สำหรับโลกสมัยใหม่",
+   "titleEn": "Scientific Literacy for the Modern World",
+   "credits": 3
+  },
+  "group": {
+   "id": "69036cb6-d8ad-4059-aca1-b4c448b8f1de",
+   "name": "กลุ่มการคิดคำนวณ การใช้เหตุผลและเทคโนโลยี(ELO 4)"
+  },
+  "createdAt": "2026-08-18T06:54:42.233Z",
+  "updatedAt": "2026-08-18T06:54:42.233Z"
+ },
+ {
+  "id": "b42757c6-8045-48f5-927f-f662ceed48d2",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "7375902c-18ec-4d41-8039-8eb94a8f0a12",
+   "code": "10700313",
+   "titleTh": "ภาษาอังกฤษเชิงวิทยาศาสตร์และนวัตกรรม",
+   "titleEn": "English for Science and Innovation",
+   "credits": 3
+  },
+  "group": {
+   "id": "40225020-b64e-40ed-89de-fb7e6b10d00d",
+   "name": "รายวิชาภาษาต่างประเทศ"
+  },
+  "createdAt": "2026-08-18T06:54:42.219Z",
+  "updatedAt": "2026-08-18T06:54:42.219Z"
+ },
+ {
+  "id": "b2aa4c13-f751-4829-9252-ad07e3e54e7c",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "851ce869-4316-45b2-86fe-66703cb9c92d",
+   "code": "10700309",
+   "titleTh": "สนทนาภาษาอังกฤษ",
+   "titleEn": "English Conversation",
+   "credits": 3
+  },
+  "group": {
+   "id": "40225020-b64e-40ed-89de-fb7e6b10d00d",
+   "name": "รายวิชาภาษาต่างประเทศ"
+  },
+  "createdAt": "2026-08-18T06:54:42.205Z",
+  "updatedAt": "2026-08-18T06:54:42.205Z"
+ },
+ {
+  "id": "525228a7-95fc-4838-ba2f-f62ba03046d9",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "cb8dbf5e-fa16-4f13-bf18-d11449108b71",
+   "code": "10700308",
+   "titleTh": "ภาษาอังกฤษในชีวิตประจำวัน",
+   "titleEn": "English in Everyday Life",
+   "credits": 3
+  },
+  "group": {
+   "id": "40225020-b64e-40ed-89de-fb7e6b10d00d",
+   "name": "รายวิชาภาษาต่างประเทศ"
+  },
+  "createdAt": "2026-08-18T06:54:42.192Z",
+  "updatedAt": "2026-08-18T06:54:42.192Z"
+ },
+ {
+  "id": "f0f6832c-0110-45ba-b17d-ae4b9c8e6719",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "b0ab34ab-e4b0-4ec0-9c99-d2f7a71e9b07",
+   "code": "10700301",
+   "titleTh": "ภาษาไทยเพื่อการนำเสนอ",
+   "titleEn": "Thai for Presentation",
+   "credits": 3
+  },
+  "group": {
+   "id": "a3cf5f1a-ff16-4acf-9ac7-e998e1d82bc3",
+   "name": "รายวิชาภาษาไทย"
+  },
+  "createdAt": "2026-08-18T06:54:42.178Z",
+  "updatedAt": "2026-08-18T06:54:42.178Z"
+ },
+ {
+  "id": "db8872ed-b7b5-422c-a7e7-beecadb6735b",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "74e0fb02-827e-4a35-b043-e4e260377815",
+   "code": "10100214",
+   "titleTh": "เกษตรเพื่อชีวิต",
+   "titleEn": "Agriculture for Life",
+   "credits": 3
+  },
+  "group": {
+   "id": "0c14a1e5-4cbd-4bbe-9b7d-e1735fc285d2",
+   "name": "กลุ่มคุณค่าความเป็นมนุษย์และการใช้ชีวิต (ELO 2)"
+  },
+  "createdAt": "2026-08-18T06:54:42.164Z",
+  "updatedAt": "2026-08-18T06:54:42.164Z"
+ },
+ {
+  "id": "9b880190-07f3-4f70-9a8d-c475bc51cea9",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "e4e7e727-e153-4a2a-bb32-0bc54e4ec69d",
+   "code": "10800113",
+   "titleTh": "พลเมืองดิจิทัล",
+   "titleEn": "Digital Citizenship",
+   "credits": 3
+  },
+  "group": {
+   "id": "9f1ba495-c263-41f3-b998-b304457e9b67",
+   "name": "กลุ่มสังคมและวัฒนธรรม (ELO 1)"
+  },
+  "createdAt": "2026-08-18T06:54:42.151Z",
+  "updatedAt": "2026-08-18T06:54:42.151Z"
+ },
+ {
+  "id": "de9446ec-a790-4131-9aaa-d1e5fbd61f06",
+  "program": {
+   "id": "30274689-46d6-4552-89eb-f99f418f3c5f",
+   "nameTh": "หลักสูตรวิทยาศาสตรบัณฑิต สาขาวิชาวิทยาการคอมพิวเตอร์",
+   "nameEn": "Bachelor of Science Program in Computer Science"
+  },
+  "course": {
+   "id": "4f9e0f88-c7f4-414c-a9ae-acace1c67519",
+   "code": "10700105",
+   "titleTh": "มนุษย์ สังคม เทคโนโลยีและสิ่งแวดล้อม",
+   "titleEn": "Man, Society, Technology and Environment",
+   "credits": 3
+  },
+  "group": {
+   "id": "9f1ba495-c263-41f3-b998-b304457e9b67",
+   "name": "กลุ่มสังคมและวัฒนธรรม (ELO 1)"
+  },
+  "createdAt": "2026-08-18T06:54:42.135Z",
+  "updatedAt": "2026-08-18T06:54:42.135Z"
+ }
+]

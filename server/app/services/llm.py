@@ -15,6 +15,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 from dataclasses import dataclass
 from typing import Any
@@ -27,6 +28,25 @@ log = logging.getLogger("kiosk.ai")
 
 _client: Any = None
 _client_provider: str | None = None
+_client_loop: Any = None   # event loop ที่ตัวเชื่อมต่อนี้ถูกสร้างขึ้นมาผูกไว้
+
+
+def _stale() -> bool:
+    """ตัวเชื่อมต่อที่เก็บไว้ยังใช้กับ event loop ปัจจุบันได้หรือไม่
+
+    ไลบรารี HTTP แบบ async ผูกคอนเนกชันไว้กับ event loop ที่สร้างมัน
+    ถ้า loop นั้นปิดไปแล้ว การเรียกครั้งถัดไปจะล้มด้วยข้อความที่ดูเหมือนเน็ตมีปัญหา
+    ทั้งที่เน็ตปกติดี ทำให้ไล่หาสาเหตุผิดทาง
+
+    เซิร์ฟเวอร์จริงมี loop เดียวตลอดอายุการทำงาน จึงไม่เจอปัญหานี้
+    แต่สคริปต์ทดสอบที่เรียก asyncio.run() หลายครั้งจะสร้าง loop ใหม่ทุกครั้ง
+    """
+    if _client is None:
+        return False
+    try:
+        return asyncio.get_running_loop() is not _client_loop
+    except RuntimeError:
+        return False
 
 
 @dataclass(slots=True)
@@ -76,9 +96,18 @@ def model_name() -> str:
 
 def reset() -> None:
     """ทิ้งตัวเชื่อมต่อเดิม ใช้ตอนเปลี่ยนการตั้งค่าระหว่างทดสอบ"""
-    global _client, _client_provider
+    global _client, _client_provider, _client_loop
     _client = None
     _client_provider = None
+    _client_loop = None
+
+
+def _remember_loop() -> None:
+    global _client_loop
+    try:
+        _client_loop = asyncio.get_running_loop()
+    except RuntimeError:
+        _client_loop = None
 
 
 # ------------------------------------------------------------
@@ -99,7 +128,7 @@ async def complete(*, system: str, prompt: str, schema: type[BaseModel]) -> Comp
 # ------------------------------------------------------------
 def _gemini_client():
     global _client, _client_provider
-    if _client is None or _client_provider != "gemini":
+    if _client is None or _client_provider != "gemini" or _stale():
         from google import genai
         from google.genai import types
 
@@ -118,6 +147,7 @@ def _gemini_client():
             ),
         )
         _client_provider = "gemini"
+        _remember_loop()
     return _client
 
 
@@ -151,6 +181,7 @@ async def _gemini(system: str, prompt: str, schema: type[BaseModel]) -> Completi
     except errors.APIError as exc:
         raise LlmError("api_error", str(exc)[:120]) from exc
     except Exception as exc:  # noqa: BLE001 — เครือข่ายล้มต้องไม่ทำให้ตู้ล่ม
+        log.warning("เรียก Gemini ไม่สำเร็จ: %s: %s", exc.__class__.__name__, exc)
         raise LlmError("connection", str(exc)[:120]) from exc
 
     usage = getattr(response, "usage_metadata", None)
@@ -172,7 +203,7 @@ async def _gemini(system: str, prompt: str, schema: type[BaseModel]) -> Completi
 # ------------------------------------------------------------
 def _anthropic_client():
     global _client, _client_provider
-    if _client is None or _client_provider != "anthropic":
+    if _client is None or _client_provider != "anthropic" or _stale():
         from anthropic import AsyncAnthropic
 
         # จำกัดการลองใหม่ไว้เอง ไลบรารีตั้งไว้ 2 ครั้งซึ่งเหมาะกับงานเบื้องหลัง
@@ -183,6 +214,7 @@ def _anthropic_client():
             max_retries=config.AI_MAX_RETRIES,
         )
         _client_provider = "anthropic"
+        _remember_loop()
     return _client
 
 

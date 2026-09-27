@@ -894,6 +894,7 @@ export function KioskProvider({ children }) {
       department: boot?.department ?? null,
       announcements: boot?.announcements ?? [],
       quickQuestions: boot?.quickQuestions ?? [],
+      anticipated: boot?.anticipated ?? [],
       dataUpdatedLabel: boot?.term?.dataUpdatedLabel ?? null,
       // ดูจากตารางของคนที่ล็อกอินอยู่ ถ้ายังไม่ได้ล็อกอินให้ดูค่ารวมของระบบ
       // (หน้าจอพักไม่มีตารางของใครให้ดู)

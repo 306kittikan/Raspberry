@@ -79,6 +79,7 @@ export default function ChatWindow() {
     voiceSupported,
     cameraOk,
     quickQuestions,
+    anticipated,
     askQuestion,
     askText,
     startListening,
@@ -228,6 +229,32 @@ export default function ChatWindow() {
       {/* ---- คำถามยอดนิยม (เปิด/ปิดได้) ---- */}
       {showQuick ? (
         <div className="max-h-[520px] shrink-0 overflow-y-auto border-t-2 border-brand-100 bg-white px-8 py-6 animate-rise-in">
+          {/* ---- ช่วงนี้น่าจะถามเรื่องนี้ ----
+              ปุ่มยอดนิยมชุดล่างตั้งไว้ตายตัว จึงเสนอเรื่องเดิมทั้งปี
+              ทั้งที่สิ่งที่นักศึกษากังวลเปลี่ยนไปตามช่วงของเทอม
+              ส่วนนี้ดูจากปฏิทินการศึกษาจริงว่าอะไรกำลังจะถึง แล้วเสนอเรื่องนั้นก่อน
+              พร้อมบอกเหตุผลกำกับ ผู้ใช้จะได้รู้ว่าทำไมตู้ถึงเสนอเรื่องนี้ */}
+          {anticipated.length > 0 ? (
+            <div className="mb-7">
+              <h2 className="mb-4 text-h3 font-bold text-brand-900">ช่วงนี้น่าจะถาม</h2>
+              <div className="space-y-3">
+                {anticipated.map((s) => (
+                  <button
+                    key={s.text}
+                    type="button"
+                    onClick={() => askText(s.text)}
+                    className="press tap block w-full rounded-[22px] border-2 border-brand-600 bg-brand-50 px-6 py-5 text-left"
+                  >
+                    <span className="block text-body font-semibold leading-snug text-brand-900">
+                      {s.text}
+                    </span>
+                    <span className="mt-1 block text-[21px] text-ink-mute">{s.because}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
           <div className="mb-4 flex items-center gap-4">
             <h2 className="text-h3 font-bold text-brand-900">คำถามยอดนิยม</h2>
             <span className="flex items-center gap-2 text-[21px] text-ink-mute">
