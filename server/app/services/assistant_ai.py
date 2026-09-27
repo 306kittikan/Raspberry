@@ -17,12 +17,44 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from .. import config, repo
+from .. import config, repo, thai
 from . import retrieval
 
 log = logging.getLogger("kiosk.ai")
 
 _client: Any = None
+
+
+class _Health:
+    """สถานะล่าสุดของผู้ช่วย AI ไว้ให้เจ้าหน้าที่ดูว่าใช้งานได้จริงหรือไม่
+
+    ค่า AI_ENABLED บอกได้แค่ว่า "ตั้งค่ากุญแจไว้แล้ว" ซึ่งไม่เหมือนกับ
+    "เรียกใช้ได้จริง" กุญแจอาจหมดอายุ เครดิตอาจหมด หรือเน็ตอาจใช้ไม่ได้
+    ถ้าไม่เก็บไว้ ตู้จะตอบ "ไม่พบข้อมูล" เงียบ ๆ ทุกคำถามโดยไม่มีใครรู้สาเหตุ
+    """
+
+    def __init__(self) -> None:
+        self.calls = 0
+        self.failures = 0
+        self.last_error: str | None = None
+        self.last_ok_at: str | None = None
+        self.input_tokens = 0
+        self.output_tokens = 0
+
+    def snapshot(self) -> dict[str, Any]:
+        return {
+            "enabled": config.AI_ENABLED,
+            "model": config.ANTHROPIC_MODEL,
+            "calls": self.calls,
+            "failures": self.failures,
+            "lastError": self.last_error,
+            "lastOkAt": self.last_ok_at,
+            "inputTokens": self.input_tokens,
+            "outputTokens": self.output_tokens,
+        }
+
+
+health = _Health()
 
 
 SYSTEM_PROMPT = """\
@@ -62,7 +94,12 @@ def _get_client():
     if _client is None:
         from anthropic import AsyncAnthropic
 
-        _client = AsyncAnthropic(timeout=config.AI_TIMEOUT_SECONDS)
+        # จำกัดการลองใหม่ไว้เอง ไลบรารีตั้งไว้ 2 ครั้งซึ่งเหมาะกับงานเบื้องหลัง
+        # แต่ที่นี่มีคนยืนรออยู่หน้าจอ เวลารวมที่แย่ที่สุดต้องคาดเดาได้
+        _client = AsyncAnthropic(
+            timeout=config.AI_TIMEOUT_SECONDS,
+            max_retries=config.AI_MAX_RETRIES,
+        )
     return _client
 
 
@@ -77,6 +114,7 @@ def _build_context(chunks: list[dict[str, Any]]) -> str:
 
 
 def _not_found(conn: sqlite3.Connection, base: dict[str, Any], reason: str) -> dict[str, Any]:
+    """คำตอบมาตรฐานเมื่อตอบไม่ได้ — บอกเหตุผลและช่องทางติดต่อ ไม่เดาคำตอบ"""
     return {
         **base,
         "source": "none",
@@ -85,26 +123,58 @@ def _not_found(conn: sqlite3.Connection, base: dict[str, Any], reason: str) -> d
     }
 
 
+def _fail(
+    conn: sqlite3.Connection,
+    base: dict[str, Any],
+    code: str,
+    reason: str,
+    *,
+    trace: bool = True,
+) -> dict[str, Any]:
+    """บันทึกความล้มเหลวไว้ให้ตรวจสอบได้ แล้วตอบแบบไม่เดาคำตอบ
+
+    เก็บรหัสสาเหตุไว้ เพราะ "ตอบไม่ได้" มีหลายแบบที่แก้คนละทาง
+    กุญแจหมดอายุกับเน็ตหลุดดูเหมือนกันบนหน้าจอ แต่ต่างกันสิ้นเชิงสำหรับเจ้าหน้าที่
+    """
+    health.failures += 1
+    health.last_error = code
+    if trace:
+        log.warning("ผู้ช่วย AI ตอบไม่ได้: %s", code)
+    return _not_found(conn, base, reason)
+
+
+def _record_usage(response: Any) -> None:
+    """สะสมจำนวนโทเค็นที่ใช้ไป เพื่อให้ประเมินค่าใช้จ่ายได้จากตัวเลขจริง"""
+    usage = getattr(response, "usage", None)
+    if usage is None:
+        return
+    health.input_tokens += getattr(usage, "input_tokens", 0) or 0
+    health.output_tokens += getattr(usage, "output_tokens", 0) or 0
+
+
 async def answer(
     conn: sqlite3.Connection, base: dict[str, Any], question: str
 ) -> dict[str, Any]:
     if not config.AI_ENABLED:
         return _not_found(conn, base, "ผู้ช่วย AI ยังไม่ได้ตั้งค่ากุญแจการเข้าใช้งาน")
 
-    chunks = retrieval.search(conn, question, limit=5)
+    chunks = retrieval.search(conn, question, limit=config.AI_CONTEXT_CHUNKS)
     if not chunks:
         return _not_found(
             conn, base, "ระบบไม่พบเอกสารอ้างอิงสำหรับคำถามนี้ จึงไม่สามารถตอบได้"
         )
 
     allowed_ids = {c["chunkId"] for c in chunks}
+    health.calls += 1
 
     try:
         import anthropic
 
         response = await _get_client().messages.parse(
             model=config.ANTHROPIC_MODEL,
-            max_tokens=2000,
+            # โทเค็นที่ใช้คิดนับรวมในเพดานนี้ด้วย ตั้งต่ำไปคำตอบจะถูกตัดกลางคัน
+            max_tokens=config.AI_MAX_TOKENS,
+            output_config={"effort": config.AI_EFFORT},
             system=SYSTEM_PROMPT,
             output_format=AiAnswer,
             messages=[
@@ -117,21 +187,31 @@ async def answer(
                 }
             ],
         )
-        parsed: AiAnswer | None = response.parsed_output
 
     except anthropic.RateLimitError:
-        log.warning("ผู้ช่วย AI ถูกจำกัดอัตราการเรียก")
-        return _not_found(conn, base, "ผู้ช่วยตอบคำถามมีผู้ใช้งานหนาแน่น กรุณาลองใหม่อีกครั้ง")
+        return _fail(conn, base, "rate_limit",
+                     "ผู้ช่วยตอบคำถามมีผู้ใช้งานหนาแน่น กรุณาลองใหม่อีกครั้ง")
+    except anthropic.AuthenticationError:
+        # กุญแจผิดหรือหมดอายุ ต้องเห็นชัดในบันทึก ไม่ใช่กลืนหายไปกับข้อผิดพลาดอื่น
+        return _fail(conn, base, "auth",
+                     "ผู้ช่วยตอบคำถามยังไม่พร้อมใช้งาน กรุณาแจ้งเจ้าหน้าที่")
     except anthropic.APIConnectionError:
-        log.warning("เชื่อมต่อผู้ช่วย AI ไม่ได้")
-        return _not_found(conn, base, "เชื่อมต่อผู้ช่วยตอบคำถามไม่ได้ในขณะนี้")
+        return _fail(conn, base, "connection", "เชื่อมต่อผู้ช่วยตอบคำถามไม่ได้ในขณะนี้")
     except anthropic.APIStatusError as exc:
-        log.error("ผู้ช่วย AI ตอบสถานะ %s", exc.status_code)
-        return _not_found(conn, base, "ผู้ช่วยตอบคำถามขัดข้องชั่วคราว")
-    except Exception:  # noqa: BLE001 — ตู้ต้องไม่ค้างเพราะผู้ช่วย AI ไม่ว่าเกิดอะไรขึ้น
+        return _fail(conn, base, f"http_{exc.status_code}",
+                     "ผู้ช่วยตอบคำถามขัดข้องชั่วคราว")
+    except Exception as exc:  # noqa: BLE001 — ตู้ต้องไม่ค้างเพราะผู้ช่วย AI ไม่ว่าเกิดอะไรขึ้น
         log.exception("ผู้ช่วย AI ล้มเหลวโดยไม่คาดคิด")
-        return _not_found(conn, base, "ผู้ช่วยตอบคำถามขัดข้องชั่วคราว")
+        return _fail(conn, base, exc.__class__.__name__,
+                     "ผู้ช่วยตอบคำถามขัดข้องชั่วคราว", trace=False)
 
+    _record_usage(response)
+
+    # โมเดลอาจปฏิเสธคำถามเองด้วยเหตุผลด้านความปลอดภัย ต้องตรวจก่อนอ่านคำตอบ
+    if getattr(response, "stop_reason", None) == "refusal":
+        return _fail(conn, base, "refusal", "ผู้ช่วยตอบคำถามไม่สามารถตอบคำถามนี้ได้")
+
+    parsed: AiAnswer | None = response.parsed_output
     if parsed is None or not parsed.found or not parsed.lines:
         return _not_found(
             conn, base, "ระบบไม่พบเอกสารอ้างอิงสำหรับคำถามนี้ จึงไม่สามารถตอบได้"
@@ -148,6 +228,7 @@ async def answer(
     if citation is None:
         return _not_found(conn, base, "ระบบไม่สามารถยืนยันแหล่งที่มาของคำตอบนี้ได้")
 
+    health.last_ok_at = thai.now().isoformat(timespec="seconds")
     return {
         **base,
         "source": "ai",

@@ -6,6 +6,7 @@ from fastapi import APIRouter
 
 from .. import config, repo, thai
 from ..deps import Db
+from ..services import assistant_ai
 
 router = APIRouter(prefix="/api", tags=["kiosk"])
 
@@ -19,6 +20,19 @@ def health(conn: Db) -> dict:
         "term": term["code"] if term else None,
         "aiEnabled": config.AI_ENABLED,
     }
+
+
+@router.get("/ai/status")
+def ai_status() -> dict:
+    """ผู้ช่วย AI ใช้งานได้จริงหรือไม่ พร้อมสาเหตุถ้าใช้ไม่ได้
+
+    ต่างจาก aiEnabled ใน /api/health ซึ่งบอกเพียงว่าตั้งค่ากุญแจไว้แล้ว
+    กุญแจที่หมดอายุหรือเครดิตที่หมดจะทำให้ตู้ตอบ "ไม่พบข้อมูล" ทุกคำถาม
+    โดยไม่มีอะไรบนหน้าจอบอกว่าเพราะอะไร เส้นทางนี้จึงมีไว้ให้เจ้าหน้าที่ตรวจ
+
+    ไม่มีข้อมูลส่วนบุคคลและไม่มีเนื้อหาคำถามใด ๆ มีแต่ตัวนับกับรหัสสาเหตุ
+    """
+    return assistant_ai.health.snapshot()
 
 
 @router.get("/bootstrap")
