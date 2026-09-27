@@ -1,0 +1,53 @@
+# เซิร์ฟเวอร์ของตู้บริการข้อมูล — เสิร์ฟทั้ง API และหน้าเว็บจาก origin เดียวกัน
+#
+# ติดตั้ง
+#   sudo cp deploy/kiosk-api.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now kiosk-api
+#
+# ดูบันทึก
+#   journalctl -u kiosk-api -f
+
+[Unit]
+Description=ตู้บริการข้อมูลอัจฉริยะ · เซิร์ฟเวอร์
+Documentation=file:///home/kiosk/Raspberry/docs/deploy-raspberry-pi.md
+# ขึ้นหลังเครือข่ายถ้ามี แต่ไม่บังคับว่าต้องมี
+# ตู้ต้องเปิดใช้งานได้แม้เน็ตล่ม เพราะตารางเรียนและกำหนดสอบอ่านจากเครื่อง
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=kiosk
+Group=kiosk
+WorkingDirectory=/home/kiosk/Raspberry/server
+
+# ผูกกับ 127.0.0.1 เท่านั้น ไม่เปิดออกเครือข่าย
+# ตู้ตั้งในที่สาธารณะและยังไม่มีการยืนยันตัวตนของเจ้าหน้าที่
+# ถ้าเปิดออกวงแลน ใครก็เรียก API อ่านข้อมูลนักศึกษาได้
+ExecStart=/home/kiosk/Raspberry/server/.venv/bin/python -m uvicorn app.main:app \
+          --host 127.0.0.1 --port 8000 --log-level info
+
+# โหลดโมเดลรู้จำใบหน้าและถอดเสียงใช้เวลาราวครึ่งนาทีบน Pi
+# ระหว่างนั้นตู้ยังใช้งานได้ด้วยการกรอกรหัสนักศึกษา จึงไม่ต้องรอให้เสร็จก่อน
+TimeoutStartSec=180
+
+# ล้มแล้วขึ้นใหม่เสมอ ตู้ต้องกลับมาเองโดยไม่ต้องมีคนไปกด
+Restart=always
+RestartSec=5
+# ถ้าล้มซ้ำ ๆ ให้ถอยห่างขึ้น กันไม่ให้วนรีสตาร์ตจนเครื่องช้า
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+# จำกัดเธรดของไลบรารีคณิตศาสตร์ ซ้ำกับที่ app/__init__.py ตั้งไว้
+# ตั้งซ้ำที่นี่ด้วยเผื่อมีคนรันตรง ๆ โดยไม่ผ่านแพ็กเกจ
+Environment=OPENBLAS_NUM_THREADS=2
+Environment=OMP_NUM_THREADS=2
+Environment=PYTHONUNBUFFERED=1
+
+# ส่วนที่เหลืออ่านจาก server/.env ผ่าน python-dotenv
+# ไม่ใส่ที่นี่เพราะไฟล์ service อยู่ใน /etc ซึ่งอ่านได้ทุกคน
+# แต่ .env มีกุญแจ API อยู่ จึงต้องเก็บไว้ในบ้านของผู้ใช้ kiosk เท่านั้น
+
+[Install]
+WantedBy=multi-user.target

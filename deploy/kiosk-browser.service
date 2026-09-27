@@ -1,0 +1,52 @@
+# Chromium โหมดเต็มจอสำหรับหน้าตู้
+#
+# ต้องรันในเซสชันกราฟิกของผู้ใช้ ไม่ใช่บริการระดับระบบ
+# ติดตั้งแบบ user service
+#   mkdir -p ~/.config/systemd/user
+#   cp deploy/kiosk-browser.service ~/.config/systemd/user/
+#   systemctl --user daemon-reload
+#   systemctl --user enable --now kiosk-browser
+#
+# ให้เปิดเองตอนบูตโดยไม่ต้องล็อกอิน
+#   sudo loginctl enable-linger kiosk
+
+[Unit]
+Description=ตู้บริการข้อมูลอัจฉริยะ · หน้าจอ
+After=graphical-session.target kiosk-api.service
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+
+# รอให้เซิร์ฟเวอร์ตอบก่อนค่อยเปิดเบราว์เซอร์
+# ไม่งั้นผู้ใช้จะเห็นหน้า "ต่อเซิร์ฟเวอร์ไม่ได้" ค้างอยู่จนกว่าจะรีเฟรชเอง
+ExecStartPre=/bin/sh -c 'until curl -sf http://127.0.0.1:8000/api/health >/dev/null; do sleep 2; done'
+
+ExecStart=/usr/bin/chromium-browser \
+  --kiosk http://127.0.0.1:8000 \
+  --app=http://127.0.0.1:8000 \
+  --noerrdialogs \
+  --disable-infobars \
+  --disable-session-crashed-bubble \
+  --disable-features=TranslateUI \
+  --disable-pinch \
+  --overscroll-history-navigation=0 \
+  --check-for-update-interval=31536000 \
+  --autoplay-policy=no-user-gesture-required \
+  --use-fake-ui-for-media-stream \
+  --unsafely-treat-insecure-origin-as-secure=http://127.0.0.1:8000 \
+  --password-store=basic
+
+# หมายเหตุสองบรรทัดสุดท้ายของคำสั่งข้างบน
+#   use-fake-ui-for-media-stream       อนุญาตไมโครโฟนอัตโนมัติ
+#     ผู้ใช้ยืนหน้าตู้ ไม่มีใครกดยอมรับกล่องขออนุญาตให้
+#   unsafely-treat-insecure-origin...  ให้ 127.0.0.1 นับเป็นต้นทางปลอดภัย
+#     เบราว์เซอร์ให้ใช้ไมโครโฟนเฉพาะ https หรือ localhost
+#     ตู้ไม่มีใบรับรอง จึงต้องบอกให้เชื่อ origin นี้เป็นการเฉพาะ
+#     ปลอดภัยเพราะเป็นเครื่องเดียวกัน ไม่ได้ออกเครือข่าย
+
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=graphical-session.target
