@@ -748,28 +748,35 @@ cd server
 
 ## ติดตั้งบน Raspberry Pi 5
 
+ขั้นตอนเต็มอยู่ที่ **[docs/deploy-raspberry-pi.md](docs/deploy-raspberry-pi.md)**
+ตั้งแต่เครื่องเปล่าจนเปิดให้บริการ พร้อมรายการตรวจก่อนส่งมอบและวิธีแก้ปัญหาที่พบบ่อย
+
+ย่อสุด ๆ
+
 ```bash
-# หน้าเว็บ
-cd web && npm run build          # ได้ web/dist ซึ่งเซิร์ฟเวอร์จะเสิร์ฟให้เอง
+# บนเครื่องพัฒนา — build หน้าเว็บ แล้วส่งของที่ git ไม่มี (รวม ~890 MB) ไปให้ Pi
+cd web && npm run build
+scp -r web/dist server/.env server/models server/data kiosk@<ไอพี>:~/Raspberry/...
 
-# เซิร์ฟเวอร์
-cd server
-python3 -m venv .venv --system-site-packages
+# บน Pi
+cd ~/Raspberry/server
+python3 -m venv .venv --system-site-packages     # --system-site-packages ไว้ใช้ picamera2
 .venv/bin/pip install -r requirements.txt
-.venv/bin/python -m app.seed
-KIOSK_SIM=0 .venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 
-# เบราว์เซอร์
-chromium-browser --kiosk http://127.0.0.1:8000 \
-  --noerrdialogs --disable-infobars --disable-pinch \
-  --overscroll-history-navigation=0 --check-for-update-interval=31536000 \
-  --use-fake-ui-for-media-stream    # อนุญาตไมโครโฟนอัตโนมัติ ไม่ต้องให้ผู้ใช้กดยอมรับ
+sudo cp ../deploy/kiosk-api.service /etc/systemd/system/
+sudo systemctl enable --now kiosk-api
+cp ../deploy/kiosk-browser.service ~/.config/systemd/user/
+systemctl --user enable --now kiosk-browser
+
+bash ../deploy/preflight.sh      # ตรวจความพร้อมก่อนเปิดบริการ
 ```
 
-เตรียมโมเดลไว้ก่อนเปิดใช้งานจริง แล้วตั้ง `KIOSK_STT_OFFLINE_ONLY=1`
-เพื่อไม่ให้ตู้พยายามดาวน์โหลดโมเดลระหว่างให้บริการ
+| ไฟล์ใน `deploy/` | ทำอะไร |
+| --- | --- |
+| `kiosk-api.service` | เซิร์ฟเวอร์ · ขึ้นเองตอนบูต · ล้มแล้วกลับมาเอง |
+| `kiosk-browser.service` | Chromium เต็มจอ · รอเซิร์ฟเวอร์พร้อมก่อนค่อยเปิด |
+| `display-setup.sh` | ปิดการดับจอ ซ่อนเคอร์เซอร์ หมุนจอแนวตั้ง |
+| `preflight.sh` | ตรวจเฉพาะสิ่งที่ผิดแล้วเห็นผลตอนมีคนมายืนหน้าตู้ |
 
-ตั้งจอเป็นแนวตั้ง 1080×1920 และปิด screen blanking ด้วย `xset s off -dpms`
-
-หากตู้ต้องทำงานขณะออฟไลน์ ให้ดาวน์โหลดฟอนต์ IBM Plex Sans Thai และ Noto Sans Thai
-มาเก็บไว้ในโปรเจกต์แทนการโหลดจาก Google Fonts ใน `web/index.html`
+> ⚠️ `preflight.sh` จะไม่ยอมให้ผ่านถ้า `KIOSK_SIM` ยังไม่เป็น `0`
+> เพราะโหมดจำลองเปิดให้ใครก็ได้สวมรอยเป็นนักศึกษาคนใดก็ได้
