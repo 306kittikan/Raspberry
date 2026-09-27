@@ -161,6 +161,7 @@ async def _handle_utterance(ws: WebSocket, raw: bytes, command: dict) -> None:
         term_id=term_id,
         online=online,
         restricted=sess.restricted if sess else True,
+        text=heard,
     )
 
     if guess.question_id is not None:

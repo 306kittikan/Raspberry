@@ -335,6 +335,168 @@ def list_public_personnel(conn: sqlite3.Connection) -> list[dict[str, Any]]:
     ]
 
 
+# คำที่บอกว่าผู้ถามกำลังพูดถึง "คน" ไม่ใช่คำพ้องเสียงอย่างอื่น
+# จำเป็นเพราะชื่อจริงภาษาไทยบางชื่อสั้นและพ้องกับคำทั่วไป
+# เช่น "สนิท" ที่แปลว่าใกล้ชิดได้ด้วย ถ้าจับแค่ชื่อจะเจอผิดใน "เพื่อนสนิท"
+_PERSON_WORDS = ("อาจารย์", "อ.", "ผศ.", "รศ.", "ศ.", "ดร.", "ผู้สอน",
+                 "ที่ปรึกษา", "คุณ", "เจ้าหน้าที่")
+
+
+def find_personnel_mention(
+    conn: sqlite3.Connection, text: str
+) -> dict[str, Any] | None:
+    """หาบุคลากรที่ถูกเอ่ยชื่อในคำถาม คืน None ถ้าไม่ได้เจาะจงถึงใคร
+
+    ใช้ตัดสินว่าคำถามนี้ตอบจากฐานข้อมูลได้เลยหรือไม่
+    "อีเมลอาจารย์พาสน์คืออะไร" มีคำตอบที่แน่นอนอยู่ในตาราง จึงไม่ควรให้ AI เดา
+    ต่างจาก "อาจารย์คนไหนสอนเรื่อง AI บ้าง" ที่ต้องค้นและเทียบหลายคน
+
+    เฉพาะผู้ที่ระบบต้นทางกำหนดให้เปิดเผยข้อมูลได้เท่านั้น
+    ตู้ตั้งในที่สาธารณะ คนเดินผ่านมองเห็นจอ
+    """
+    if not text:
+        return None
+
+    flat = text.replace(" ", "")
+    has_title = any(word.replace(" ", "") in flat for word in _PERSON_WORDS)
+
+    rows = conn.execute(
+        """
+        SELECT * FROM personnel
+        WHERE is_public = 1 AND fullname_th IS NOT NULL
+        """
+    ).fetchall()
+
+    best: sqlite3.Row | None = None
+    best_score = 0
+    for row in rows:
+        parts = (row["fullname_th"] or "").split()
+        given = parts[0] if parts else ""
+        surname = parts[1] if len(parts) > 1 else ""
+
+        # นามสกุลตรงถือว่าเจาะจงพอแล้ว เพราะซ้ำกับคำทั่วไปได้ยากกว่าชื่อ
+        if surname and surname in flat:
+            score = 3 if given and given in flat else 2
+        elif given and given in flat and has_title:
+            score = 1
+        else:
+            continue
+
+        if score > best_score:
+            best, best_score = row, score
+
+    if best is None:
+        return None
+
+    return {
+        "name": f"{best['prefix'] or ''}{best['fullname_th']}".strip(),
+        "nameEn": best["fullname_en"],
+        "position": best["academic_position"],
+        "adminPosition": best["administrative_position"],
+        "type": best["personnel_type"],
+        "education": best["education"],
+        "email": best["email"],
+        "phone": best["phone"],
+        "expertise": best["expertise"],
+    }
+
+
+# คำย่อและคำไทยที่นักศึกษาใช้ กับคำเต็มที่เขียนไว้ในฐานข้อมูล
+#
+# ฐานข้อมูลเก็บความเชี่ยวชาญเป็นภาษาอังกฤษเต็มรูป เช่น "Internet of Things"
+# แต่ไม่มีใครพูดแบบนั้น ทุกคนพูดว่า IoT หรือ "ไอโอที"
+# ถ้าไม่มีตารางนี้ คำถามที่พบบ่อยที่สุดจะหาไม่เจอเลยสักคำ
+TOPIC_ALIASES: dict[str, tuple[str, ...]] = {
+    "artificial intelligence": ("ai", "เอไอ", "ปัญญาประดิษฐ์"),
+    "internet of things": ("iot", "ไอโอที", "อินเทอร์เน็ตในทุกสิ่ง", "อินเตอร์เน็ตของสรรพสิ่ง"),
+    "machine learning": ("ml", "แมชชีนเลิร์นนิง", "การเรียนรู้ของเครื่อง"),
+    "deep learning": ("ดีปเลิร์นนิง", "การเรียนรู้เชิงลึก"),
+    "data mining": ("เหมืองข้อมูล", "ดาต้าไมนิง"),
+    "data science": ("วิทยาการข้อมูล", "ดาต้าไซแอนซ์"),
+    "image processing": ("ประมวลผลภาพ", "ประมวลภาพ"),
+    "database": ("ฐานข้อมูล", "ดาต้าเบส"),
+    "network": ("เครือข่าย", "เน็ตเวิร์ก", "เน็ตเวิร์ค"),
+    "block chain": ("บล็อกเชน", "blockchain", "บล็อคเชน"),
+    "mobile applications": ("แอปมือถือ", "โมบายแอป", "แอปพลิเคชันมือถือ"),
+    "software": ("ซอฟต์แวร์", "พัฒนาโปรแกรม"),
+    "data structure": ("โครงสร้างข้อมูล",),
+    "security": ("ความปลอดภัย", "ไซเบอร์"),
+    "web": ("เว็บ", "เว็บไซต์"),
+}
+
+
+def _topic_hits(text: str) -> set[str]:
+    """หัวข้อที่ถูกเอ่ยถึงในคำถาม คืนเป็นคำเต็มแบบที่ฐานข้อมูลเก็บไว้"""
+    low = text.lower().replace(" ", "")
+    found: set[str] = set()
+    for canonical, aliases in TOPIC_ALIASES.items():
+        if canonical.replace(" ", "") in low:
+            found.add(canonical)
+            continue
+        for alias in aliases:
+            if alias.replace(" ", "") in low:
+                found.add(canonical)
+                break
+    return found
+
+
+def search_personnel_by_topic(
+    conn: sqlite3.Connection, text: str
+) -> list[dict[str, Any]]:
+    """หาอาจารย์ที่เชี่ยวชาญหัวข้อที่ถูกถามถึง
+
+    ตอบจากคอลัมน์ความเชี่ยวชาญในตารางบุคลากรโดยตรง จึงได้ครบทุกคนเสมอ
+    ต่างจากการให้ AI อ่านเอกสาร ซึ่งเห็นได้เท่าที่ค้นมาให้และอ้างอิงได้ทีละชิ้น
+    คำถามแบบ "ใครสอนเรื่อง IoT บ้าง" จึงเคยได้คำตอบที่ขาดคนไปหลายคน
+    """
+    topics = _topic_hits(text)
+    if not topics:
+        return []
+
+    matched = []
+    for row in conn.execute(
+        """
+        SELECT * FROM personnel
+        WHERE is_public = 1 AND expertise IS NOT NULL AND expertise != ''
+        ORDER BY fullname_th
+        """
+    ).fetchall():
+        expertise = row["expertise"].lower()
+        hit = [t for t in topics if t.replace(" ", "") in expertise.replace(" ", "")]
+        if hit:
+            matched.append({
+                "name": f"{row['prefix'] or ''}{row['fullname_th']}".strip(),
+                "email": row["email"],
+                "phone": row["phone"],
+                "topics": sorted(hit),
+                "expertise": row["expertise"],
+            })
+    return matched
+
+
+def personnel_lines(person: dict[str, Any]) -> list[str]:
+    """แปลงข้อมูลบุคลากรเป็นบรรทัดสำหรับแสดงบนจอ
+
+    เรียงตามสิ่งที่นักศึกษามาหาบ่อยที่สุดก่อน คือช่องทางติดต่อ
+    ความเชี่ยวชาญใส่ไว้ท้ายสุดเพราะยาวและอ่านข้ามได้
+    """
+    lines = [person["name"]]
+    if person.get("position"):
+        lines.append(person["position"])
+    if person.get("email"):
+        lines.append(f"อีเมล {person['email']}")
+    if person.get("phone"):
+        lines.append(f"โทร {person['phone']}")
+    if person.get("education"):
+        lines.append(f"การศึกษา {person['education']}")
+    if person.get("expertise"):
+        # ในฐานข้อมูลเก็บเป็นหลายบรรทัด แต่บนจอตู้ควรเป็นบรรทัดเดียว
+        topics = " · ".join(t.strip() for t in person["expertise"].split("\n") if t.strip())
+        if topics:
+            lines.append(f"ความเชี่ยวชาญ {topics}")
+    return lines
+
+
 def find_teacher(conn: sqlite3.Connection, name: str) -> dict[str, Any] | None:
     """หาผู้สอนจากชื่อที่ปรากฏในตารางเรียน"""
     if not name:

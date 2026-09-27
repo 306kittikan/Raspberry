@@ -27,6 +27,7 @@ class AskContext:
     term_id: int | None
     online: bool = True
     restricted: bool = False  # โหมดกรอกรหัสนักศึกษา ไม่มีการยืนยันตัวตน
+    text: str = ""            # ข้อความที่ผู้ใช้ถามมาจริง ใช้หาชื่อบุคคลที่เอ่ยถึง
 
 
 UNCLEAR_ANSWER: dict[str, Any] = {
@@ -237,6 +238,34 @@ def _answer_from_db(
 async def resolve(
     conn: sqlite3.Connection, question_id: str, ctx: AskContext
 ) -> dict[str, Any]:
+    # คำถามที่เอ่ยชื่อบุคลากร ตอบจากตารางบุคลากรโดยตรง
+    # ไม่ได้มาจากปุ่มคำถามยอดนิยม จึงไม่มีแถวใน quick_questions
+    if question_id == "person-detail":
+        person = repo.find_personnel_mention(conn, ctx.text)
+        if person is not None:
+            return {
+                "questionId": "person-detail",
+                "kind": "บุคลากร",
+                "label": ctx.text,
+                "source": "db",
+                "title": person["name"],
+                "lines": repo.personnel_lines(person),
+            }
+
+    if question_id == "person-topic":
+        people = repo.search_personnel_by_topic(conn, ctx.text)
+        if people:
+            topics = sorted({t for p in people for t in p["topics"]})
+            lines = [f"{p['name']} · {p['email']}" for p in people]
+            return {
+                "questionId": "person-topic",
+                "kind": "บุคลากร",
+                "label": ctx.text,
+                "source": "db",
+                "title": f"อาจารย์ที่เชี่ยวชาญด้าน {', '.join(topics)}",
+                "lines": lines,
+            }
+
     q = repo.get_quick_question(conn, question_id)
     if q is None:
         return {

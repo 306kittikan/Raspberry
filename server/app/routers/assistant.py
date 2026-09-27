@@ -65,6 +65,7 @@ async def ask(body: AskIn, conn: Db, sess: MaybeSession) -> dict:
         term_id=term_id,
         online=body.online,
         restricted=sess.restricted if sess else True,
+        text=typed,
     )
 
     guess = None
