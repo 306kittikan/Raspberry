@@ -14,7 +14,6 @@ export default function KeypadScreen() {
     endSession,
     unknownReason,
     markActivity,
-    simStudents,
     enrollIntent,
     pendingToken,
     completeEnroll,
@@ -84,13 +83,6 @@ export default function KeypadScreen() {
             onSubmit={submit}
             error={error}
           />
-        </div>
-
-        <div className="mt-8 rounded-[24px] border-2 border-dashed border-brand-200 bg-white px-8 py-6">
-          <p className="text-[22px] font-semibold text-ink-mute">รหัสนักศึกษาสำหรับทดสอบ</p>
-          <p className="mt-2 text-label tabular-nums text-brand-800">
-            {simStudents.map((s) => s.studentId).join('  ·  ')}
-          </p>
         </div>
 
         <Button

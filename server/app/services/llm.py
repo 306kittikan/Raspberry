@@ -105,8 +105,17 @@ def _gemini_client():
 
         _client = genai.Client(
             api_key=config.GEMINI_API_KEY,
-            # ฝั่งนี้คิดเป็นมิลลิวินาที ต่างจากฝั่ง anthropic ที่คิดเป็นวินาที
-            http_options=types.HttpOptions(timeout=int(config.AI_TIMEOUT_SECONDS * 1000)),
+            http_options=types.HttpOptions(
+                # ฝั่งนี้คิดเป็นมิลลิวินาที ต่างจากฝั่ง anthropic ที่คิดเป็นวินาที
+                timeout=int(config.AI_TIMEOUT_SECONDS * 1000),
+                # attempts นับรวมครั้งแรกด้วย ส่วน max_retries ของ anthropic นับเฉพาะครั้งที่ลองซ้ำ
+                # จึงต้องบวกหนึ่ง เพื่อให้ KIOSK_AI_RETRIES มีความหมายเดียวกันทั้งสองฝั่ง
+                retry_options=types.HttpRetryOptions(
+                    attempts=config.AI_MAX_RETRIES + 1,
+                    initial_delay=0.5,
+                    max_delay=4.0,
+                ),
+            ),
         )
         _client_provider = "gemini"
     return _client

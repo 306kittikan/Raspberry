@@ -80,10 +80,10 @@ def ask(conn, question: str) -> dict[str, Any]:
     return asyncio.run(assistant_ai.answer_open(conn, question))
 
 
-def answer(found: bool = True, chunk_id: int | None = None,
+def answer(kind: str = "department", chunk_id: int | None = None,
            lines: list[str] | None = None) -> assistant_ai.AiAnswer:
     return assistant_ai.AiAnswer(
-        found=found,
+        answer_type=kind,
         chunk_id=chunk_id,
         lines=lines if lines is not None else ["บรรทัดตอบทดสอบ"],
     )
@@ -151,7 +151,7 @@ def main() -> int:
               "source=none", str(result["source"]))
 
         print("\n5. โมเดลบอกเองว่าไม่พบคำตอบ")
-        with_fake(done(answer(found=False, chunk_id=good_id, lines=["เดาไปก่อน"])))
+        with_fake(done(answer(kind="none", chunk_id=good_id, lines=["เดาไปก่อน"])))
         result = ask(conn, question)
         check(result["source"] == "none", "ยอมรับคำว่าไม่รู้ ไม่ฝืนแสดงคำตอบ",
               "source=none", str(result["source"]))
@@ -196,14 +196,20 @@ def main() -> int:
         check(result["source"] == "none", "จับได้ทุกกรณี ตู้ยังตอบต่อได้",
               "source=none", str(result["source"]))
 
-        print("\n10. ค้นเอกสารไม่เจอ ต้องไม่เรียกโมเดลเลย")
-        spy = with_fake(done(answer(chunk_id=good_id)))
+        print("\n10. ค้นเอกสารไม่เจอ แต่ยังต้องคุยได้")
+        # ตั้งแต่เปิดให้คุยทั่วไป คำถามที่ค้นเอกสารไม่เจอก็ยังต้องส่งให้โมเดล
+        # เพราะการทักทายหรือคุยเล่นไม่ต้องใช้เอกสารอยู่แล้ว
+        # แลกกับการที่คำถามนอกเรื่องเสียค่าเรียกโมเดลหนึ่งครั้ง ซึ่งเป็นราคาที่ยอมจ่าย
+        spy = with_fake(done(answer(kind="none", lines=["ไม่ทราบ"])))
         result = ask(conn, "ราคาทองคำวันนี้เท่าไร")
-        check(result["source"] == "none", "คำถามนอกเรื่องตอบว่าไม่พบข้อมูล",
+        check(spy.called, "ส่งให้โมเดลแม้ค้นเอกสารไม่เจอ เพื่อให้คุยเล่นได้",
+              "เรียกโมเดล", "ไม่ได้เรียก")
+        check("ไม่พบเอกสาร" in (spy.prompt or ""),
+              "บอกโมเดลตรง ๆ ว่าไม่มีเอกสาร จะได้ไม่แต่งข้อเท็จจริงของสาขา",
+              "มีข้อความแจ้ง", (spy.prompt or "")[-80:])
+        check(result["source"] == "none",
+              "โมเดลตอบว่าไม่ทราบ ระบบก็ตอบว่าไม่พบข้อมูล ไม่เดาแทน",
               "source=none", str(result["source"]))
-        check(not spy.called,
-              "ไม่เสียค่าเรียกโมเดลกับคำถามที่ไม่มีเอกสารรองรับ",
-              "ไม่เรียกโมเดล", "เรียกไปแล้ว")
 
         print("\n11. ปิดผู้ช่วย AI ไว้")
         spy = with_fake(done(answer(chunk_id=good_id)))
@@ -213,7 +219,36 @@ def main() -> int:
               "เมื่อปิดไว้ ต้องไม่เรียกโมเดลและไม่เดาคำตอบ",
               "ไม่เรียกโมเดล", str(spy.called))
 
-        print("\n12. ทุกคำตอบที่ปฏิเสธต้องมีช่องทางติดต่อ")
+        print("\n12. คุยทั่วไปได้ แต่ต้องไม่ถูกเข้าใจว่าเป็นข้อมูลของสาขา")
+        config.AI_ENABLED = True
+        with_fake(done(answer(kind="general", lines=["สวัสดีครับ มีอะไรให้ช่วยไหม"])))
+        result = ask(conn, "สวัสดี")
+        check(result["source"] == "ai_general",
+              "การทักทายตอบได้ตามปกติ", "source=ai_general", str(result["source"]))
+        check("สวัสดี" in " ".join(result["lines"]),
+              "ข้อความที่ผู้ช่วยตอบถูกส่งถึงหน้าจอ", "มีคำทักทาย", str(result["lines"]))
+        check(not result.get("ref"),
+              "ไม่มีป้ายอ้างอิงเอกสาร เพราะไม่ได้ตอบจากเอกสารของสาขา",
+              "ไม่มี ref", str(result.get("ref")))
+
+        print("\n13. คุยทั่วไปต้องไม่กลายเป็นทางลัดเลี่ยงการอ้างอิง")
+        # ถ้าโมเดลตอบเรื่องของสาขาโดยอ้างว่าเป็นการคุยทั่วไป คำตอบจะไม่มีที่มา
+        # ป้ายบนจอจึงต้องบอกให้ชัดว่านี่ไม่ใช่ข้อมูลของสาขา ไม่ใช่ติดป้าย AI ธรรมดา
+        with_fake(done(answer(kind="general", lines=["หลักสูตรมี 130 หน่วยกิต"])))
+        result = ask(conn, "หลักสูตรมีกี่หน่วยกิต")
+        check(result["source"] == "ai_general",
+              "ไม่ถูกติดป้ายว่าเป็นข้อมูลของสาขา", "source=ai_general", str(result["source"]))
+        check(result["source"] != "ai",
+              "แยกจากคำตอบที่มีเอกสารรองรับอย่างชัดเจน", "ไม่ใช่ ai", str(result["source"]))
+
+        print("\n14. คุยทั่วไปยังห้ามแต่งหมายเลขเอกสาร")
+        with_fake(done(answer(kind="department", chunk_id=None, lines=["ไม่มีที่มา"])))
+        result = ask(conn, question)
+        check(result["source"] == "none",
+              "บอกว่าตอบจากเอกสารแต่ไม่ระบุชิ้น ต้องถูกปฏิเสธ",
+              "source=none", str(result["source"]))
+
+        print("\n15. ทุกคำตอบที่ปฏิเสธต้องมีช่องทางติดต่อ")
         config.AI_ENABLED = True
         with_fake(done(answer(chunk_id=999_999)))
         result = ask(conn, question)

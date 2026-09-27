@@ -19,7 +19,9 @@ from ..services import intent
 
 router = APIRouter(prefix="/api/assistant", tags=["assistant"])
 
-_SOURCE_LABEL = {"db": "ฐานข้อมูล", "ai": "AI", "none": "ไม่พบ"}
+# สถิติเก็บแค่ว่าคำตอบมาจากไหน ไม่เก็บเนื้อหาคำถาม
+# การคุยทั่วไปนับรวมเป็น AI เพราะก็คือการเรียกโมเดลเหมือนกัน
+_SOURCE_LABEL = {"db": "ฐานข้อมูล", "ai": "AI", "ai_general": "AI", "none": "ไม่พบ"}
 _CHANNELS = {"แตะ", "เสียง", "พิมพ์"}
 
 OFFLINE_OPEN_ANSWER = {

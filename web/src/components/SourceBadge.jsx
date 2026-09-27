@@ -3,9 +3,14 @@ import { IconDatabase, IconSparkle, IconWarning } from './Icons'
 
 /**
  * ป้ายบอกที่มาของคำตอบ — บังคับให้มีทุกคำตอบ
- *  db   : เขียว + ไอคอนฐานข้อมูล  → "ข้อมูลจากระบบของสาขา"
- *  ai   : ม่วง + ไอคอนประกาย      → "ตอบโดยผู้ช่วย AI · อ้างอิง: {ชื่อเอกสาร}"
- *  none : ส้ม  + ไอคอนเตือน       → ไม่พบข้อมูลในระบบ
+ *  db          : เขียว + ไอคอนฐานข้อมูล → "ข้อมูลจากระบบของสาขา"
+ *  ai          : ม่วง + ไอคอนประกาย     → "ตอบโดยผู้ช่วย AI · อ้างอิง: {ชื่อเอกสาร}"
+ *  ai_general  : เทา  + ไอคอนประกาย     → "คุยทั่วไป ไม่ใช่ข้อมูลของสาขา"
+ *  none        : ส้ม  + ไอคอนเตือน      → ไม่พบข้อมูลในระบบ
+ *
+ * ป้าย ai_general สำคัญพอ ๆ กับตัวคำตอบ เพราะผู้ช่วยคุยเรื่องทั่วไปได้แล้ว
+ * นักศึกษาจึงต้องแยกออกทันทีว่าบรรทัดที่อ่านอยู่เป็นข้อมูลทางการของสาขา
+ * หรือเป็นแค่บทสนทนา ถ้าแยกไม่ออกก็เท่ากับไม่มีป้ายบอกที่มาตั้งแต่แรก
  */
 export default function SourceBadge({ source, reference, className = '' }) {
   if (source === 'db') {
@@ -29,6 +34,17 @@ export default function SourceBadge({ source, reference, className = '' }) {
           ตอบโดยผู้ช่วย AI
           {reference ? <span className="font-normal"> · อ้างอิง: {reference}</span> : null}
         </span>
+      </span>
+    )
+  }
+
+  if (source === 'ai_general') {
+    return (
+      <span
+        className={`inline-flex items-center gap-3 rounded-full border-2 border-ink-mute/40 bg-white px-6 py-3 text-label font-semibold text-ink-mute ${className}`}
+      >
+        <IconSparkle className="h-8 w-8 shrink-0" />
+        คุยทั่วไป · ไม่ใช่ข้อมูลของสาขา
       </span>
     )
   }

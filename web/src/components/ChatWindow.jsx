@@ -183,7 +183,7 @@ export default function ChatWindow() {
             <Bubble
               side="kiosk"
               tone={
-                turn.answer?.source === 'ai'
+                turn.answer?.source?.startsWith('ai')
                   ? 'border-ai-200'
                   : turn.answer?.source === 'none'
                     ? 'border-alert-100'
