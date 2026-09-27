@@ -23,6 +23,16 @@ server/models/
 .env.*
 !.env.example
 
+# ตารางเรียนรายบุคคล — เป็นข้อมูลของนักศึกษาที่ระบุตัวตนได้จริง
+# มีทั้งชื่อ รหัส อาจารย์ที่ปรึกษา และเวลาที่อยู่ที่ไหนในแต่ละวัน
+# ซึ่งบอกได้ว่าเจ้าตัวอยู่ที่ไหนตอนไหน จึงห้ามขึ้น git เด็ดขาด
+csmju_dataset/my_semester_*/
+**/my_semester_*.json
+**/my_class_sessions.csv
+**/my_exams.csv
+**/registered_courses.csv
+**/schedule_*.ics
+
 # อื่น ๆ
 .DS_Store
 *.local

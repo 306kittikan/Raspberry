@@ -44,7 +44,11 @@ function ClassRow({ item, muted }) {
         <p className="text-[24px] font-semibold text-ink-mute">{item.code}</p>
         <p className="truncate text-h3 font-bold leading-tight text-brand-900">{item.name}</p>
         <p className="mt-2 text-body text-ink-soft">
-          ห้อง {item.room} · ชั้น {item.floor} {item.building}
+          {/* ห้องของคณะอื่นมีแค่ชื่อ ไม่รู้ชั้นและอาคาร
+              แสดงเท่าที่รู้ ดีกว่าขึ้นว่า "ชั้น null" หรือเดาเลขชั้นขึ้นมา */}
+          ห้อง {item.room ?? '—'}
+          {item.floor ? ` · ชั้น ${item.floor}` : null}
+          {item.building ? ` ${item.building}` : null}
         </p>
       </div>
     </div>
