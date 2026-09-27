@@ -71,10 +71,25 @@ export function createVoiceChannel(onMessage) {
       try {
         stream = await navigator.mediaDevices.getUserMedia({
           audio: {
+            // เสียงพูดไม่ต้องใช้สองช่อง ช่องเดียวเล็กกว่าและถอดความได้เท่ากัน
             channelCount: 1,
+            // ขอ 48 kHz ไว้ก่อน แล้วให้ฝั่งเซิร์ฟเวอร์ลดเหลือ 16 kHz เอง
+            // การลดจากของดีทำได้สะอาดกว่าการขอต่ำตั้งแต่ต้นแล้วได้เสียงที่บางไปแล้ว
+            sampleRate: 48000,
+
+            // ตัดเสียงรบกวนของเบราว์เซอร์ออกแบบเปิด/ปิดเท่านั้น ปรับความแรงไม่ได้
+            // เมื่อเปิด มันจะกดย่านความถี่ที่มันคิดว่าเป็นเสียงรบกวนทิ้ง
+            // ซึ่งกินเสียงพยัญชนะเบา ๆ ของภาษาไทยอย่าง ส ฉ ถ ไปด้วย
+            // ตัวถอดความอาศัยเสียงเหล่านี้แยกคำ จึงปิดไว้แล้วให้ตัวถอดความจัดการเอง
+            noiseSuppression: false,
+
+            // ปรับระดับเสียงอัตโนมัติ ทำให้ความดังไม่สม่ำเสมอระหว่างประโยค
+            // และดึงเสียงพื้นหลังขึ้นมาในจังหวะที่คนหยุดพูด
+            autoGainControl: false,
+
+            // เปิดไว้เพราะตู้ใช้ลำโพง ไม่ใช่หูฟัง
+            // ถ้าไม่ตัด เสียงที่ตู้พูดตอบจะวนกลับเข้าไมค์แล้วถูกถอดความซ้ำ
             echoCancellation: true,
-            noiseSuppression: true,
-            autoGainControl: true,
           },
         })
         return true
@@ -88,7 +103,12 @@ export function createVoiceChannel(onMessage) {
       if (!(await this.prime())) return false
       if (recorder?.state === 'recording') return true
 
-      recorder = new MediaRecorder(stream, { mimeType: pickMimeType() })
+      // ค่าปริยายของเบราว์เซอร์สำหรับเสียงพูดอยู่ราว 32 kbps ซึ่งบีบอัดแรงเกินไป
+      // รายละเอียดที่หายไปคือสิ่งที่ตัวถอดความใช้แยกคำที่เสียงใกล้กัน
+      recorder = new MediaRecorder(stream, {
+        mimeType: pickMimeType(),
+        audioBitsPerSecond: 128000,
+      })
       recorder.ondataavailable = (ev) => {
         if (ev.data.size > 0 && ready()) {
           ev.data.arrayBuffer().then((buf) => ready() && socket.send(buf))
