@@ -74,7 +74,7 @@ export default function Stage({ children, aside }) {
         transform: `scale(${box.scale})`,
         transformOrigin: box.mode === 'desktop' ? 'top left' : 'center center',
       }}
-      className="relative shrink-0 overflow-hidden bg-brand-50"
+      className="stage-surface relative shrink-0 overflow-hidden"
     >
       {children}
     </div>

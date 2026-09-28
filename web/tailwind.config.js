@@ -50,11 +50,27 @@ export default {
         body: ['26px', { lineHeight: '1.5' }],
         'body-lg': ['30px', { lineHeight: '1.5' }],
         label: ['24px', { lineHeight: '1.4' }],
-        h3: ['40px', { lineHeight: '1.25' }],
-        h2: ['52px', { lineHeight: '1.2' }],
-        h1: ['68px', { lineHeight: '1.15' }],
-        mega: ['120px', { lineHeight: '1' }],
-        clock: ['180px', { lineHeight: '1' }],
+        h3: ['40px', { lineHeight: '1.25', letterSpacing: '-0.01em' }],
+        h2: ['52px', { lineHeight: '1.2', letterSpacing: '-0.015em' }],
+        h1: ['68px', { lineHeight: '1.15', letterSpacing: '-0.02em' }],
+        mega: ['120px', { lineHeight: '1', letterSpacing: '-0.03em' }],
+        clock: ['180px', { lineHeight: '1', letterSpacing: '-0.035em' }],
+      },
+      boxShadow: {
+        // เงาสองชั้น ชั้นบางไว้แทนเส้นขอบ ชั้นฟุ้งไว้ยกพื้นผิวให้ลอย
+        // ใช้แทนกรอบ 2px ทั้งหมด เพราะกรอบหนาทำให้ทุกอย่างดูเป็นกล่องแบน
+        // ระวังบน Raspberry Pi — ใส่เฉพาะพื้นผิวที่อยู่นิ่ง ไม่ใส่ในรายการที่ซ้ำหลายสิบแถว
+        card: '0 1px 2px rgba(6, 53, 32, 0.05), 0 8px 24px -6px rgba(6, 53, 32, 0.10)',
+        'card-lg': '0 2px 4px rgba(6, 53, 32, 0.06), 0 20px 48px -12px rgba(6, 53, 32, 0.16)',
+        hero: '0 4px 12px rgba(6, 53, 32, 0.18), 0 24px 56px -16px rgba(6, 53, 32, 0.40)',
+        // ปุ่มหลักยกขึ้นเล็กน้อย ให้รู้ว่ากดได้โดยไม่ต้องมีกรอบ
+        raise: '0 2px 4px rgba(6, 53, 32, 0.12), 0 10px 22px -8px rgba(11, 97, 54, 0.45)',
+        inset: 'inset 0 1px 2px rgba(6, 53, 32, 0.08)',
+      },
+      borderRadius: {
+        xl2: '20px',
+        xl3: '28px',
+        xl4: '34px',
       },
       keyframes: {
         'fade-in': {

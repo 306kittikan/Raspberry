@@ -30,8 +30,8 @@ const TABS = [
 function ClassRow({ item, muted }) {
   return (
     <div
-      className={`flex items-stretch gap-6 rounded-[24px] border-2 px-8 py-7 ${
-        muted ? 'border-brand-100 bg-white' : 'border-brand-200 bg-white'
+      className={`flex items-stretch gap-6 rounded-xl3 bg-white px-8 py-7 ring-1 ${
+        muted ? 'ring-brand-100' : 'ring-brand-200'
       }`}
     >
       <div className="flex w-[150px] shrink-0 flex-col justify-center border-r-2 border-brand-100 pr-6">
@@ -76,7 +76,7 @@ export default function HomeScreen() {
   }
 
   return (
-    <div className="flex h-full w-full flex-col bg-brand-50">
+    <div className="stage-surface flex h-full w-full flex-col">
       <TopBar showName onExit={() => endSession('manual')} />
       <OfflineBanner />
 
@@ -86,7 +86,7 @@ export default function HomeScreen() {
           <button
             type="button"
             onClick={startEnrollFlow}
-            className="press tap mb-7 flex w-full items-center gap-5 rounded-[24px] border-2 border-brand-300 bg-white px-8 py-6 text-left active:bg-brand-50"
+            className="press tap card mb-7 flex w-full items-center gap-5 px-8 py-6 text-left active:bg-brand-50"
           >
             <IconFace className="h-14 w-14 shrink-0 text-brand-700" />
             <span className="min-w-0 flex-1">
@@ -114,7 +114,7 @@ export default function HomeScreen() {
             </div>
           </>
         ) : next ? (
-          <div className="rounded-[32px] border-4 border-brand-700 bg-brand-800 p-10 text-white">
+          <div className="rounded-xl4 bg-gradient-to-br from-brand-700 via-brand-800 to-brand-900 p-10 text-white shadow-hero">
             <div className="flex items-center gap-4">
               <IconClock className="h-9 w-9 text-brand-200" />
               <p className="text-label font-semibold text-brand-100">
@@ -144,7 +144,7 @@ export default function HomeScreen() {
               </div>
             </div>
 
-            <div className="mt-6 rounded-[22px] bg-brand-500 px-7 py-6 text-center">
+            <div className="mt-6 rounded-[22px] bg-white/15 px-7 py-6 text-center ring-1 ring-white/25">
               <p className="text-label text-white/85">
                 {next.ongoing ? 'เลิกเรียน' : 'นับถอยหลังถึงเวลาเรียน'}
               </p>
@@ -165,21 +165,18 @@ export default function HomeScreen() {
 
         {/* ---- แท็บ (ซ่อนเมื่อไม่มีข้อมูลตารางเรียน) ---- */}
         <div
-          className={`sticky top-0 z-10 -mx-12 mt-9 bg-brand-50 px-12 pb-5 pt-2 ${
+          className={`stage-surface sticky top-0 z-10 -mx-12 mt-9 px-12 pb-5 pt-2 ${
             hasSchedule ? '' : 'hidden'
           }`}
         >
-          <div className="grid grid-cols-3 gap-4">
+          <div className="segment grid grid-cols-3 gap-2">
             {TABS.map((t) => (
               <button
                 key={t.id}
                 type="button"
+                data-on={tab === t.id}
                 onClick={() => selectTab(t.id)}
-                className={`press tap min-h-[92px] rounded-[22px] border-2 text-body-lg font-bold ${
-                  tab === t.id
-                    ? 'border-brand-700 bg-brand-700 text-white'
-                    : 'border-brand-200 bg-white text-brand-800 active:bg-brand-100'
-                }`}
+                className="press segment-item min-h-[84px]"
               >
                 {t.label}
               </button>

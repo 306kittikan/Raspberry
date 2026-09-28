@@ -37,8 +37,8 @@ function Bubble({ side, children, tone = '' }) {
       <div
         className={`relative max-w-[86%] px-8 py-6 ${
           mine
-            ? 'rounded-[26px] rounded-br-[8px] bg-brand-700 text-white'
-            : `rounded-[26px] rounded-bl-[8px] border-2 bg-white ${tone}`
+            ? 'rounded-[26px] rounded-br-[8px] bg-gradient-to-br from-brand-600 to-brand-700 text-white shadow-card'
+            : `rounded-[26px] rounded-bl-[8px] bg-white shadow-card ring-1 ${tone}`
         }`}
       >
         {children}
@@ -116,9 +116,9 @@ export default function ChatWindow() {
   }
 
   return (
-    <div className="flex h-full w-full flex-col overflow-hidden rounded-[32px] border-2 border-brand-100 bg-white shadow-[0_18px_50px_rgba(11,97,54,0.18)]">
+    <div className="flex h-full w-full flex-col overflow-hidden rounded-xl4 bg-white shadow-card-lg ring-1 ring-brand-100">
       {/* ---- แถบหัว ---- */}
-      <header className="flex shrink-0 items-center gap-5 bg-brand-700 px-8 py-6 text-white">
+      <header className="flex shrink-0 items-center gap-5 bg-gradient-to-r from-brand-700 to-brand-800 px-8 py-6 text-white">
         <span className="flex h-[84px] w-[84px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-white/15">
           {cameraOk && !anonymous ? (
             <CameraView className="h-full w-full" rounded="rounded-full" />
@@ -153,7 +153,7 @@ export default function ChatWindow() {
       {/* ---- บทสนทนา ---- */}
       <div className="min-h-0 flex-1 space-y-6 overflow-y-auto bg-brand-50/60 px-8 py-8">
         {messages.length === 0 ? (
-          <Bubble side="kiosk" tone="border-brand-200">
+          <Bubble side="kiosk" tone="ring-brand-200">
             <p className="text-h3 font-bold leading-tight text-brand-900">
               สวัสดีครับ ถามได้เลย
             </p>
@@ -185,10 +185,10 @@ export default function ChatWindow() {
               side="kiosk"
               tone={
                 turn.answer?.source?.startsWith('ai')
-                  ? 'border-ai-200'
+                  ? 'ring-ai-100'
                   : turn.answer?.source === 'none'
-                    ? 'border-alert-100'
-                    : 'border-brand-200'
+                    ? 'ring-alert-100'
+                    : 'ring-brand-200'
               }
             >
               <Answer answer={turn.answer} />
@@ -204,7 +204,7 @@ export default function ChatWindow() {
         ) : null}
 
         {busy ? (
-          <Bubble side="kiosk" tone="border-brand-200">
+          <Bubble side="kiosk" tone="ring-brand-200">
             <div className="flex items-center gap-4">
               <IconSparkle className="h-8 w-8 shrink-0 text-brand-600" />
               <span className="flex gap-2">
@@ -243,7 +243,7 @@ export default function ChatWindow() {
                     key={s.text}
                     type="button"
                     onClick={() => askText(s.text)}
-                    className="press tap block w-full rounded-[22px] border-2 border-brand-600 bg-brand-50 px-6 py-5 text-left"
+                    className="press tap block w-full rounded-[22px] bg-gradient-to-br from-brand-50 to-brand-100 px-6 py-5 text-left shadow-card ring-1 ring-brand-300"
                   >
                     <span className="block text-body font-semibold leading-snug text-brand-900">
                       {s.text}
@@ -305,7 +305,7 @@ export default function ChatWindow() {
       {/* ---- ช่องพิมพ์ ---- */}
       <div className="shrink-0 border-t-2 border-brand-100 bg-white px-8 py-6">
         <div
-          className={`rounded-[26px] border-2 px-6 py-5 ${
+          className={`rounded-xl3 px-6 py-5 shadow-card ring-1 ${
             listening ? 'border-brand-600 bg-brand-50' : 'border-brand-300 bg-white'
           }`}
         >
@@ -374,7 +374,7 @@ export default function ChatWindow() {
               onClick={send}
               disabled={!draft.trim() || busy}
               aria-label="ส่งคำถาม"
-              className="press tap ml-auto flex h-[76px] w-[76px] shrink-0 items-center justify-center rounded-full bg-brand-700 text-white active:bg-brand-800 disabled:bg-brand-100 disabled:text-ink-mute"
+              className="press tap ml-auto flex h-[76px] w-[76px] shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand-600 to-brand-700 text-white shadow-raise active:from-brand-700 active:to-brand-800 disabled:from-brand-100 disabled:to-brand-100 disabled:text-ink-mute disabled:shadow-none"
             >
               <IconSend className="h-10 w-10" />
             </button>

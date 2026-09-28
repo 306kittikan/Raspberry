@@ -25,12 +25,28 @@ export default function IdleScreen() {
   const ann = announcements[annIndex] ?? null
 
   return (
-    <div className="flex h-full w-full flex-col bg-brand-50">
+    <div className="stage-surface flex h-full w-full flex-col">
       <OfflineBanner />
 
       {/* ---- ส่วนหัว: เวลา วันที่ ชื่อสาขา ---- */}
-      <div className="bg-brand-800 px-12 pb-10 pt-12 text-white">
-        <div className="flex items-center gap-5">
+      {/* ไล่สีทแยงแทนสีเขียวทึบ และลบมุมล่างให้โค้ง
+          ขอบตรงเป็นเส้นแบ่งแข็ง ๆ ทำให้ส่วนหัวดูเหมือนแถบที่แปะทับ
+          ไม่ใช่พื้นผิวที่ต่อเนื่องกับเนื้อหาข้างล่าง */}
+      <div className="relative overflow-hidden rounded-b-[44px] bg-gradient-to-br from-brand-700 via-brand-800 to-brand-900 px-12 pb-11 pt-12 text-white shadow-hero">
+        {/* วงแสงจาง ๆ มุมบนขวา ให้พื้นผิวมีมิติโดยไม่รบกวนการอ่าน
+            เป็นไล่สีธรรมดา ไม่ใช่การเบลอ จึงไม่กินแรงเครื่อง */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute -right-28 -top-32 h-[400px] w-[400px] rounded-full"
+          style={{
+            // ไล่สีแบบรัศมีจางหายไปที่ขอบ ต่างจากวงกลมสีทึบซึ่งเห็นเส้นรอบวงชัด
+            // ให้ผลเหมือนแสงฟุ้งโดยไม่ต้องใช้ฟิลเตอร์เบลอ ซึ่งกินแรง GPU ของ Pi
+            background:
+              'radial-gradient(circle, rgba(130, 205, 159, 0.30) 0%, rgba(130, 205, 159, 0.12) 45%, rgba(130, 205, 159, 0) 70%)',
+          }}
+        />
+
+        <div className="relative flex items-center gap-5">
           <IconLogo className="h-[76px] w-[76px] text-brand-200" />
           <div>
             <p className="text-h3 font-bold leading-tight">{department?.name}</p>
@@ -38,9 +54,11 @@ export default function IdleScreen() {
           </div>
         </div>
 
-        <p className="mt-10 text-mega font-bold leading-none tabular-nums">{formatClock(now)}</p>
-        <p className="mt-3 text-h3 text-brand-100">{formatThaiDate(now)}</p>
-        <p className="mt-2 text-label text-brand-200">{termLabel}</p>
+        <p className="relative mt-10 text-mega font-bold leading-none tracking-tight tabular-nums">
+          {formatClock(now)}
+        </p>
+        <p className="relative mt-3 text-h3 text-brand-100">{formatThaiDate(now)}</p>
+        <p className="relative mt-2 text-label text-brand-200">{termLabel}</p>
       </div>
 
       {/* ---- คำเชิญชวนหลัก ---- */}
@@ -48,7 +66,7 @@ export default function IdleScreen() {
         <div className="card flex flex-col items-center px-10 py-11 text-center">
           <span className="relative flex h-[184px] w-[184px] items-center justify-center">
             <span className="absolute inset-0 rounded-full border-4 border-brand-300 animate-pulse-ring" />
-            <span className="flex h-[184px] w-[184px] items-center justify-center rounded-full border-4 border-brand-600 bg-brand-50">
+            <span className="flex h-[184px] w-[184px] items-center justify-center rounded-full bg-gradient-to-br from-brand-50 to-brand-100 shadow-card ring-2 ring-brand-300">
               <IconFace className="h-[100px] w-[100px] text-brand-700" />
             </span>
           </span>
@@ -79,7 +97,7 @@ export default function IdleScreen() {
           </div>
 
           <div key={ann?.id} className="mt-6 animate-fade-in">
-            <span className="inline-block rounded-full bg-brand-100 px-5 py-2 text-[22px] font-semibold text-brand-800">
+            <span className="inline-block rounded-full bg-brand-100 px-5 py-2 text-[22px] font-semibold text-brand-800 ring-1 ring-brand-200">
               {ann?.tag}
             </span>
             <p className="mt-4 text-h3 font-bold leading-snug text-brand-900">{ann?.title}</p>

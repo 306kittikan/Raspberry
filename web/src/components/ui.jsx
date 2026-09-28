@@ -1,23 +1,30 @@
 import React from 'react'
 import { useKiosk } from '../state/KioskProvider'
 
+// ปุ่มหลักใช้ไล่สีอ่อน ๆ บวกเงา แทนสีทึบที่มีกรอบหนา
+// ทำให้เห็นว่ากดได้จากรูปทรง ไม่ต้องอาศัยเส้นขอบ
 const VARIANTS = {
   primary:
-    'bg-brand-700 text-white border-2 border-brand-700 active:bg-brand-800 disabled:bg-brand-200 disabled:border-brand-200 disabled:text-ink-mute',
+    'bg-gradient-to-b from-brand-600 to-brand-700 text-white shadow-raise ' +
+    'active:from-brand-700 active:to-brand-800 ' +
+    'disabled:from-brand-200 disabled:to-brand-200 disabled:text-ink-mute disabled:shadow-none',
   secondary:
-    'bg-white text-brand-800 border-2 border-brand-300 active:bg-brand-50 disabled:text-ink-mute disabled:border-brand-100',
+    'bg-white text-brand-800 shadow-card ring-1 ring-brand-200/70 ' +
+    'active:bg-brand-50 disabled:text-ink-mute disabled:shadow-none',
   danger:
-    'bg-danger-600 text-white border-2 border-danger-600 active:bg-danger-700 disabled:bg-danger-100 disabled:border-danger-100',
+    'bg-gradient-to-b from-danger-600 to-danger-700 text-white shadow-raise ' +
+    'active:from-danger-700 active:to-danger-700 ' +
+    'disabled:from-danger-100 disabled:to-danger-100 disabled:shadow-none',
   outlineDanger:
-    'bg-white text-danger-700 border-2 border-danger-600 active:bg-danger-50 disabled:text-ink-mute disabled:border-brand-100',
-  dark: 'bg-brand-900 text-white border-2 border-brand-900 active:bg-black',
-  ghost: 'bg-transparent text-brand-800 border-2 border-transparent active:bg-brand-100',
+    'bg-white text-danger-700 shadow-card ring-1 ring-danger-600/40 active:bg-danger-50',
+  dark: 'bg-gradient-to-b from-brand-800 to-brand-900 text-white shadow-hero active:from-brand-900 active:to-black',
+  ghost: 'bg-transparent text-brand-800 active:bg-brand-100',
 }
 
 const SIZES = {
-  md: 'min-h-[88px] px-8 text-body font-semibold rounded-[22px]',
-  lg: 'min-h-[112px] px-10 text-body-lg font-semibold rounded-[26px]',
-  xl: 'min-h-[140px] px-12 text-h3 font-bold rounded-[30px]',
+  md: 'min-h-[88px] px-8 text-body font-semibold rounded-xl2',
+  lg: 'min-h-[112px] px-10 text-body-lg font-semibold rounded-[24px]',
+  xl: 'min-h-[140px] px-12 text-h3 font-bold rounded-xl3',
 }
 
 /** ปุ่มมาตรฐาน: เป้าแตะไม่ต่ำกว่า 72×72px และยุบลงทันทีเมื่อกด */
@@ -76,7 +83,7 @@ export function UpdatedAt({ className = '' }) {
 
 export function EmptyState({ icon: Icon, title, detail, children }) {
   return (
-    <div className="flex flex-col items-center rounded-[28px] border-2 border-dashed border-brand-200 bg-white px-10 py-14 text-center">
+    <div className="flex flex-col items-center rounded-xl3 border-2 border-dashed border-brand-200 bg-white/70 px-10 py-14 text-center">
       {Icon ? <Icon className="mb-6 h-20 w-20 text-brand-400" /> : null}
       <p className="text-h3 font-bold text-brand-900">{title}</p>
       {detail ? <p className="mt-4 max-w-[760px] text-body text-ink-soft">{detail}</p> : null}
