@@ -18,6 +18,12 @@ studentByProgram*
 # ข้อมูลและความลับ — ห้ามขึ้น git เด็ดขาด (มีข้อมูลชีวภาพ)
 server/data/*.db
 server/data/*.db-*
+# ไฟล์สำรองฐานข้อมูลก็มีเวกเตอร์ใบหน้าและชื่อนักศึกษาจริงเหมือนตัวจริงทุกประการ
+# เคยหลุดขึ้น git มาแล้วเพราะกฎเดิมจับเฉพาะนามสกุล .db
+server/data/*.bak
+server/data/*.sqlite*
+server/data/backup*
+*.db.bak
 server/models/
 .env
 .env.*
@@ -32,6 +38,9 @@ csmju_dataset/my_semester_*/
 **/my_exams.csv
 **/registered_courses.csv
 **/schedule_*.ics
+
+# ไฟล์ชั่วคราวของ Word ตอนเปิดเอกสารค้างไว้
+~$*
 
 # อื่น ๆ
 .DS_Store
