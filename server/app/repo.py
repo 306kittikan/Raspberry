@@ -555,6 +555,57 @@ def _minutes(hhmm: str) -> int:
     return int(h) * 60 + int(m)
 
 
+def schedule_from_registrar(
+    conn: sqlite3.Connection, sessions: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    """แปลงคาบเรียนที่ได้จากระบบทะเบียน ให้อยู่ในรูปเดียวกับตารางในเครื่อง
+
+    หน้าจอจึงไม่ต้องรู้ว่าข้อมูลมาจากไหน และตรรกะคาบถัดไปกับมุมมองรายสัปดาห์
+    ใช้โค้ดชุดเดียวกันทั้งหมด ไม่ต้องเขียนซ้ำสองทาง
+
+    เติมชั้นและอาคารให้จากตารางห้องเท่าที่รู้ ห้องที่ไม่รู้จักปล่อยว่างไว้
+    ไม่เดา เพราะบอกชั้นผิดแปลว่านักศึกษาเดินขึ้นผิดชั้น
+    """
+    rooms = {
+        (r["short_name"] or "").strip().lower(): r
+        for r in conn.execute(
+            """SELECT r.short_name, r.name, r.floor, r.room_type,
+                      b.name AS building
+               FROM rooms r LEFT JOIN buildings b ON b.id = r.building_id"""
+        ).fetchall()
+        if r["short_name"]
+    }
+    # ชื่อห้องในระบบทะเบียนเรียกไม่เหมือนกับในฐานข้อมูลของสาขา
+    alias = {"lab คอม 5": "labcom 5", "lab คอม5": "labcom 5",
+             "บรรยาย คอม 8": "lect 8", "บรรยาย คอม 6": "lect 6",
+             "lab คอม 1": "lab 1", "lab คอม 2": "lab 2",
+             "lab คอม 3": "lab 3", "lab คอม 4": "lab 4"}
+
+    out = []
+    for s in sessions:
+        raw = (s.get("room") or "").strip()
+        key = alias.get(raw.lower(), raw.lower())
+        info = rooms.get(key)
+        out.append({
+            "day": s["day"],
+            "start": s["start"],
+            "end": s["end"],
+            "code": s.get("code"),
+            "name": s.get("name") or s.get("code"),
+            "room": raw or None,
+            "roomFullName": info["name"] if info else None,
+            "roomType": info["room_type"] if info else None,
+            "building": info["building"] if info else (s.get("building") or None),
+            "floor": info["floor"] if info else None,
+            "teacher": None,
+            "directions": None,
+            "isSynthetic": False,
+            "fromRegistrar": True,
+        })
+    out.sort(key=lambda i: (i["day"], i["start"]))
+    return out
+
+
 def free_rooms_now(
     conn: sqlite3.Connection, now: datetime, *, only_cs_building: bool = True
 ) -> dict[str, Any]:

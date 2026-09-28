@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field
 from .. import config, repo
 from .. import session as session_store
 from ..deps import Db, MaybeSession
+from ..services import reg_lookup
 
 router = APIRouter(prefix="/api/session", tags=["session"])
 
@@ -113,8 +114,15 @@ def keep_alive(sess: MaybeSession) -> dict:
 
 
 @router.delete("")
-def logout(sess: MaybeSession) -> dict:
+def logout(conn: Db, sess: MaybeSession) -> dict:
     """ออกจากระบบและล้างข้อมูลทั้งหมดของเซสชันนี้ทิ้งทันที"""
     if sess is not None:
+        # ตารางเรียนที่ดึงสดมาจากระบบทะเบียนอยู่ในหน่วยความจำเท่านั้น
+        # แต่ต้องลบทันทีที่ผู้ใช้เดินจากไป ไม่ใช่รอให้หมดอายุเอง
+        # เพราะคนถัดไปมายืนที่ตู้เครื่องเดียวกัน
+        if sess.student_pk is not None:
+            student = repo.get_student(conn, sess.student_pk)
+            if student is not None:
+                reg_lookup.forget(student["student_id"])
         session_store.store.end(sess.token)
     return {"ok": True}

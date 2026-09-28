@@ -901,6 +901,8 @@ export function KioskProvider({ children }) {
       hasSyntheticSchedule: student
         ? Boolean(effectiveSchedule.isSynthetic)
         : (boot?.hasSyntheticSchedule ?? false),
+      // ตารางนี้ดึงสดจากระบบทะเบียนตอนเข้าใช้งาน ไม่ได้เก็บไว้ในตู้
+      scheduleFromRegistrar: Boolean(effectiveSchedule.fromRegistrar),
       termLabel: boot?.term?.label ?? null,
       // ผู้ใช้ปัจจุบัน
       student,

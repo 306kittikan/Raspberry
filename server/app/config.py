@@ -111,6 +111,16 @@ AI_MAX_TOKENS = int(os.getenv("KIOSK_AI_MAX_TOKENS", "8000"))
 # มากกว่านี้เริ่มได้ชิ้นที่ไม่เกี่ยวเข้ามาปน ซึ่งทำให้โมเดลหลงประเด็น
 AI_CONTEXT_CHUNKS = int(os.getenv("KIOSK_AI_CHUNKS", "8"))
 
+# ---- ดึงตารางเรียนจากระบบทะเบียนแบบสด ----
+# นักศึกษาส่วนใหญ่ไม่มีตารางเรียนอยู่ในตู้ เพราะสาขายังไม่มีช่องทางส่งให้
+# ตู้จึงถามระบบทะเบียนให้ตอนที่นักศึกษากรอกรหัสหรือสแกนหน้า แล้วแสดงผลโดยไม่บันทึก
+# ปิดได้ถ้าตู้ต้องทำงานออฟไลน์ล้วน หรือไม่ต้องการให้ตู้ออกไปหาระบบภายนอก
+REG_LOOKUP_ENABLED = _flag("KIOSK_REG_LOOKUP", True)
+# ต้องสั้น เพราะมีคนยืนรออยู่หน้าตู้ ช้ากว่านี้ควรยอมแพ้แล้วใช้ข้อมูลในเครื่อง
+REG_TIMEOUT_SECONDS = float(os.getenv("KIOSK_REG_TIMEOUT", "8"))
+REG_ACADYEAR = int(os.getenv("KIOSK_REG_ACADYEAR", "2569"))
+REG_SEMESTER = int(os.getenv("KIOSK_REG_SEMESTER", "1"))
+
 # ---- CORS (เฉพาะตอนพัฒนา ตอนใช้งานจริงเสิร์ฟจาก origin เดียวกัน) ----
 DEV_ORIGINS = [
     o.strip()

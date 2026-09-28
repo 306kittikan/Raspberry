@@ -63,8 +63,8 @@ export function SectionTitle({ children, right }) {
 
 /** ข้อความกำกับความสดของข้อมูล ต้องมีทุกหน้าที่แสดงตารางเรียน/กำหนดสอบ */
 export function UpdatedAt({ className = '' }) {
-  const { dataUpdatedLabel, hasSyntheticSchedule } = useKiosk()
-  if (!dataUpdatedLabel && !hasSyntheticSchedule) return null
+  const { dataUpdatedLabel, hasSyntheticSchedule, scheduleFromRegistrar } = useKiosk()
+  if (!dataUpdatedLabel && !hasSyntheticSchedule && !scheduleFromRegistrar) return null
   return (
     <div className={`leading-snug ${className}`}>
       {dataUpdatedLabel ? (
@@ -72,6 +72,13 @@ export function UpdatedAt({ className = '' }) {
       ) : null}
       {/* ตราบใดที่ยังไม่ได้รับตารางเรียนจริงจากสาขา ต้องบอกผู้ใช้ตรง ๆ
           ไม่ให้เข้าใจผิดว่าเป็นตารางเรียนของตนเองจริง ๆ */}
+      {/* ตารางที่ดึงสดจากระบบทะเบียนไม่ได้ถูกบันทึกไว้ในตู้
+          บอกผู้ใช้ตรง ๆ เพราะเป็นข้อมูลของเขา เขาควรรู้ว่าตู้เก็บอะไรไว้บ้าง */}
+      {scheduleFromRegistrar ? (
+        <p className="mt-1 inline-flex items-center gap-2 rounded-full bg-brand-50 px-4 py-1 text-[20px] font-semibold text-brand-800 ring-1 ring-brand-200">
+          ดึงสดจากระบบทะเบียน · ตู้ไม่ได้เก็บตารางเรียนของคุณไว้
+        </p>
+      ) : null}
       {hasSyntheticSchedule ? (
         <p className="mt-1 inline-flex items-center gap-2 rounded-full border-2 border-alert-100 bg-alert-50 px-4 py-1 text-[20px] font-semibold text-alert-900">
           ตารางเรียนเป็นข้อมูลตัวอย่าง ยังไม่ใช่ตารางจริง

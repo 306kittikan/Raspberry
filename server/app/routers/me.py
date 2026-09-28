@@ -6,6 +6,7 @@ from fastapi import APIRouter, HTTPException, status
 
 from .. import config, repo, thai
 from ..deps import Db, StudentSession, VerifiedSession, current_term_id
+from ..services import reg_lookup
 
 router = APIRouter(prefix="/api/me", tags=["me"])
 
@@ -28,8 +29,25 @@ def schedule(conn: Db, sess: StudentSession) -> dict:
     now = thai.now()
     items = repo.get_schedule(conn, sess.student_pk, term_id)
 
+    # ตู้มีตารางเรียนของนักศึกษาไม่กี่คน เพราะสาขายังไม่มีช่องทางส่งให้เป็นระบบ
+    # ถ้าไม่มีในเครื่อง ให้ถามระบบทะเบียนสด ๆ แล้วแสดงผลโดยไม่บันทึกอะไรไว้
+    from_registrar = False
+    if not items:
+        student = repo.get_student(conn, sess.student_pk)
+        code = student["student_id"] if student else None
+        if code:
+            try:
+                fetched = reg_lookup.student_timetable(code)
+            except reg_lookup.RegError:
+                fetched = []      # ถามไม่ได้ก็แสดงว่าไม่มีข้อมูล ดีกว่าค้างรอ
+            if fetched:
+                items = repo.schedule_from_registrar(conn, fetched)
+                from_registrar = True
+
     return {
         "hasSchedule": bool(items),
+        # หน้าจอใช้บอกผู้ใช้ว่าข้อมูลนี้ดึงสดมาจากระบบทะเบียน ไม่ได้เก็บไว้ในตู้
+        "fromRegistrar": from_registrar,
         "today": repo.classes_today(items, now),
         "week": {str(day): rows for day, rows in repo.classes_by_week(items).items()},
         "nextClass": repo.find_next_class(items, now),
