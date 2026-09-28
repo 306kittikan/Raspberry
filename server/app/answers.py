@@ -359,6 +359,29 @@ async def resolve(
                 "lines": lines,
             }
 
+    if question_id == "instructor-schedule":
+        person = repo.find_personnel_mention(conn, ctx.text)
+        if person is not None:
+            rows = repo.instructor_schedule(conn, person["name"])
+            if rows:
+                lines = repo.instructor_schedule_lines(rows)
+                # ตารางสอนคือช่วงที่ท่านไม่ว่างแน่ ๆ ไม่ใช่ช่วงเวลาทำงานทั้งหมด
+                # ถ้าไม่บอกไว้ นักศึกษาจะเข้าใจว่าเวลาที่เหลือเดินไปเจอได้เลย
+                lines.append("")
+                lines.append("ตารางนี้เป็นคาบสอนตามตารางเรียน ควรนัดหมายก่อนไปพบ")
+                if person.get("email"):
+                    lines.append(f"อีเมล {person['email']}")
+                if person.get("phone"):
+                    lines.append(f"โทร {person['phone']}")
+                return {
+                    "questionId": "instructor-schedule",
+                    "kind": "ตารางสอน",
+                    "label": ctx.text,
+                    "source": "db",
+                    "title": f"ตารางสอน {person['name']}",
+                    "lines": lines,
+                }
+
     if question_id == "exam-public":
         rows = repo.search_exam_schedule(conn, ctx.text)
         if rows:

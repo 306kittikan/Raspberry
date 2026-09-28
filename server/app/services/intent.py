@@ -146,6 +146,18 @@ def match(conn: sqlite3.Connection, text: str) -> Intent:
         if person is not None:
             return Intent("instructor-now", 1.0, "person")
 
+    # ---- ตารางสอนของอาจารย์ ----
+    # ต้องตรวจก่อน person-detail ไม่งั้นคำถามที่มีชื่ออาจารย์อยู่ด้วย
+    # จะถูกตอบเป็นนามบัตรทั้งหมด ไม่ว่าจะถามเรื่องอะไรเกี่ยวกับท่านก็ตาม
+    # วางไว้หลัง instructor-now เพราะ "สอนอยู่ไหม" ถามคนละอย่าง
+    if any(w in flat for w in ("ตารางสอน", "สอนวันไหน", "สอนวันอะไร",
+                               "สอนอะไร", "สอนวิชาอะไร", "สอนวิชาไหน",
+                               "สอนกี่โมง", "คาบสอน", "ตารางของอาจารย์",
+                               "สอนเทอมนี้", "สอนกี่วิชา")):
+        person = repo.find_personnel_mention(conn, text)
+        if person is not None and repo.instructor_schedule(conn, person["name"]):
+            return Intent("instructor-schedule", 1.0, "person")
+
     # คำถามที่เอ่ยชื่อบุคลากรตรง ๆ มีคำตอบแน่นอนอยู่ในฐานข้อมูล
     # ตอบจากตารางได้เลย แม่นกว่าและทำงานได้แม้ตู้ออฟไลน์
     # ต้องตรวจก่อนกฎคำสำคัญ ไม่งั้นจะถูกกฎ contact-teacher กลืนไปก่อน

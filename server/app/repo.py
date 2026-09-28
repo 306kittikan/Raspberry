@@ -744,6 +744,80 @@ def instructor_now(
     }
 
 
+def instructor_schedule(
+    conn: sqlite3.Connection, name: str
+) -> list[dict[str, Any]]:
+    """คาบสอนทั้งสัปดาห์ของอาจารย์คนหนึ่ง
+
+    ต่างจาก instructor_now ที่ตอบว่า "ตอนนี้ติดสอนอยู่ไหม" อันนี้ตอบว่า
+    "ทั้งสัปดาห์สอนอะไรบ้าง" ซึ่งเป็นคนละคำถามและใช้คนละโอกาส
+    นักศึกษาถามอันนี้ตอนจะวางแผนไปพบ ไม่ใช่ตอนกำลังจะเดินไป
+
+    ชื่อในตารางสอนเก็บเป็นข้อความยาวคั่นด้วยเซมิโคลอนและมียศเต็ม
+    ส่วนในทำเนียบบุคลากรเป็นชื่อย่อ จึงเทียบด้วยชื่อกับนามสกุลแยกกัน
+    ใช้ทั้งสองส่วนเพื่อไม่ให้อาจารย์ที่ชื่อต้นซ้ำกันถูกดึงมาปนกัน
+    """
+    if not name:
+        return []
+    parts = [
+        w for w in name.replace("ผศ.", " ").replace("รศ.", " ").replace("ศ.", " ")
+        .replace("ดร.", " ").replace("อ.", " ").replace("ว่าที่ร้อยตรี", " ")
+        .replace("นางสาว", " ").replace("นาง", " ").replace("นาย", " ").split()
+        if w
+    ]
+    if not parts:
+        return []
+
+    given = parts[0]
+    rows = conn.execute(
+        """SELECT day, start_time, end_time, course_code, course_title,
+                  section, kind, room, building_name, instructors
+           FROM class_sessions
+           WHERE instructors LIKE ?
+           ORDER BY day, start_time""",
+        (f"%{given}%",),
+    ).fetchall()
+
+    # มีนามสกุลให้เทียบด้วย ก็กรองซ้ำอีกชั้นกันคนชื่อต้นซ้ำกัน
+    if len(parts) > 1:
+        family = parts[-1]
+        exact = [r for r in rows if family in (r["instructors"] or "")]
+        if exact:
+            rows = exact
+
+    # วิชาเดียวกันคาบเดียวกันอาจถูกบันทึกซ้ำจากหลายแหล่ง ยุบให้เหลือรายการเดียว
+    seen: set[tuple[Any, ...]] = set()
+    out: list[dict[str, Any]] = []
+    for r in rows:
+        key = (r["day"], r["start_time"], r["end_time"], r["course_code"], r["section"])
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(dict(r))
+    return out
+
+
+def instructor_schedule_lines(rows: list[dict[str, Any]]) -> list[str]:
+    """จัดคาบสอนเป็นบรรทัด จัดกลุ่มตามวันเพื่อให้กวาดตาอ่านบนจอตู้ได้เร็ว"""
+    lines: list[str] = []
+    current_day: int | None = None
+    for r in rows:
+        if r["day"] != current_day:
+            current_day = r["day"]
+            idx = (current_day or 1) - 1
+            day_name = thai.THAI_WEEKDAYS[idx] if 0 <= idx < 7 else "—"
+            lines.append(f"วัน{day_name}")
+        where = r["room"] or "—"
+        if r.get("building_name") and r.get("room"):
+            where = f"{r['room']} {r['building_name']}"
+        title = (r["course_title"] or "").strip()
+        kind = f" ({r['kind']})" if r.get("kind") else ""
+        lines.append(
+            f"  {r['start_time']}-{r['end_time']} · {r['course_code']} {title}{kind} · {where}"
+        )
+    return lines
+
+
 def search_exam_schedule(
     conn: sqlite3.Connection, text: str, limit: int = 6
 ) -> list[dict[str, Any]]:
