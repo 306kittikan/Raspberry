@@ -235,7 +235,9 @@ export default function HomeScreen() {
               exams.length > 0 ? (
                 exams.map((exam) => (
                   <div
-                    key={exam.code}
+                    // หนึ่งรายวิชามีสอบได้ทั้งกลางภาคและปลายภาค
+                    // ใช้รหัสวิชาอย่างเดียวจึงซ้ำกัน แล้ว React จะข้ามแถวใดแถวหนึ่งทิ้ง
+                    key={`${exam.code}-${exam.type}-${exam.dateISO}`}
                     className="rounded-[24px] border-2 border-brand-200 bg-white px-8 py-7"
                   >
                     <div className="flex items-center gap-4">

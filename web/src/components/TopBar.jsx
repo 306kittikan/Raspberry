@@ -1,7 +1,8 @@
 import React from 'react'
 import { useKiosk } from '../state/KioskProvider'
 import { formatClock } from '../lib/time'
-import { IconLogo, IconLogout, IconWifiOff } from './Icons'
+import { IconLogout, IconWifiOff } from './Icons'
+import Logo from './Logo'
 
 /**
  * แถบบนสุด: โลโก้ + ชื่อสาขา + เวลา + ปุ่มออกจากระบบ (มองเห็นได้ตลอดทุกหน้า)
@@ -12,7 +13,7 @@ export default function TopBar({ onExit, exitLabel = 'ออกจากระ�
 
   return (
     <header className="relative z-10 flex items-center gap-6 bg-white px-12 py-6 shadow-card">
-      <IconLogo className="h-[72px] w-[72px] shrink-0 text-brand-700" />
+      <Logo height={76} />
 
       <div className="min-w-0 flex-1">
         <p className="truncate text-[28px] font-bold leading-tight text-brand-900">

@@ -3,7 +3,8 @@ import { useKiosk } from '../state/KioskProvider'
 import { formatClock, formatThaiDate } from '../lib/time'
 import { Button } from '../components/ui'
 import OfflineBanner from '../components/OfflineBanner'
-import { IconBell, IconFace, IconIncognito, IconLogo } from '../components/Icons'
+import { IconBell, IconFace, IconIncognito } from '../components/Icons'
+import Logo from '../components/Logo'
 
 /**
  * หน้าจอพัก — ยังไม่ยืนยันตัวตน จึงต้องไม่แสดงข้อมูลส่วนบุคคลใด ๆ
@@ -32,38 +33,40 @@ export default function IdleScreen() {
       {/* ไล่สีทแยงแทนสีเขียวทึบ และลบมุมล่างให้โค้ง
           ขอบตรงเป็นเส้นแบ่งแข็ง ๆ ทำให้ส่วนหัวดูเหมือนแถบที่แปะทับ
           ไม่ใช่พื้นผิวที่ต่อเนื่องกับเนื้อหาข้างล่าง */}
-      <div className="relative overflow-hidden rounded-b-[44px] bg-gradient-to-br from-brand-700 via-brand-800 to-brand-900 px-12 pb-11 pt-12 text-white shadow-hero">
-        {/* วงแสงจาง ๆ มุมบนขวา ให้พื้นผิวมีมิติโดยไม่รบกวนการอ่าน
-            เป็นไล่สีธรรมดา ไม่ใช่การเบลอ จึงไม่กินแรงเครื่อง */}
+      <div className="relative overflow-hidden rounded-b-[40px] bg-white px-12 pb-8 pt-9 shadow-card-lg">
+        {/* แถบฟ้าอ่อนจางหายไปทางล่าง ให้ส่วนหัวมีมิติโดยไม่ทับโลโก้
+            เป็นไล่สีธรรมดา ไม่ใช่การเบลอ จึงไม่กินแรงเครื่องบน Pi */}
         <span
           aria-hidden
-          className="pointer-events-none absolute -right-28 -top-32 h-[400px] w-[400px] rounded-full"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[420px]"
           style={{
-            // ไล่สีแบบรัศมีจางหายไปที่ขอบ ต่างจากวงกลมสีทึบซึ่งเห็นเส้นรอบวงชัด
-            // ให้ผลเหมือนแสงฟุ้งโดยไม่ต้องใช้ฟิลเตอร์เบลอ ซึ่งกินแรง GPU ของ Pi
             background:
-              'radial-gradient(circle, rgba(127, 184, 238, 0.30) 0%, rgba(127, 184, 238, 0.12) 45%, rgba(127, 184, 238, 0) 70%)',
+              'radial-gradient(120% 100% at 80% 0%, rgba(127, 184, 238, 0.28) 0%, rgba(127, 184, 238, 0.10) 40%, rgba(127, 184, 238, 0) 72%)',
           }}
         />
 
-        <div className="relative flex items-center gap-5">
-          <IconLogo className="h-[76px] w-[76px] text-brand-200" />
-          <div>
-            <p className="text-h3 font-bold leading-tight">{department?.name}</p>
-            <p className="text-label text-brand-100">{department?.faculty}</p>
-          </div>
+        {/* โลโก้มีชื่อสาขาเป็นภาษาอังกฤษอยู่ในภาพแล้ว จึงไม่ต้องมีบรรทัดชื่อสาขาซ้ำ
+            เหลือไว้แต่ชื่อคณะเป็นภาษาไทย ซึ่งโลโก้ไม่ได้บอกและนักศึกษาไทยอ่านได้ทันที */}
+        <div className="relative">
+          <Logo height={112} />
+          {/* โลโก้บอกชื่อสาขาเป็นภาษาอังกฤษเท่านั้น
+              นักศึกษาไทยกวาดสายตาหาข้อความภาษาไทยก่อนเสมอ
+              จึงต้องมีชื่อสาขาภาษาไทยอยู่ด้วย ไม่ใช่มีแต่ชื่อคณะ */}
+          <p className="mt-4 text-label font-semibold text-ink-soft">
+            {department?.name} · {department?.faculty}
+          </p>
         </div>
 
-        <p className="relative mt-10 text-mega font-bold leading-none tracking-tight tabular-nums">
+        <p className="relative mt-7 text-mega font-bold leading-none tracking-tight tabular-nums text-brand-800">
           {formatClock(now)}
         </p>
-        <p className="relative mt-3 text-h3 text-brand-100">{formatThaiDate(now)}</p>
-        <p className="relative mt-2 text-label text-brand-200">{termLabel}</p>
+        <p className="relative mt-2 text-h3 font-semibold text-brand-700">{formatThaiDate(now)}</p>
+        <p className="relative mt-2 text-label text-ink-mute">{termLabel}</p>
       </div>
 
       {/* ---- คำเชิญชวนหลัก ---- */}
-      <div className="flex min-h-0 flex-1 flex-col justify-between px-12 py-9">
-        <div className="card flex flex-col items-center px-10 py-11 text-center">
+      <div className="flex min-h-0 flex-1 flex-col justify-between px-12 py-7">
+        <div className="card flex flex-col items-center px-10 py-9 text-center">
           <span className="relative flex h-[184px] w-[184px] items-center justify-center">
             <span className="absolute inset-0 rounded-full border-4 border-brand-300 animate-pulse-ring" />
             <span className="flex h-[184px] w-[184px] items-center justify-center rounded-full bg-gradient-to-br from-brand-50 to-brand-100 shadow-card ring-2 ring-brand-300">
@@ -71,16 +74,16 @@ export default function IdleScreen() {
             </span>
           </span>
 
-          <h1 className="mt-8 text-h1 font-bold leading-tight text-brand-900">
+          <h1 className="mt-6 text-h1 font-bold leading-tight text-brand-900">
             ยืนหน้าตู้เพื่อดูตารางเรียนของคุณ
           </h1>
-          <p className="mt-5 max-w-[800px] text-body-lg text-ink-soft">
+          <p className="mt-4 max-w-[800px] text-body-lg text-ink-soft">
             ระบบจะยืนยันตัวตนด้วยใบหน้าโดยอัตโนมัติ ไม่ต้องพิมพ์ข้อความใด ๆ
           </p>
         </div>
 
         {/* ---- ประกาศของสาขา วนแสดงอัตโนมัติ (ซ่อนเมื่อยังไม่มีประกาศ) ---- */}
-        <div className={`card mt-8 p-9 ${ann ? '' : 'hidden'}`}>
+        <div className={`card mt-6 p-8 ${ann ? '' : 'hidden'}`}>
           <div className="flex items-center gap-4">
             <IconBell className="h-10 w-10 text-brand-700" />
             <p className="text-label font-bold text-brand-800">ประกาศของสาขา</p>
@@ -106,7 +109,7 @@ export default function IdleScreen() {
         </div>
 
         {/* ---- ปุ่มหลัก วางช่วงกลางถึงล่างของจอ ---- */}
-        <div className="mt-8 flex flex-col gap-5">
+        <div className="mt-6 flex flex-col gap-4">
           <Button size="xl" icon={IconFace} onClick={startScan}>
             เริ่มสแกนใบหน้า
           </Button>
