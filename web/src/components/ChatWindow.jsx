@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useKiosk } from '../state/KioskProvider'
 import SourceBadge from './SourceBadge'
+import * as speech from '../lib/speech'
 import CameraView from './CameraView'
 import {
   IconClose,
@@ -11,6 +12,8 @@ import {
   IconMic,
   IconSend,
   IconSparkle,
+  IconSpeaker,
+  IconSpeakerOff,
 } from './Icons'
 
 /**
@@ -47,11 +50,55 @@ function Bubble({ side, children, tone = '' }) {
   )
 }
 
+/** รวมคำตอบเป็นข้อความเดียวสำหรับอ่านออกเสียง */
+function answerText(answer) {
+  const parts = [answer?.title, ...(answer?.lines ?? [])]
+  return parts.filter(Boolean).join(' ')
+}
+
+function SpeakButton({ answer }) {
+  const [state, setState] = useState('idle') // idle | loading | speaking
+
+  async function onTap() {
+    if (state === 'speaking' || state === 'loading') {
+      speech.stop()
+      setState('idle')
+      return
+    }
+    setState('loading')
+    // เสียงจากเซิร์ฟเวอร์ใช้เวลาสังเคราะห์หลายวินาทีในครั้งแรกของแต่ละประโยค
+    // ต้องมีสถานะให้เห็น ไม่งั้นผู้ใช้จะกดซ้ำเพราะคิดว่าปุ่มเสีย
+    const ok = await speech.speak(answerText(answer))
+    setState(ok ? 'speaking' : 'idle')
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={onTap}
+      aria-label={state === 'speaking' ? 'หยุดอ่าน' : 'อ่านออกเสียง'}
+      className="absolute right-5 top-5 grid h-12 w-12 place-items-center rounded-full
+                 text-brand-600 transition hover:bg-brand-50 active:scale-95
+                 disabled:opacity-40"
+      disabled={state === 'loading'}
+    >
+      {state === 'loading' ? (
+        <span className="h-5 w-5 animate-spin rounded-full border-2 border-brand-200 border-t-brand-600" />
+      ) : state === 'speaking' ? (
+        <IconSpeakerOff className="h-6 w-6" />
+      ) : (
+        <IconSpeaker className="h-6 w-6" />
+      )}
+    </button>
+  )
+}
+
 function Answer({ answer }) {
   return (
     <>
+      <SpeakButton answer={answer} />
       <SourceBadge source={answer?.source} reference={answer?.ref} />
-      <p className="mt-4 text-h3 font-bold leading-tight text-brand-900">{answer?.title}</p>
+      <p className="mt-4 pr-12 text-h3 font-bold leading-tight text-brand-900">{answer?.title}</p>
       {answer?.lines?.length ? (
         <ul className="mt-3 space-y-2">
           {answer.lines.map((line, i) => (

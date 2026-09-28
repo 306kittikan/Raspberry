@@ -26,11 +26,12 @@ import logging
 import time
 
 import numpy as np
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, HTTPException, Response, WebSocket, WebSocketDisconnect, status
+from pydantic import BaseModel, Field
 
 from .. import answers, config, repo
 from ..deps import current_term_id, open_db
-from ..services import intent, stt
+from ..services import intent, stt, tts
 from ..session import store as session_store
 
 log = logging.getLogger("kiosk.voice")
@@ -56,6 +57,42 @@ async def voice_status() -> dict:
         "error": stt.engine.error,
         "model": config.STT_MODEL,
     }
+
+
+class SpeakIn(BaseModel):
+    """ข้อความที่ต้องการให้ตู้อ่านออกเสียง"""
+
+    text: str = Field(max_length=1200)
+
+
+@router.get("/api/tts/status")
+async def tts_status() -> dict:
+    return tts.status()
+
+
+@router.post("/api/tts/speak")
+async def tts_speak(body: SpeakIn) -> Response:
+    """คืนไฟล์เสียงของข้อความนี้
+
+    รับข้อความจากหน้าจอแทนที่จะสังเคราะห์ตอนตอบคำถาม
+    เพราะผู้ใช้เปิดหรือปิดเสียงได้ และคำตอบส่วนใหญ่ถูกอ่านด้วยตา
+    การสังเคราะห์ทุกคำตอบทิ้งไว้เฉย ๆ เปลืองซีพียูที่ตู้ต้องใช้รู้จำใบหน้า
+    """
+    if not tts.available():
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "ยังไม่พร้อมอ่านออกเสียง")
+    try:
+        audio = await asyncio.to_thread(tts.synthesize, body.text)
+    except RuntimeError as exc:
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, str(exc)) from exc
+    if not audio:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, "ไม่มีข้อความให้อ่าน")
+    # ไม่ต้องให้เบราว์เซอร์เก็บไว้ เพราะฝั่งเซิร์ฟเวอร์แคชให้แล้ว
+    # และเสียงที่ค้างอยู่ในเบราว์เซอร์คือร่องรอยของคำถามที่ผู้ใช้ถาม
+    return Response(
+        content=audio,
+        media_type="audio/wav",
+        headers={"Cache-Control": "no-store"},
+    )
 
 
 @router.websocket("/ws/voice")

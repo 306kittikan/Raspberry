@@ -211,3 +211,19 @@ export const IconLogo = (p) => (
     <path d="M24 36h16" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
   </svg>
 )
+
+export const IconSpeaker = (p) => (
+  <svg {...base(p)}>
+    <path d="M11 5L6 9H3v6h3l5 4V5z" />
+    <path d="M15.5 8.5a5 5 0 0 1 0 7" />
+    <path d="M18.5 5.5a9 9 0 0 1 0 13" />
+  </svg>
+)
+
+export const IconSpeakerOff = (p) => (
+  <svg {...base(p)}>
+    <path d="M11 5L6 9H3v6h3l5 4V5z" />
+    <path d="M22 9l-6 6" />
+    <path d="M16 9l6 6" />
+  </svg>
+)

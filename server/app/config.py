@@ -69,6 +69,14 @@ STT_MODEL_DIR = Path(os.getenv("KIOSK_STT_MODEL_DIR", SERVER_DIR / "models" / "w
 STT_OFFLINE_ONLY = _flag("KIOSK_STT_OFFLINE_ONLY", False)
 STT_ENABLED = _flag("KIOSK_STT_ENABLED", True)
 
+# ---- อ่านคำตอบออกเสียง (ภาษาไทย) ----
+# ใช้ Piper ซึ่งทำงานบนเครื่อง ตู้จึงพูดได้แม้เครือข่ายล่ม
+# และคำถามของนักศึกษาไม่ต้องถูกส่งออกไปนอกเครื่อง
+TTS_ENABLED = _flag("KIOSK_TTS_ENABLED", True)
+TTS_MODEL_PATH = Path(
+    os.getenv("KIOSK_TTS_MODEL", SERVER_DIR / "models" / "piper" / "th_TH-tsync2-medium.onnx")
+)
+
 # ---- ผู้ช่วย AI ----
 # เลือกผู้ให้บริการ: gemini | anthropic | auto
 # auto = ใช้กุญแจที่ใส่ไว้ ถ้ามีทั้งคู่เลือก gemini ก่อนเพราะมีโควตาให้ใช้ฟรี
