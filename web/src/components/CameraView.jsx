@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useKiosk } from '../state/KioskProvider'
 import * as api from '../lib/api'
 import { IconCameraOff, IconFace } from './Icons'
@@ -14,7 +14,24 @@ import { IconCameraOff, IconFace } from './Icons'
  */
 export default function CameraView({ className = '', rounded = 'rounded-[28px]' }) {
   const { cameraReady, cameraOk } = useKiosk()
-  const streamUrl = useMemo(() => api.cameraStreamUrl(), [])
+  // เซิร์ฟเวอร์ตัดภาพสดทิ้งเองเมื่อครบอายุ เพื่อไม่ให้สายค้างสะสมจนตู้ตอบไม่ไหว
+  // ฝั่งนี้จึงต้องขอสายใหม่เมื่อถูกตัด ไม่งั้นภาพจะดับไปเฉย ๆ แล้วไม่กลับมา
+  const [attempt, setAttempt] = useState(0)
+  const [url, setUrl] = useState(() => api.cameraStreamUrl())
+  const timer = useRef(null)
+
+  useEffect(() => {
+    if (attempt > 0) setUrl(api.cameraStreamUrl())
+  }, [attempt])
+
+  useEffect(() => () => clearTimeout(timer.current), [])
+
+  const retry = useCallback(() => {
+    clearTimeout(timer.current)
+    // หน่วงก่อนลองใหม่ ถ้าเซิร์ฟเวอร์ปฏิเสธเพราะมีสายเปิดอยู่มากเกินไป
+    // การยิงซ้ำทันทีจะยิ่งทำให้แย่ลง
+    timer.current = setTimeout(() => setAttempt((n) => n + 1), 1200)
+  }, [])
 
   if (!cameraOk) {
     return (
@@ -42,8 +59,10 @@ export default function CameraView({ className = '', rounded = 'rounded-[28px]' 
 
   return (
     <img
-      src={streamUrl}
+      key={url}
+      src={url}
       alt=""
+      onError={retry}
       className={`scale-x-[-1] bg-[#0B1622] object-cover ${rounded} ${className}`}
     />
   )

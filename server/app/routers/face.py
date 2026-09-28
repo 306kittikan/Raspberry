@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 import logging
+import threading
 import time
-from typing import Iterator
+from typing import AsyncIterator
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Request, status
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
@@ -24,8 +25,32 @@ log = logging.getLogger("kiosk.face.api")
 router = APIRouter(prefix="/api/face", tags=["face"])
 
 # คุณภาพ JPEG ของภาพพรีวิว — ต่ำพอให้ Raspberry Pi ส่งทันโดยยังดูรู้เรื่อง
+# อายุสูงสุดของภาพสดหนึ่งสาย หน้าจอจะขอสายใหม่เองเมื่อถูกตัด
+STREAM_MAX_SECONDS = 180.0
+
 PREVIEW_QUALITY = 70
 PREVIEW_FPS = 12
+
+# จำนวนภาพสดที่เปิดพร้อมกันได้
+#
+# ภาพสดหนึ่งสายกินเธรดของเซิร์ฟเวอร์เป็นระยะ ๆ ตลอดเวลาที่เปิดอยู่
+# และเซิร์ฟเวอร์มีเธรดจำกัด เส้นทางอื่นทั้งหมดใช้เธรดชุดเดียวกันนี้
+# ถ้าภาพสดค้างสะสมไปเรื่อย ๆ ตู้จะเริ่มตอบช้าลงแล้วหยุดตอบไปเลย
+# ซึ่งเห็นเป็นอาการ "ใช้ไปสักพักแล้วค้าง"
+#
+# ตู้จริงมีหน้าจอเดียวและเปิดภาพสดได้ทีละหนึ่งถึงสองที่
+# แต่ตอนสลับหน้า สายเก่ากับสายใหม่ซ้อนกันได้ชั่วครู่ และเบราว์เซอร์
+# บางครั้งขอสายใหม่ก่อนที่สายเก่าจะถูกปิด จึงต้องเผื่อไว้มากกว่าที่ใช้จริง
+# แน่นเกินไปจะเห็นเป็นภาพกล้องกะพริบตอนเปลี่ยนหน้า
+MAX_STREAMS = 8
+
+_stream_lock = threading.Lock()
+_active_streams = 0
+
+
+def active_streams() -> int:
+    with _stream_lock:
+        return _active_streams
 
 
 @router.get("/status")
@@ -36,51 +61,87 @@ def face_status() -> dict:
 # ------------------------------------------------------------
 # ภาพสดจากกล้อง
 # ------------------------------------------------------------
-def _mjpeg_frames() -> Iterator[bytes]:
+async def _mjpeg_frames(request: Request) -> AsyncIterator[bytes]:
     """ส่งภาพต่อเนื่องแบบ multipart/x-mixed-replace
 
     เลือก MJPEG แทน WebRTC เพราะแท็ก <img> แสดงได้เลยโดยไม่ต้องใช้จาวาสคริปต์
     และ Chromium บน Raspberry Pi ถอดรหัส JPEG ได้เร็วกว่าถอดรหัสวิดีโอ
+
+    เขียนเป็นฟังก์ชันแบบ async เพื่อให้ถามได้ว่าอีกฝั่งยังดูอยู่ไหม
+    ตอนเป็นฟังก์ชันธรรมดา เซิร์ฟเวอร์ไม่มีทางรู้ว่าเบราว์เซอร์ปิดไปแล้ว
+    จึงส่งภาพต่อไปเรื่อย ๆ ตลอดอายุของเซิร์ฟเวอร์
+    สายที่ตายแล้วสะสมไปกินเธรดจนเส้นทางอื่นเริ่มช้าลงแล้วหยุดตอบ
+    ซึ่งเห็นเป็นอาการ "ใช้ไปสักพักแล้วค้าง"
+
+    งานที่บล็อก คือรอเฟรมกับเข้ารหัส JPEG ถูกโยนไปทำในเธรดอื่น
+    ไม่ให้ไปหยุดลูปหลักของเซิร์ฟเวอร์ซึ่งต้องคอยรับคำขออื่นอยู่
     """
+    import anyio
     import cv2
 
-    last_seq = -1
-    min_interval = 1.0 / PREVIEW_FPS
+    global _active_streams
+    with _stream_lock:
+        _active_streams += 1
 
-    while True:
-        started = time.time()
-        frame, seq = camera.wait_for_frame(last_seq, timeout=2.0)
+    state = {"seq": -1}
+    min_interval = 1.0 / PREVIEW_FPS
+    # เพดานอายุเผื่อกรณีที่การตรวจจับการตัดการเชื่อมต่อไม่ทำงาน
+    # หน้าจอที่ยังดูอยู่จะขอสายใหม่ให้เองโดยผู้ใช้ไม่รู้สึก
+    deadline = time.time() + STREAM_MAX_SECONDS
+
+    def grab() -> bytes | None:
+        frame, seq = camera.wait_for_frame(state["seq"], timeout=2.0)
         if frame is None:
+            return None
+        state["seq"] = seq
+        ok, buf = cv2.imencode(".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, PREVIEW_QUALITY])
+        return buf.tobytes() if ok else None
+
+    try:
+        while True:
+            started = time.time()
+            if started > deadline or await request.is_disconnected():
+                break
             if not camera.available:
                 break
-            continue
-        last_seq = seq
 
-        ok, buf = cv2.imencode(".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, PREVIEW_QUALITY])
-        if not ok:
-            continue
+            jpeg = await anyio.to_thread.run_sync(grab)
+            if jpeg is None:
+                continue
 
-        yield (
-            b"--frame\r\nContent-Type: image/jpeg\r\n"
-            b"Content-Length: " + str(len(buf)).encode() + b"\r\n\r\n"
-            + buf.tobytes() + b"\r\n"
-        )
+            yield (
+                b"--frame\r\nContent-Type: image/jpeg\r\n"
+                b"Content-Length: " + str(len(jpeg)).encode() + b"\r\n\r\n"
+                + jpeg + b"\r\n"
+            )
 
-        # จำกัดอัตราเฟรมไม่ให้แย่งซีพียูจากการรู้จำใบหน้า
-        elapsed = time.time() - started
-        if elapsed < min_interval:
-            time.sleep(min_interval - elapsed)
+            # จำกัดอัตราเฟรมไม่ให้แย่งซีพียูจากการรู้จำใบหน้า
+            elapsed = time.time() - started
+            if elapsed < min_interval:
+                await anyio.sleep(min_interval - elapsed)
+    finally:
+        # ต้องลดตัวนับเสมอ ไม่ว่าจะจบเพราะหมดเวลา กล้องหาย
+        # หรือเบราว์เซอร์ตัดการเชื่อมต่อกลางคัน
+        with _stream_lock:
+            _active_streams -= 1
 
 
 @router.get("/stream")
-def stream() -> StreamingResponse:
+def stream(request: Request) -> StreamingResponse:
     if not camera.available:
         raise HTTPException(
             status.HTTP_503_SERVICE_UNAVAILABLE,
             camera.error or "กล้องไม่พร้อมใช้งาน",
         )
+    if active_streams() >= MAX_STREAMS:
+        # ปฏิเสธดีกว่าปล่อยให้สะสมจนตู้ทั้งตู้ตอบไม่ได้
+        # หน้าจอจะขึ้นว่ากล้องไม่พร้อม ซึ่งยังใช้การกรอกรหัสนักศึกษาต่อได้
+        raise HTTPException(
+            status.HTTP_503_SERVICE_UNAVAILABLE,
+            "มีภาพสดเปิดอยู่มากเกินไป",
+        )
     return StreamingResponse(
-        _mjpeg_frames(),
+        _mjpeg_frames(request),
         media_type="multipart/x-mixed-replace; boundary=frame",
         headers={"Cache-Control": "no-store, no-cache", "Pragma": "no-cache"},
     )

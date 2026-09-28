@@ -201,6 +201,9 @@ class FaceWorker:
                 self._enroll = None
 
     def status(self) -> dict[str, Any]:
+        # นำเข้าตรงนี้เพื่อเลี่ยงการอ้างวนระหว่างโมดูล
+        from ..routers.face import active_streams as _active_streams
+
         with self._lock:
             return {
                 "mode": self._mode,
@@ -211,6 +214,8 @@ class FaceWorker:
                 "modelError": face.engine.error,
                 "detectMs": round(self._fps_ms),
                 "camera": camera.status(),
+                # จำนวนภาพสดที่เปิดอยู่ ใช้ไล่หาสาเหตุเวลาตู้เริ่มตอบช้า
+                "streams": _active_streams(),
             }
 
     # ------------------------------------------------------------

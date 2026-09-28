@@ -3,14 +3,14 @@ import { useKiosk } from '../state/KioskProvider'
 import { formatClock, formatThaiDate } from '../lib/time'
 import { Button } from '../components/ui'
 import OfflineBanner from '../components/OfflineBanner'
-import { IconBell, IconFace, IconIncognito } from '../components/Icons'
+import { IconBell, IconFace, IconIncognito, IconKeypad } from '../components/Icons'
 import Logo from '../components/Logo'
 
 /**
  * หน้าจอพัก — ยังไม่ยืนยันตัวตน จึงต้องไม่แสดงข้อมูลส่วนบุคคลใด ๆ
  */
 export default function IdleScreen() {
-  const { now, startScan, startAnonymous, department, announcements, termLabel } = useKiosk()
+  const { now, startScan, startAnonymous, goto, department, announcements, termLabel } = useKiosk()
   const [annIndex, setAnnIndex] = useState(0)
 
   // ประกาศมาจากเซิร์ฟเวอร์ จึงยังว่างอยู่ในเฟรมแรก และจำนวนเปลี่ยนได้ระหว่างวัน
@@ -113,7 +113,13 @@ export default function IdleScreen() {
           <Button size="xl" icon={IconFace} onClick={startScan}>
             เริ่มสแกนใบหน้า
           </Button>
-          <Button size="lg" variant="secondary" icon={IconIncognito} onClick={startAnonymous}>
+          {/* เดิมต้องเข้าหน้าสแกนก่อนถึงจะไปกรอกรหัสได้
+              คนที่ไม่อยากให้ตู้สแกนหน้าจึงต้องกดผ่านหน้าที่เปิดกล้องอยู่ดี
+              ซึ่งขัดกับเจตนาของเขา จึงต้องมีทางเข้าตรงจากหน้าแรก */}
+          <Button size="lg" variant="secondary" icon={IconKeypad} onClick={() => goto('keypad')}>
+            กรอกรหัสนักศึกษาแทน
+          </Button>
+          <Button size="lg" variant="ghost" icon={IconIncognito} onClick={startAnonymous}>
             ถามคำถามโดยไม่ระบุตัวตน
           </Button>
         </div>
