@@ -61,7 +61,7 @@ export default function FaceScanScreen() {
       <OfflineBanner />
 
       {/* ---- ภาพจำลองจากกล้อง ---- */}
-      <div className="relative flex-1 overflow-hidden bg-[#0C1A13]">
+      <div className="relative flex-1 overflow-hidden bg-[#0B1622]">
         {cameraOk ? (
           <>
             {cameraReady ? (
@@ -78,14 +78,14 @@ export default function FaceScanScreen() {
                   className="absolute inset-0 opacity-70"
                   style={{
                     background:
-                      'radial-gradient(circle at 50% 42%, #24493A 0%, #14291F 45%, #0A1611 100%)',
+                      'radial-gradient(circle at 50% 42%, #22405C 0%, #132436 45%, #091420 100%)',
                   }}
                 />
                 <div
                   className="absolute inset-0 opacity-15"
                   style={{
                     backgroundImage:
-                      'linear-gradient(#9FD8BA 1px, transparent 1px), linear-gradient(90deg, #9FD8BA 1px, transparent 1px)',
+                      'linear-gradient(#9FC8E8 1px, transparent 1px), linear-gradient(90deg, #9FC8E8 1px, transparent 1px)',
                     backgroundSize: '60px 60px',
                   }}
                 />

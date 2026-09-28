@@ -14,7 +14,7 @@ export default function SleepScreen() {
   return (
     <div
       onClick={detectPresence}
-      className="flex h-full w-full flex-col items-center justify-center bg-[#04110A] text-center animate-fade-in"
+      className="flex h-full w-full flex-col items-center justify-center bg-[#04101B] text-center animate-fade-in"
     >
       <IconLogo className="h-[180px] w-[180px] text-brand-500/40" />
 

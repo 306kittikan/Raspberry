@@ -19,7 +19,7 @@ export default function CameraView({ className = '', rounded = 'rounded-[28px]' 
   if (!cameraOk) {
     return (
       <div
-        className={`flex items-center justify-center bg-[#0C1A13] ${rounded} ${className}`}
+        className={`flex items-center justify-center bg-[#0B1622] ${rounded} ${className}`}
       >
         <div className="text-center">
           <IconCameraOff className="mx-auto h-20 w-20 text-danger-100" />
@@ -31,7 +31,7 @@ export default function CameraView({ className = '', rounded = 'rounded-[28px]' 
 
   if (!cameraReady) {
     return (
-      <div className={`flex items-center justify-center bg-[#0C1A13] ${rounded} ${className}`}>
+      <div className={`flex items-center justify-center bg-[#0B1622] ${rounded} ${className}`}>
         <div className="text-center">
           <IconFace className="mx-auto h-20 w-20 text-brand-500/50" />
           <p className="mt-4 text-label text-white/50">กำลังเปิดกล้อง…</p>
@@ -44,7 +44,7 @@ export default function CameraView({ className = '', rounded = 'rounded-[28px]' 
     <img
       src={streamUrl}
       alt=""
-      className={`scale-x-[-1] bg-[#0C1A13] object-cover ${rounded} ${className}`}
+      className={`scale-x-[-1] bg-[#0B1622] object-cover ${rounded} ${className}`}
     />
   )
 }

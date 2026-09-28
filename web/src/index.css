@@ -8,7 +8,7 @@
   #root {
     height: 100%;
     margin: 0;
-    background: #05140c;
+    background: #050d16;
     overflow: hidden;
   }
 
@@ -17,13 +17,13 @@
      ไล่สีเป็นงานที่ถูกมากสำหรับ GPU ต่างจากการเบลอพื้นหลัง */
   .stage-surface {
     background:
-      radial-gradient(120% 60% at 50% 0%, #FFFFFF 0%, #F6FBF8 45%, #EFF7F2 100%);
+      radial-gradient(120% 60% at 50% 0%, #FFFFFF 0%, #F7FAFF 45%, #EFF5FC 100%);
   }
 
   body {
     font-family: 'IBM Plex Sans Thai', 'Noto Sans Thai', sans-serif;
     -webkit-font-smoothing: antialiased;
-    color: #101c16;
+    color: #0f1822;
     /* ตู้จอสัมผัส: ปิดการเลือกข้อความ / เมนูค้าง / ไฮไลต์เวลาแตะ */
     user-select: none;
     -webkit-user-select: none;
@@ -53,19 +53,19 @@
      ไม่ใช่พื้นผิวที่ลอยอยู่เหนือพื้นหลัง */
   .card {
     @apply rounded-xl3 bg-white shadow-card;
-    border: 1px solid rgba(11, 97, 54, 0.08);
+    border: 1px solid rgba(10, 76, 138, 0.08);
   }
 
   .card-lg {
     @apply rounded-xl4 bg-white shadow-card-lg;
-    border: 1px solid rgba(11, 97, 54, 0.08);
+    border: 1px solid rgba(10, 76, 138, 0.08);
   }
 
   /* แถบสลับมุมมอง (วันนี้ / ทั้งสัปดาห์ / กำหนดสอบ)
      รางเดียวที่มีปุ่มเลื่อนอยู่ข้างใน อ่านง่ายกว่าปุ่มสามปุ่มที่มีกรอบแยกกัน */
   .segment {
     @apply rounded-[26px] bg-brand-50 p-2 shadow-inset;
-    border: 1px solid rgba(11, 97, 54, 0.08);
+    border: 1px solid rgba(10, 76, 138, 0.08);
   }
   .segment-item {
     @apply rounded-[20px] text-body-lg font-bold transition-colors;

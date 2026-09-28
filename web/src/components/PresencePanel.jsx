@@ -50,7 +50,7 @@ export default function PresencePanel() {
   const reply = answer ? [answer.title, ...(answer.lines ?? [])].filter(Boolean)[0] : null
 
   return (
-    <div className="flex h-full w-full flex-col bg-[#04110A] px-10 py-9 text-white">
+    <div className="flex h-full w-full flex-col bg-[#04101B] px-10 py-9 text-white">
       {/* ---- หัวแผง ---- */}
       <div className="flex items-center gap-4">
         <IconLogo className="h-14 w-14 shrink-0 text-brand-500/70" />

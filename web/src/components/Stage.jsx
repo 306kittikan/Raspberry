@@ -83,7 +83,7 @@ export default function Stage({ children, aside }) {
   if (box.mode === 'desktop') {
     return (
       <LayoutContext.Provider value={box}>
-        <div className="fixed inset-0 flex items-center justify-center overflow-hidden bg-[#04110A]">
+        <div className="fixed inset-0 flex items-center justify-center overflow-hidden bg-[#04101B]">
           <div
             style={{ width: box.asideWidth }}
             className="relative h-full shrink-0 overflow-hidden"
