@@ -266,6 +266,99 @@ async def resolve(
             ],
         }
 
+    if question_id == "room-free":
+        now = thai.now()
+        result = repo.free_rooms_now(conn, now)
+        free = result["free"]
+        if not free:
+            return {
+                "questionId": "room-free",
+                "kind": "ห้องเรียน",
+                "label": ctx.text,
+                "source": "db",
+                "title": "ตอนนี้ไม่มีห้องว่างในอาคารคณะวิทยาศาสตร์",
+                "lines": [f"ทุกห้องมีคาบเรียนอยู่ · ตรวจเมื่อ {now.hour:02d}.{now.minute:02d} น."],
+            }
+        lines = []
+        for r in free[:6]:
+            if r["freeUntil"]:
+                lines.append(f"{r['room']} · ว่างถึง {r['freeUntil']} น.")
+            else:
+                lines.append(f"{r['room']} · ว่างตลอดวันนี้")
+        return {
+            "questionId": "room-free",
+            "kind": "ห้องเรียน",
+            "label": ctx.text,
+            "source": "db",
+            "title": f"ห้องว่างตอนนี้ {len(free)} ห้อง",
+            "lines": lines,
+            "ref": "ตารางเรียนจากระบบทะเบียน",
+        }
+
+    if question_id == "room-status":
+        now = thai.now()
+        st = repo.room_status(conn, ctx.text, now)
+        if st is not None:
+            if st["busy"]:
+                cur = st["current"]
+                lines = [
+                    f"มีคาบเรียนอยู่ถึง {cur['end_time']} น.",
+                    f"{cur['course_code']} {cur['course_title'] or ''}".strip(),
+                ]
+                if st["next"]:
+                    lines.append(f"คาบถัดไป {st['next']['start_time']} น.")
+                title = f"ห้อง {st['room']} ไม่ว่างตอนนี้"
+            else:
+                lines = []
+                if st["next"]:
+                    lines.append(f"ว่างถึง {st['next']['start_time']} น. "
+                                 f"แล้วมีคาบ {st['next']['course_title'] or ''}".strip())
+                else:
+                    lines.append("ว่างตลอดช่วงที่เหลือของวันนี้")
+                lines.append(f"วันนี้มีคาบเรียนในห้องนี้ {len(st['today'])} คาบ")
+                title = f"ห้อง {st['room']} ว่างอยู่"
+            return {
+                "questionId": "room-status",
+                "kind": "ห้องเรียน",
+                "label": ctx.text,
+                "source": "db",
+                "title": title,
+                "lines": lines,
+                "ref": "ตารางเรียนจากระบบทะเบียน",
+            }
+
+    if question_id == "instructor-now":
+        person = repo.find_personnel_mention(conn, ctx.text)
+        if person is not None:
+            st = repo.instructor_now(conn, person["name"], thai.now())
+            lines = []
+            if st and st["teaching"]:
+                cur = st["current"]
+                title = f"{person['name']} กำลังสอนอยู่"
+                lines.append(f"ถึง {cur['end_time']} น. · ห้อง {cur['room'] or '—'}")
+                lines.append(f"{cur['course_code']} {cur['course_title'] or ''}".strip())
+            else:
+                title = f"{person['name']} ไม่มีคาบสอนในขณะนี้"
+                if st and st["next"]:
+                    nx = st["next"]
+                    lines.append(f"คาบถัดไปวันนี้ {nx['start_time']} น. ห้อง {nx['room'] or '—'}")
+                elif st and st["todayCount"] == 0:
+                    lines.append("วันนี้ไม่มีคาบสอนตามตารางเรียน")
+            if person.get("email"):
+                lines.append(f"อีเมล {person['email']}")
+            if person.get("phone"):
+                lines.append(f"โทร {person['phone']}")
+            # ตารางสอนบอกได้แค่ว่าติดคาบหรือไม่ ไม่ได้แปลว่าอยู่ห้องพักหรือไม่
+            lines.append("ตารางสอนบอกได้เฉพาะคาบเรียน ควรนัดหมายล่วงหน้าก่อนไปพบ")
+            return {
+                "questionId": "instructor-now",
+                "kind": "บุคลากร",
+                "label": ctx.text,
+                "source": "db",
+                "title": title,
+                "lines": lines,
+            }
+
     if question_id == "exam-public":
         rows = repo.search_exam_schedule(conn, ctx.text)
         if rows:

@@ -545,6 +545,154 @@ def anticipated_questions(
     return out
 
 
+# ห้องของสาขาที่นักศึกษาเข้าใช้ได้ เรียงตามที่นั่งทำงานได้สะดวก
+# ห้องของคณะหรือหน่วยงานอื่นไม่เอามาเสนอ เพราะนักศึกษาเข้าไม่ได้อยู่ดี
+CS_BUILDING = "105"
+
+
+def _minutes(hhmm: str) -> int:
+    h, m = hhmm.split(":")
+    return int(h) * 60 + int(m)
+
+
+def free_rooms_now(
+    conn: sqlite3.Connection, now: datetime, *, only_cs_building: bool = True
+) -> dict[str, Any]:
+    """ห้องที่ไม่มีคาบเรียนอยู่ในขณะนี้ พร้อมบอกว่าจะว่างถึงกี่โมง
+
+    เป็นคำถามที่นักศึกษาถามกันเองตลอดแต่ตู้ไม่เคยตอบได้
+    ตอบจากตารางเรียนทั้งภาค จึงใช้งานได้แม้ตู้ออฟไลน์
+
+    บอก "ว่างถึงกี่โมง" ด้วย เพราะห้องที่ว่างอีกสิบนาทีแล้วมีคนมาเรียน
+    ไม่มีประโยชน์กับคนที่กำลังหาที่นั่งอ่านหนังสือ
+    """
+    day = now.isoweekday()
+    now_min = _minutes(f"{now.hour:02d}:{now.minute:02d}")
+
+    where = "WHERE room IS NOT NULL AND room != ''"
+    params: list[Any] = []
+    if only_cs_building:
+        where += " AND building_code = ?"
+        params.append(CS_BUILDING)
+
+    rooms = [r["room"] for r in conn.execute(
+        f"SELECT DISTINCT room FROM class_sessions {where} ORDER BY room", params
+    ).fetchall()]
+
+    today = conn.execute(
+        f"SELECT room, start_time, end_time, course_title FROM class_sessions "
+        f"{where} AND day = ?", [*params, day],
+    ).fetchall()
+
+    busy: dict[str, list[sqlite3.Row]] = {}
+    for row in today:
+        busy.setdefault(row["room"], []).append(row)
+
+    free, occupied = [], []
+    for room in rooms:
+        slots = sorted(busy.get(room, []), key=lambda r: r["start_time"])
+        current = next(
+            (s for s in slots if _minutes(s["start_time"]) <= now_min < _minutes(s["end_time"])),
+            None,
+        )
+        if current is not None:
+            occupied.append({
+                "room": room,
+                "until": current["end_time"],
+                "course": current["course_title"],
+            })
+            continue
+        # ว่างอยู่ — หาว่าคาบถัดไปของวันนี้เริ่มกี่โมง
+        nxt = next((s for s in slots if _minutes(s["start_time"]) > now_min), None)
+        free.append({
+            "room": room,
+            "freeUntil": nxt["start_time"] if nxt else None,
+            "minutes": (_minutes(nxt["start_time"]) - now_min) if nxt else None,
+        })
+
+    # ห้องที่ว่างยาวที่สุดขึ้นก่อน คนหาที่นั่งอยากได้ห้องที่อยู่ได้นาน
+    free.sort(key=lambda r: (r["minutes"] is not None, r["minutes"] or 0), reverse=True)
+    return {"free": free, "occupied": occupied, "day": day}
+
+
+def room_status(conn: sqlite3.Connection, text: str, now: datetime) -> dict[str, Any] | None:
+    """สถานะของห้องที่ถูกเอ่ยชื่อในคำถาม"""
+    if not text:
+        return None
+    flat = text.replace(" ", "").lower()
+
+    rooms = [r["room"] for r in conn.execute(
+        "SELECT DISTINCT room FROM class_sessions WHERE room IS NOT NULL AND room != ''"
+    ).fetchall()]
+
+    # ชื่อห้องยาวที่สุดที่ตรงก่อน กัน "Lab คอม 5" ไปตรงกับ "Lab คอม" ของห้องอื่น
+    hit = None
+    for room in sorted(rooms, key=len, reverse=True):
+        if room.replace(" ", "").lower() in flat:
+            hit = room
+            break
+    if hit is None:
+        return None
+
+    day = now.isoweekday()
+    now_min = _minutes(f"{now.hour:02d}:{now.minute:02d}")
+    slots = conn.execute(
+        """SELECT start_time, end_time, course_code, course_title, instructors
+           FROM class_sessions WHERE room = ? AND day = ? ORDER BY start_time""",
+        (hit, day),
+    ).fetchall()
+
+    current = next(
+        (s for s in slots if _minutes(s["start_time"]) <= now_min < _minutes(s["end_time"])),
+        None,
+    )
+    nxt = next((s for s in slots if _minutes(s["start_time"]) > now_min), None)
+    return {
+        "room": hit,
+        "busy": current is not None,
+        "current": dict(current) if current else None,
+        "next": dict(nxt) if nxt else None,
+        "today": [dict(s) for s in slots],
+    }
+
+
+def instructor_now(
+    conn: sqlite3.Connection, name: str, now: datetime
+) -> dict[str, Any] | None:
+    """ผู้สอนคนนี้กำลังสอนอยู่หรือไม่ และคาบถัดไปของวันนี้คือเมื่อไร
+
+    นักศึกษาที่จะไปพบอาจารย์อยากรู้ก่อนว่าเดินไปแล้วจะเจอไหม
+    """
+    if not name:
+        return None
+    # ชื่อในตารางสอนมีคำนำหน้าเต็มยศ ส่วนในตารางบุคลากรเป็นชื่อย่อ จึงเทียบด้วยชื่อจริง
+    parts = name.replace("ผศ.", "").replace("ดร.", "").replace("อ.", "").strip().split()
+    if not parts:
+        return None
+    given = parts[0]
+
+    day = now.isoweekday()
+    now_min = _minutes(f"{now.hour:02d}:{now.minute:02d}")
+    slots = conn.execute(
+        """SELECT start_time, end_time, course_code, course_title, room, building_name
+           FROM class_sessions
+           WHERE instructors LIKE ? AND day = ? ORDER BY start_time""",
+        (f"%{given}%", day),
+    ).fetchall()
+
+    current = next(
+        (s for s in slots if _minutes(s["start_time"]) <= now_min < _minutes(s["end_time"])),
+        None,
+    )
+    nxt = next((s for s in slots if _minutes(s["start_time"]) > now_min), None)
+    return {
+        "teaching": current is not None,
+        "current": dict(current) if current else None,
+        "next": dict(nxt) if nxt else None,
+        "todayCount": len(slots),
+    }
+
+
 def search_exam_schedule(
     conn: sqlite3.Connection, text: str, limit: int = 6
 ) -> list[dict[str, Any]]:

@@ -1,0 +1,1440 @@
+{
+ "rooms_105": [
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "6361",
+   "room": "1104",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "6141",
+   "room": "C 205",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "6282",
+   "room": "C 206 IT",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "6201",
+   "room": "C 301",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "3044",
+   "room": "C 302 IT",
+   "equipment": "Computer+Presenter+Projector+TV.+OHP+Tape",
+   "capacity": 35
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "6067",
+   "room": "C 305 IT",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "6068",
+   "room": "C 401",
+   "equipment": null,
+   "capacity": 80
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "6023",
+   "room": "C 403 IT",
+   "equipment": null,
+   "capacity": 80
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "6026",
+   "room": "C 405 IT",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "6261",
+   "room": "C 406 IT",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4621",
+   "room": "C301 IT",
+   "equipment": "Computer+Presenter+Projector+TV.+OHP+Tape",
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "5681",
+   "room": "COM 3203",
+   "equipment": null,
+   "capacity": 60
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "7201",
+   "room": "Co working space",
+   "equipment": null,
+   "capacity": 0
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "6501",
+   "room": "GI1",
+   "equipment": null,
+   "capacity": 0
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "6502",
+   "room": "GI2",
+   "equipment": null,
+   "capacity": 0
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "2351",
+   "room": "L พันธุศาสตร์",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "2861",
+   "room": "L ฟิสิกส์",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "2043",
+   "room": "LAB ชีว",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "2044",
+   "room": "LAB เคมี",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "2203",
+   "room": "LAB1 ชั้น 5",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "5661",
+   "room": "Lab IT 3202-1",
+   "equipment": null,
+   "capacity": 120
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "5963",
+   "room": "Lab IT 3202-2",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "3981",
+   "room": "Lab Molecular",
+   "equipment": null,
+   "capacity": 40
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "5261",
+   "room": "Lab PTC",
+   "equipment": null,
+   "capacity": 30
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "3561",
+   "room": "Lab คณิต 1",
+   "equipment": null,
+   "capacity": 60
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "5321",
+   "room": "Lab คณิต 3",
+   "equipment": null,
+   "capacity": 60
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "3821",
+   "room": "Lab คณิต 4",
+   "equipment": null,
+   "capacity": 60
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4962",
+   "room": "Lab คอม 1",
+   "equipment": null,
+   "capacity": 30
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4966",
+   "room": "Lab คอม 3",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4967",
+   "room": "Lab คอม 4",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4968",
+   "room": "Lab คอม 5",
+   "equipment": null,
+   "capacity": 30
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4964",
+   "room": "Lab คอม2",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "8142",
+   "room": "Lab คอม3-4",
+   "equipment": null,
+   "capacity": 120
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "5921",
+   "room": "Lab วิทย์ 2305",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "3222",
+   "room": "Lab สถิติ",
+   "equipment": null,
+   "capacity": 40
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4976",
+   "room": "Lab ไอที 1",
+   "equipment": null,
+   "capacity": 45
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4977",
+   "room": "Lab ไอที 2",
+   "equipment": null,
+   "capacity": 45
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "2541",
+   "room": "Lab2 (คศ)",
+   "equipment": null,
+   "capacity": 60
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "3881",
+   "room": "Lวิทย์ 1105",
+   "equipment": null,
+   "capacity": 40
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1923",
+   "room": "Lวิทย์ 1109",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1910",
+   "room": "Lวิทย์ 1112",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1908",
+   "room": "Lวิทย์ 1113",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1912",
+   "room": "Lวิทย์ 1115",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1915",
+   "room": "Lวิทย์ 1203",
+   "equipment": null,
+   "capacity": 35
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1917",
+   "room": "Lวิทย์ 1205",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1918",
+   "room": "Lวิทย์ 1206",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1921",
+   "room": "Lวิทย์ 1208",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4021",
+   "room": "Lวิทย์ 1209",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1919",
+   "room": "Lวิทย์ 1211",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1920",
+   "room": "Lวิทย์ 1214",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1909",
+   "room": "Lวิทย์ 1215",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1922",
+   "room": "Lวิทย์ 1217",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1916",
+   "room": "Lวิทย์ 1218",
+   "equipment": null,
+   "capacity": 35
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4381",
+   "room": "Lวิทย์ 2108",
+   "equipment": null,
+   "capacity": 40
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1913",
+   "room": "Lวิทย์ 2202/1",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1914",
+   "room": "Lวิทย์ 2202/2",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4181",
+   "room": "Lวิทย์ 2202/3",
+   "equipment": null,
+   "capacity": 40
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "3882",
+   "room": "Lวิทย์ 2206",
+   "equipment": null,
+   "capacity": 40
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "3522",
+   "room": "Lวิทย์ 2302",
+   "equipment": null,
+   "capacity": 40
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "3523",
+   "room": "Lวิทย์ 2304",
+   "equipment": null,
+   "capacity": 36
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1737",
+   "room": "Lวิทย์ 2306",
+   "equipment": null,
+   "capacity": 40
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "3541",
+   "room": "Lวิทย์ 2308",
+   "equipment": null,
+   "capacity": 20
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4081",
+   "room": "MS 1",
+   "equipment": null,
+   "capacity": 40
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4871",
+   "room": "MS 2",
+   "equipment": null,
+   "capacity": 40
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "5342",
+   "room": "MS3",
+   "equipment": null,
+   "capacity": 40
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "5348",
+   "room": "MS5",
+   "equipment": null,
+   "capacity": 40
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "8461",
+   "room": "Sci Digital Lab",
+   "equipment": null,
+   "capacity": 45
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "6047",
+   "room": "TBA(วิทย์)",
+   "equipment": null,
+   "capacity": 100
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1948",
+   "room": "TBA(วิทย์)",
+   "equipment": null,
+   "capacity": 100
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "2347",
+   "room": "บ.เคมี 3",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "2348",
+   "room": "บ.เคมี 4",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4970",
+   "room": "บรรยาย คอม 6",
+   "equipment": null,
+   "capacity": 65
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4971",
+   "room": "บรรยาย คอม 7",
+   "equipment": null,
+   "capacity": 54
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4972",
+   "room": "บรรยาย คอม 8",
+   "equipment": null,
+   "capacity": 80
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "3982",
+   "room": "บรรยาย ป.โท",
+   "equipment": null,
+   "capacity": 40
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4973",
+   "room": "บรรยาย ไอที 1",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4974",
+   "room": "บรรยาย ไอที 2",
+   "equipment": null,
+   "capacity": 45
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "2641",
+   "room": "วิทย์ 1107",
+   "equipment": null,
+   "capacity": 30
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1726",
+   "room": "วิทย์ 1108",
+   "equipment": null,
+   "capacity": 160
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1727",
+   "room": "วิทย์ 1116",
+   "equipment": null,
+   "capacity": 60
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1728",
+   "room": "วิทย์ 2105",
+   "equipment": null,
+   "capacity": 164
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1731",
+   "room": "วิทย์ 2109",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1730",
+   "room": "วิทย์ 2202",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1903",
+   "room": "วิทย์ 2203",
+   "equipment": null,
+   "capacity": 100
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1904",
+   "room": "วิทย์ 2204",
+   "equipment": null,
+   "capacity": 100
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1729",
+   "room": "วิทย์ 2205",
+   "equipment": null,
+   "capacity": 130
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "6962",
+   "room": "วิทย์ 2206",
+   "equipment": null,
+   "capacity": 30
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1732",
+   "room": "วิทย์ 2301",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1733",
+   "room": "วิทย์ 2302",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1734",
+   "room": "วิทย์ 2303",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1736",
+   "room": "วิทย์ 2305",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1738",
+   "room": "วิทย์ 2307",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1739",
+   "room": "วิทย์ 2308",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1740",
+   "room": "วิทย์ 2309",
+   "equipment": null,
+   "capacity": 130
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "5063",
+   "room": "วิทย์ 2310",
+   "equipment": null,
+   "capacity": 30
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1902",
+   "room": "วิทย์ 2311",
+   "equipment": null,
+   "capacity": 130
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4401",
+   "room": "วิทย์ 2312",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "5062",
+   "room": "วิทย์ 2312",
+   "equipment": null,
+   "capacity": 30
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4402",
+   "room": "วิทย์ 2314",
+   "equipment": null,
+   "capacity": 40
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1741",
+   "room": "วิทย์ 2401",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1742",
+   "room": "วิทย์ 2402",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1743",
+   "room": "วิทย์ 2403",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1744",
+   "room": "วิทย์ 2404",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1745",
+   "room": "วิทย์ 2405",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1746",
+   "room": "วิทย์ 2406",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1747",
+   "room": "วิทย์ 2407",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1748",
+   "room": "วิทย์ 2408",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1749",
+   "room": "วิทย์ 2409",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1750",
+   "room": "วิทย์ 2501",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1751",
+   "room": "วิทย์ 2502",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1752",
+   "room": "วิทย์ 2503",
+   "equipment": null,
+   "capacity": 40
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1753",
+   "room": "วิทย์ 2504",
+   "equipment": null,
+   "capacity": 70
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1754",
+   "room": "วิทย์ 2505",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "1755",
+   "room": "วิทย์ 2506",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "2741",
+   "room": "วิทย์ 2507/1",
+   "equipment": null,
+   "capacity": 80
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "4661",
+   "room": "วิทย์ 2507/2",
+   "equipment": null,
+   "capacity": 80
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "7141",
+   "room": "วิทย์ 2610",
+   "equipment": null,
+   "capacity": 0
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "2882",
+   "room": "วิทย์1109",
+   "equipment": null,
+   "capacity": 50
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "6021",
+   "room": "ห้องประชุม2",
+   "equipment": null,
+   "capacity": 60
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "3941",
+   "room": "ห้องประชุมภาคชีว",
+   "equipment": null,
+   "capacity": 40
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "8261",
+   "room": "ห้องสอบออนไลน์",
+   "equipment": null,
+   "capacity": 100
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "2822",
+   "room": "ห้องสัมมนาเคมี",
+   "equipment": null,
+   "capacity": 60
+  },
+  {
+   "building": "105",
+   "building_name": "คณะวิทยาศาสตร์",
+   "roomid": "6702",
+   "room": "เพาะเลี้ยง",
+   "equipment": null,
+   "capacity": 30
+  }
+ ],
+ "cs_room_usage_2569_1": [
+  {
+   "room": "",
+   "roomid": "4968",
+   "capacity": 30,
+   "day_th": "จันทร์",
+   "weekday_index": 0,
+   "start": "13:00",
+   "end": "15:00",
+   "course_code": "10301366",
+   "title_th": "วิทยาการสมองกลฝังตัว",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896533"
+  },
+  {
+   "room": "",
+   "roomid": "4968",
+   "capacity": 30,
+   "day_th": "อังคาร",
+   "weekday_index": 1,
+   "start": "10:00",
+   "end": "13:00",
+   "course_code": "10301366",
+   "title_th": "วิทยาการสมองกลฝังตัว",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896533"
+  },
+  {
+   "room": "",
+   "roomid": "4964",
+   "capacity": 50,
+   "day_th": "จันทร์",
+   "weekday_index": 0,
+   "start": "10:00",
+   "end": "12:00",
+   "course_code": "10301341",
+   "title_th": "การเข้ารหัสและความปลอดภัยในเครือข่าย",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896490"
+  },
+  {
+   "room": "",
+   "roomid": "4964",
+   "capacity": 50,
+   "day_th": "จันทร์",
+   "weekday_index": 0,
+   "start": "13:00",
+   "end": "15:00",
+   "course_code": "10301364",
+   "title_th": "ตรรกศาสตร์เชิงดิจิทัลและอุปกรณ์อัจฉริยะ",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896531"
+  },
+  {
+   "room": "",
+   "roomid": "4964",
+   "capacity": 50,
+   "day_th": "อังคาร",
+   "weekday_index": 1,
+   "start": "09:00",
+   "end": "12:00",
+   "course_code": "10301341",
+   "title_th": "การเข้ารหัสและความปลอดภัยในเครือข่าย",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896490"
+  },
+  {
+   "room": "",
+   "roomid": "4964",
+   "capacity": 50,
+   "day_th": "พุธ",
+   "weekday_index": 2,
+   "start": "09:00",
+   "end": "12:00",
+   "course_code": "10301342",
+   "title_th": "การประมวลผลแบบกลุ่มเมฆ",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896493"
+  },
+  {
+   "room": "",
+   "roomid": "4964",
+   "capacity": 50,
+   "day_th": "พฤหัสบดี",
+   "weekday_index": 3,
+   "start": "09:00",
+   "end": "12:00",
+   "course_code": "10301364",
+   "title_th": "ตรรกศาสตร์เชิงดิจิทัลและอุปกรณ์อัจฉริยะ",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896531"
+  },
+  {
+   "room": "",
+   "roomid": "4964",
+   "capacity": 50,
+   "day_th": "ศุกร์",
+   "weekday_index": 4,
+   "start": "09:00",
+   "end": "12:00",
+   "course_code": "10301374",
+   "title_th": "การประมวลผลภาษาธรรมชาติ",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896538"
+  },
+  {
+   "room": "",
+   "roomid": "4964",
+   "capacity": 50,
+   "day_th": "ศุกร์",
+   "weekday_index": 4,
+   "start": "13:00",
+   "end": "16:00",
+   "course_code": "10301371",
+   "title_th": "ปัญญาประดิษฐ์",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896535"
+  },
+  {
+   "room": "",
+   "roomid": "8142",
+   "capacity": 120,
+   "day_th": "จันทร์",
+   "weekday_index": 0,
+   "start": "09:00",
+   "end": "12:00",
+   "course_code": "10301231",
+   "title_th": "เว็บเทคโนโลยี",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896438"
+  },
+  {
+   "room": "",
+   "roomid": "8142",
+   "capacity": 120,
+   "day_th": "จันทร์",
+   "weekday_index": 0,
+   "start": "13:00",
+   "end": "15:00",
+   "course_code": "10301225",
+   "title_th": "วิศวกรรมซอฟต์แวร์",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896437"
+  },
+  {
+   "room": "",
+   "roomid": "8142",
+   "capacity": 120,
+   "day_th": "อังคาร",
+   "weekday_index": 1,
+   "start": "09:30",
+   "end": "11:30",
+   "course_code": "10301111",
+   "title_th": "การเขียนโปรแกรมเบื้องต้น",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896352"
+  },
+  {
+   "room": "",
+   "roomid": "8142",
+   "capacity": 120,
+   "day_th": "อังคาร",
+   "weekday_index": 1,
+   "start": "13:00",
+   "end": "15:00",
+   "course_code": "10301223",
+   "title_th": "ฐานข้อมูลโครงสร้างเชิงสัมพันธ์",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896435"
+  },
+  {
+   "room": "",
+   "roomid": "8142",
+   "capacity": 120,
+   "day_th": "อังคาร",
+   "weekday_index": 1,
+   "start": "15:00",
+   "end": "17:00",
+   "course_code": "10301222",
+   "title_th": "โครงสร้างข้อมูลและอัลกอริทึม",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896434"
+  },
+  {
+   "room": "",
+   "roomid": "8142",
+   "capacity": 120,
+   "day_th": "พุธ",
+   "weekday_index": 2,
+   "start": "09:00",
+   "end": "12:00",
+   "course_code": "10301111",
+   "title_th": "การเขียนโปรแกรมเบื้องต้น",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896352"
+  },
+  {
+   "room": "",
+   "roomid": "8142",
+   "capacity": 120,
+   "day_th": "พฤหัสบดี",
+   "weekday_index": 3,
+   "start": "09:00",
+   "end": "12:00",
+   "course_code": "10301223",
+   "title_th": "ฐานข้อมูลโครงสร้างเชิงสัมพันธ์",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896435"
+  },
+  {
+   "room": "",
+   "roomid": "8142",
+   "capacity": 120,
+   "day_th": "พฤหัสบดี",
+   "weekday_index": 3,
+   "start": "13:00",
+   "end": "15:00",
+   "course_code": "10301231",
+   "title_th": "เว็บเทคโนโลยี",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896438"
+  },
+  {
+   "room": "",
+   "roomid": "8142",
+   "capacity": 120,
+   "day_th": "ศุกร์",
+   "weekday_index": 4,
+   "start": "10:00",
+   "end": "13:00",
+   "course_code": "10301112",
+   "title_th": "เทคโนโลยีสารสนเทศและการสื่อสาร",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896365"
+  },
+  {
+   "room": "",
+   "roomid": "8142",
+   "capacity": 120,
+   "day_th": "ศุกร์",
+   "weekday_index": 4,
+   "start": "13:00",
+   "end": "16:00",
+   "course_code": "10301225",
+   "title_th": "วิศวกรรมซอฟต์แวร์",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896437"
+  },
+  {
+   "room": "",
+   "roomid": "4970",
+   "capacity": 65,
+   "day_th": "จันทร์",
+   "weekday_index": 0,
+   "start": "15:00",
+   "end": "17:00",
+   "course_code": "10301385",
+   "title_th": "ระบบบริหารสารสนเทศเพื่อการจัดการ",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896548"
+  },
+  {
+   "room": "",
+   "roomid": "4970",
+   "capacity": 65,
+   "day_th": "อังคาร",
+   "weekday_index": 1,
+   "start": "13:00",
+   "end": "15:00",
+   "course_code": "10301391",
+   "title_th": "หัวข้อพิเศษทางวิทยาการคอมพิวเตอร์ 1",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896549"
+  },
+  {
+   "room": "",
+   "roomid": "4970",
+   "capacity": 65,
+   "day_th": "พุธ",
+   "weekday_index": 2,
+   "start": "17:00",
+   "end": "20:00",
+   "course_code": "คพ392",
+   "title_th": "การเป็นผู้ประกอบการทางด้านคอมพิวเตอร์และนวัตกรรม",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8892693"
+  },
+  {
+   "room": "",
+   "roomid": "4970",
+   "capacity": 65,
+   "day_th": "พฤหัสบดี",
+   "weekday_index": 3,
+   "start": "10:00",
+   "end": "13:00",
+   "course_code": "10301391",
+   "title_th": "หัวข้อพิเศษทางวิทยาการคอมพิวเตอร์ 1",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896549"
+  },
+  {
+   "room": "",
+   "roomid": "4970",
+   "capacity": 65,
+   "day_th": "พฤหัสบดี",
+   "weekday_index": 3,
+   "start": "14:00",
+   "end": "17:00",
+   "course_code": "10301385",
+   "title_th": "ระบบบริหารสารสนเทศเพื่อการจัดการ",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896548"
+  },
+  {
+   "room": "",
+   "roomid": "4970",
+   "capacity": 65,
+   "day_th": "ศุกร์",
+   "weekday_index": 4,
+   "start": "09:00",
+   "end": "12:00",
+   "course_code": "10301314",
+   "title_th": "หลักการเขียนโปรแกรมเชิงวัตถุ",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896474"
+  },
+  {
+   "room": "",
+   "roomid": "4971",
+   "capacity": 54,
+   "day_th": "จันทร์",
+   "weekday_index": 0,
+   "start": "13:00",
+   "end": "15:00",
+   "course_code": "10301342",
+   "title_th": "การประมวลผลแบบกลุ่มเมฆ",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896493"
+  },
+  {
+   "room": "",
+   "roomid": "4972",
+   "capacity": 80,
+   "day_th": "จันทร์",
+   "weekday_index": 0,
+   "start": "09:00",
+   "end": "12:00",
+   "course_code": "10301491",
+   "title_th": "สัมมนาวิชาการทางวิทยาการคอมพิวเตอร์",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896441"
+  },
+  {
+   "room": "",
+   "roomid": "4972",
+   "capacity": 80,
+   "day_th": "จันทร์",
+   "weekday_index": 0,
+   "start": "13:00",
+   "end": "15:00",
+   "course_code": "10301314",
+   "title_th": "หลักการเขียนโปรแกรมเชิงวัตถุ",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896474"
+  },
+  {
+   "room": "",
+   "roomid": "4972",
+   "capacity": 80,
+   "day_th": "อังคาร",
+   "weekday_index": 1,
+   "start": "17:00",
+   "end": "19:00",
+   "course_code": "คพ392",
+   "title_th": "การเป็นผู้ประกอบการทางด้านคอมพิวเตอร์และนวัตกรรม",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8892693"
+  },
+  {
+   "room": "",
+   "roomid": "4972",
+   "capacity": 80,
+   "day_th": "พฤหัสบดี",
+   "weekday_index": 3,
+   "start": "13:00",
+   "end": "15:00",
+   "course_code": "10301374",
+   "title_th": "การประมวลผลภาษาธรรมชาติ",
+   "credits": 3,
+   "section": 1,
+   "building": "L1",
+   "courseid": "8896538"
+  }
+ ]
+}

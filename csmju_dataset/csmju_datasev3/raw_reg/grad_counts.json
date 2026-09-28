@@ -1,0 +1,140 @@
+[
+ {
+  "edu_program_id": "65304010",
+  "acadyear_be": 2568,
+  "semester": 2,
+  "graduates": 81,
+  "honors": {
+   "เกียรตินิยมอันดับหนึ่ง": 29,
+   "ไม่มีเกียรตินิยม": 43,
+   "เกียรตินิยมอันดับสอง": 9
+  },
+  "status": {
+   "รออนุมัติ": 81
+  }
+ },
+ {
+  "edu_program_id": "65304010",
+  "acadyear_be": 2569,
+  "semester": 1,
+  "graduates": 4,
+  "honors": {
+   "ไม่มีเกียรตินิยม": 4
+  },
+  "status": {
+   "รออนุมัติ": 4
+  }
+ },
+ {
+  "edu_program_id": "60304010",
+  "acadyear_be": 2566,
+  "semester": 1,
+  "graduates": 9,
+  "honors": {
+   "ไม่มีเกียรตินิยม": 9
+  },
+  "status": {
+   "รออนุมัติ": 9
+  }
+ },
+ {
+  "edu_program_id": "60304010",
+  "acadyear_be": 2566,
+  "semester": 2,
+  "graduates": 59,
+  "honors": {
+   "ไม่มีเกียรตินิยม": 32,
+   "เกียรตินิยมอันดับสอง": 14,
+   "เกียรตินิยมอันดับหนึ่ง": 13
+  },
+  "status": {
+   "รออนุมัติ": 59
+  }
+ },
+ {
+  "edu_program_id": "60304010",
+  "acadyear_be": 2567,
+  "semester": 1,
+  "graduates": 12,
+  "honors": {
+   "ไม่มีเกียรตินิยม": 12
+  },
+  "status": {
+   "รออนุมัติ": 12
+  }
+ },
+ {
+  "edu_program_id": "60304010",
+  "acadyear_be": 2567,
+  "semester": 2,
+  "graduates": 50,
+  "honors": {
+   "ไม่มีเกียรตินิยม": 22,
+   "เกียรตินิยมอันดับสอง": 12,
+   "เกียรตินิยมอันดับหนึ่ง": 16
+  },
+  "status": {
+   "รออนุมัติ": 50
+  }
+ },
+ {
+  "edu_program_id": "60304010",
+  "acadyear_be": 2567,
+  "semester": 3,
+  "graduates": 1,
+  "honors": {
+   "ไม่มีเกียรตินิยม": 1
+  },
+  "status": {
+   "รออนุมัติ": 1
+  }
+ },
+ {
+  "edu_program_id": "60304010",
+  "acadyear_be": 2568,
+  "semester": 1,
+  "graduates": 7,
+  "honors": {
+   "ไม่มีเกียรตินิยม": 7
+  },
+  "status": {
+   "รออนุมัติ": 7
+  }
+ },
+ {
+  "edu_program_id": "60304010",
+  "acadyear_be": 2568,
+  "semester": 2,
+  "graduates": 13,
+  "honors": {
+   "ไม่มีเกียรตินิยม": 13
+  },
+  "status": {
+   "รออนุมัติ": 13
+  }
+ },
+ {
+  "edu_program_id": "60304010",
+  "acadyear_be": 2568,
+  "semester": 3,
+  "graduates": 1,
+  "honors": {
+   "ไม่มีเกียรตินิยม": 1
+  },
+  "status": {
+   "รออนุมัติ": 1
+  }
+ },
+ {
+  "edu_program_id": "60304010",
+  "acadyear_be": 2569,
+  "semester": 1,
+  "graduates": 7,
+  "honors": {
+   "ไม่มีเกียรตินิยม": 7
+  },
+  "status": {
+   "รออนุมัติ": 7
+  }
+ }
+]

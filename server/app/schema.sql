@@ -260,6 +260,64 @@ CREATE TABLE IF NOT EXISTS edu_forms (
 CREATE INDEX IF NOT EXISTS ix_forms_title ON edu_forms (title);
 
 -- ------------------------------------------------------------
+-- คาบเรียนทั้งหมดของภาคการศึกษา  (ข้อมูลสาธารณะจากระบบทะเบียน)
+--
+-- ต่างจากตาราง sections ซึ่งเก็บเฉพาะคาบที่นักศึกษาในระบบลงทะเบียนไว้
+-- ตารางนี้เก็บทุกคาบที่เปิดสอน จึงตอบคำถามที่ไม่ผูกกับตัวบุคคลได้
+--   "ตอนนี้ห้องไหนว่าง"        ← ห้องที่ไม่มีคาบเรียนคาบทับอยู่
+--   "อาจารย์คนนี้ว่างไหม"       ← ช่วงที่ไม่มีคาบสอน
+-- ทั้งสองคำถามเป็นสิ่งที่นักศึกษาถามบ่อยแต่เดิมตู้ตอบไม่ได้เลย
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS class_sessions (
+  id             INTEGER PRIMARY KEY AUTOINCREMENT,
+  acadyear_be    INTEGER,
+  semester       INTEGER,
+  day            INTEGER NOT NULL CHECK (day BETWEEN 1 AND 7),  -- 1 = จันทร์
+  start_time     TEXT NOT NULL,                 -- 'HH:MM'
+  end_time       TEXT NOT NULL,
+  course_code    TEXT NOT NULL,
+  course_title   TEXT,
+  section        INTEGER,
+  kind           TEXT,                          -- 'บรรยาย' | 'ปฏิบัติ'
+  room           TEXT,
+  building_code  TEXT,
+  building_name  TEXT,
+  instructors    TEXT,
+  is_cs          INTEGER NOT NULL DEFAULT 0 CHECK (is_cs IN (0, 1)),
+  CHECK (start_time < end_time)
+);
+CREATE INDEX IF NOT EXISTS ix_sessions_room ON class_sessions (room, day);
+CREATE INDEX IF NOT EXISTS ix_sessions_day  ON class_sessions (day, start_time);
+
+-- อาคารทั้งมหาวิทยาลัย ใช้แปลงรหัสอาคารเป็นชื่อที่คนอ่านเข้าใจ
+CREATE TABLE IF NOT EXISTS campus_buildings (
+  code      TEXT PRIMARY KEY,
+  name      TEXT NOT NULL,
+  campus    TEXT
+);
+
+-- ตารางเรียนตามแผนการศึกษา แยกตามชั้นปี
+--
+-- ไม่ใช่ตารางเรียนของนักศึกษาคนใดคนหนึ่ง แต่เป็นแผนที่สาขากำหนดไว้
+-- นักศึกษาที่ลงวิชาเอกเลือกหรือเรียนล่าช้าจะมีตารางต่างออกไป
+-- จึงต้องติดป้ายบอกเสมอว่าเป็นตารางตามแผน ไม่ใช่ตารางของผู้ใช้คนนั้น
+CREATE TABLE IF NOT EXISTS cohort_sessions (
+  id            INTEGER PRIMARY KEY AUTOINCREMENT,
+  year_level    INTEGER NOT NULL,
+  entry_code    TEXT,
+  day           INTEGER NOT NULL CHECK (day BETWEEN 1 AND 7),
+  start_time    TEXT NOT NULL,
+  end_time      TEXT NOT NULL,
+  course_code   TEXT NOT NULL,
+  course_title  TEXT,
+  section       INTEGER,
+  room          TEXT,
+  building_code TEXT,
+  instructors   TEXT
+);
+CREATE INDEX IF NOT EXISTS ix_cohort_year ON cohort_sessions (year_level, day, start_time);
+
+-- ------------------------------------------------------------
 -- ความยินยอม (พ.ร.บ.คุ้มครองข้อมูลส่วนบุคคลฯ มาตรา 26)
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS consents (

@@ -86,7 +86,7 @@ def similarity(a: str, b: str) -> float:
 
 def match(conn: sqlite3.Connection, text: str) -> Intent:
     # นำเข้าตรงนี้เพื่อเลี่ยงการอ้างวนระหว่างโมดูล repo กับ intent
-    from .. import repo
+    from .. import repo, thai
 
     flat = _normalise(text)
     if not flat:
@@ -124,6 +124,27 @@ def match(conn: sqlite3.Connection, text: str) -> Intent:
                                "คําร้อง", "คำร้อง", "ขอใบรับรอง", "ใบรับรอง")):
         if repo.search_forms(conn, text):
             return Intent("edu-forms", 1.0, "keyword")
+
+    # ---- ห้องว่าง ----
+    # ถามหาห้องนั่งทำงานระหว่างคาบ เป็นคำถามที่นักศึกษาถามกันเองตลอด
+    # ต้องมีคำว่า "ว่าง" ด้วย ไม่งั้น "ห้องเรียนอยู่ไหน" จะถูกดึงมาตอบผิดเรื่อง
+    # ชื่อห้องมีทั้ง Lab และ lab จึงต้องเทียบแบบไม่สนตัวพิมพ์ใหญ่เล็ก
+    low = flat.lower()
+    _asks_free = any(w in low for w in ("ว่าง", "ไม่มีคนใช้", "นั่งทำงาน", "นั่งอ่านหนังสือ"))
+    if _asks_free and any(w in low for w in ("ห้อง", "แล็บ", "lab", "ที่นั่ง")):
+        # เอ่ยชื่อห้องเจาะจง → ตอบสถานะของห้องนั้น
+        if repo.room_status(conn, text, thai.now()) is not None:
+            return Intent("room-status", 1.0, "keyword")
+        return Intent("room-free", 1.0, "keyword")
+
+    # ---- ผู้สอนกำลังสอนอยู่ไหม ----
+    # ต้องตรวจก่อน person-detail เพราะคำถามมีชื่ออาจารย์อยู่ด้วย
+    # แต่สิ่งที่ผู้ถามอยากรู้คือ "เดินไปตอนนี้จะเจอไหม" ไม่ใช่เบอร์โทร
+    if any(w in flat for w in ("ว่างไหม", "สอนอยู่", "ติดสอน", "อยู่ไหม",
+                               "ตอนนี้อยู่", "ไปพบ", "เจอได้ไหม", "ติดคาบ")):
+        person = repo.find_personnel_mention(conn, text)
+        if person is not None:
+            return Intent("instructor-now", 1.0, "person")
 
     # คำถามที่เอ่ยชื่อบุคลากรตรง ๆ มีคำตอบแน่นอนอยู่ในฐานข้อมูล
     # ตอบจากตารางได้เลย แม่นกว่าและทำงานได้แม้ตู้ออฟไลน์
