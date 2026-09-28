@@ -231,7 +231,8 @@ KIOSK_CAMERA=auto        # ลอง Pi Camera ก่อน ไม่มีค�
 cd ~/Raspberry/server
 
 .venv/bin/python -m app.seed                                   # สร้างตารางและข้อมูลตั้งต้น
-.venv/bin/python -m app.import_csmju --dataset ../csmju_dataset/csmju_dataset
+.venv/bin/python -m app.import_csmju --dataset ../csmju_dataset/csmju_datasev3
+.venv/bin/python scripts/import_timetable.py ../csmju_dataset/csmju_timetable_dataset
 .venv/bin/python scripts/import_roster.py <ไฟล์รายชื่อ>        # ถ้ามีรายชื่อจากระบบทะเบียน
 .venv/bin/python scripts/import_my_semester.py ../csmju_dataset/my_semester_1-2569
 ```
